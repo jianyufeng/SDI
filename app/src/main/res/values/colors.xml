@@ -12,4 +12,13 @@
     <color name="qmui_config_color_75_pure_black">#C0000000</color>
     <color name="blue_24">#248bd2</color>
 
+    <color name="c_f3f3f3f">#f3f3f3</color>
+
+    <color name="c_16a5ff">#16a5ff</color>
+    <color name="c_ffffff">#ffffff</color>
+
+
+    <color name="c_384051">#384051</color>
+
+
 </resources>

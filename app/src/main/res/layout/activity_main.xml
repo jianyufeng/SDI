@@ -1,18 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <variable
+            name="viewModel"
+            type="com.puyu.mobile.sdi.viewmodel.MainViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/c_f3f3f3f"
+        tools:context=".act.MainActivity">
+
+        <RadioGroup
+            android:id="@+id/rg"
+            android:elevation="@dimen/dp1"
+            android:divider="@drawable/line"
+            android:orientation="horizontal"
+            android:showDividers="beginning|middle|end"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/standard_gas_config"
+                android:text="@string/standard_gas_config"
+                style="@style/mainTab" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                style="@style/mainTab"
+                android:id="@+id/rinse"
+                android:text="@string/rinse" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                style="@style/mainTab"
+                android:id="@+id/pressurize"
+                android:text="@string/pressurize" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                style="@style/mainTab"
+                android:id="@+id/add_sample"
+                android:text="@string/add_sample" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                style="@style/mainTab"
+                android:id="@+id/set"
+                android:text="@string/set" />
+        </RadioGroup>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp2"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintTop_toBottomOf="@id/rg"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

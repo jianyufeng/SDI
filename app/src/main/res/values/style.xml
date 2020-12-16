@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="NoStatusAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -15,6 +16,7 @@
     <style name="QMUI.BaseDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:buttonStyle">@style/Button.Compat</item>
     </style>
+
     <style name="QMUI.TipDialog" parent="QMUI.BaseDialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>
@@ -23,6 +25,7 @@
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
     <style name="ButtonBase.Compat" parent="@style/Widget.AppCompat.Button">
         <!-- 取消 Button 字符默认大写的功能（会导致 Spannable 失效），默认值只影响 5.0 以上版本，但使用Compat包后，4.x 版本也会受到影响 -->
         <!-- http://stackoverflow.com/questions/29007746/button-settext-with-spannable-dosent-work-for-android-5-0-lollipop -->
@@ -30,47 +33,61 @@
     </style>
 
     <style name="Button.Compat" parent="ButtonBase.Compat" />
+
     <declare-styleable name="QMUILayout">
-        <attr name="android:maxWidth"/>
-        <attr name="android:maxHeight"/>
-        <attr name="android:minWidth"/>
-        <attr name="android:minHeight"/>
-        <attr name="qmui_bottomDividerHeight" format="dimension"/>
-        <attr name="qmui_bottomDividerColor" format="color|reference"/>
-        <attr name="qmui_bottomDividerInsetLeft" format="dimension"/>
-        <attr name="qmui_bottomDividerInsetRight" format="dimension"/>
-        <attr name="qmui_topDividerHeight" format="dimension"/>
-        <attr name="qmui_topDividerColor" format="color|reference"/>
-        <attr name="qmui_topDividerInsetLeft" format="dimension"/>
-        <attr name="qmui_topDividerInsetRight" format="dimension"/>
-        <attr name="qmui_leftDividerWidth" format="dimension"/>
-        <attr name="qmui_leftDividerColor" format="color|reference"/>
-        <attr name="qmui_leftDividerInsetTop" format="dimension"/>
-        <attr name="qmui_leftDividerInsetBottom" format="dimension"/>
-        <attr name="qmui_rightDividerWidth" format="dimension"/>
-        <attr name="qmui_rightDividerColor" format="color|reference"/>
-        <attr name="qmui_rightDividerInsetTop" format="dimension"/>
-        <attr name="qmui_rightDividerInsetBottom" format="dimension"/>
-        <attr name="qmui_radius" format="dimension"/>
-        <attr name="qmui_borderColor" format="color|reference"/>
-        <attr name="qmui_borderWidth" format="dimension"/>
-        <attr name="qmui_outerNormalColor" format="color|reference"/>
+        <attr name="android:maxWidth" />
+        <attr name="android:maxHeight" />
+        <attr name="android:minWidth" />
+        <attr name="android:minHeight" />
+        <attr name="qmui_bottomDividerHeight" format="dimension" />
+        <attr name="qmui_bottomDividerColor" format="color|reference" />
+        <attr name="qmui_bottomDividerInsetLeft" format="dimension" />
+        <attr name="qmui_bottomDividerInsetRight" format="dimension" />
+        <attr name="qmui_topDividerHeight" format="dimension" />
+        <attr name="qmui_topDividerColor" format="color|reference" />
+        <attr name="qmui_topDividerInsetLeft" format="dimension" />
+        <attr name="qmui_topDividerInsetRight" format="dimension" />
+        <attr name="qmui_leftDividerWidth" format="dimension" />
+        <attr name="qmui_leftDividerColor" format="color|reference" />
+        <attr name="qmui_leftDividerInsetTop" format="dimension" />
+        <attr name="qmui_leftDividerInsetBottom" format="dimension" />
+        <attr name="qmui_rightDividerWidth" format="dimension" />
+        <attr name="qmui_rightDividerColor" format="color|reference" />
+        <attr name="qmui_rightDividerInsetTop" format="dimension" />
+        <attr name="qmui_rightDividerInsetBottom" format="dimension" />
+        <attr name="qmui_radius" format="dimension" />
+        <attr name="qmui_borderColor" format="color|reference" />
+        <attr name="qmui_borderWidth" format="dimension" />
+        <attr name="qmui_outerNormalColor" format="color|reference" />
         <attr name="qmui_hideRadiusSide" format="enum">
-            <enum name="none" value="0"/>
-            <enum name="top" value="1"/>
-            <enum name="right" value="2"/>
-            <enum name="bottom" value="3"/>
-            <enum name="left" value="4"/>
+            <enum name="none" value="0" />
+            <enum name="top" value="1" />
+            <enum name="right" value="2" />
+            <enum name="bottom" value="3" />
+            <enum name="left" value="4" />
         </attr>
-        <attr name="qmui_showBorderOnlyBeforeL" format="boolean"/>
-        <attr name="qmui_shadowElevation" format="dimension"/>
-        <attr name="qmui_useThemeGeneralShadowElevation" format="boolean"/>
-        <attr name="qmui_shadowAlpha" format="float"/>
-        <attr name="qmui_outlineInsetTop" format="dimension"/>
-        <attr name="qmui_outlineInsetLeft" format="dimension"/>
-        <attr name="qmui_outlineInsetRight" format="dimension"/>
-        <attr name="qmui_outlineInsetBottom" format="dimension"/>
-        <attr name="qmui_outlineExcludePadding" format="boolean"/>
+        <attr name="qmui_showBorderOnlyBeforeL" format="boolean" />
+        <attr name="qmui_shadowElevation" format="dimension" />
+        <attr name="qmui_useThemeGeneralShadowElevation" format="boolean" />
+        <attr name="qmui_shadowAlpha" format="float" />
+        <attr name="qmui_outlineInsetTop" format="dimension" />
+        <attr name="qmui_outlineInsetLeft" format="dimension" />
+        <attr name="qmui_outlineInsetRight" format="dimension" />
+        <attr name="qmui_outlineInsetBottom" format="dimension" />
+        <attr name="qmui_outlineExcludePadding" format="boolean" />
     </declare-styleable>
+
+
+    <style name="mainTab">
+        <item name="android:textColor">@color/main_tab_select</item>
+        <item name="android:background">@drawable/main_tab_select</item>
+        <item name="android:padding">@dimen/dp10</item>
+        <item name="android:gravity">center</item>
+        <item name="android:button">@null</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">@dimen/sp20</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
 
 </resources>
