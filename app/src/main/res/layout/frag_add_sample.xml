@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools">
 
     <data>
 
@@ -8,11 +10,288 @@
             type="com.puyu.mobile.sdi.viewmodel.AddSampViewModel" />
     </data>
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:background="#879"
         android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.cardview.widget.CardView
+            app:cardElevation="@dimen/dp5"
+            app:cardCornerRadius="@dimen/dp5"
+            android:layout_margin="@dimen/dp5"
+            app:cardBackgroundColor="@color/c_f3f3f3f"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:background="@color/c_ffffff"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_type_tip"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:padding="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text="加样种类"
+                    android:textColor="@color/c_384051"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:id="@+id/line"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:background="@color/c_DBE0E8"
+                    android:layout_width="0dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_type_tip"
+                    android:layout_height="1dp" />
+
+                <RadioGroup
+                    android:padding="@dimen/dp5"
+                    android:id="@+id/rg_add_sample"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:layout_width="0dp"
+                        android:text="标气1"
+                        android:layout_weight="1"
+                        android:textColor="@color/mul_add_select"
+                        android:textSize="@dimen/sp16"
+                        android:layout_height="wrap_content" />
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:layout_width="0dp"
+                        android:text="标气2"
+                        android:layout_weight="1"
+                        android:textColor="@color/mul_add_select"
+
+                        android:textSize="@dimen/sp16"
+                        android:layout_height="wrap_content" />
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:layout_width="0dp"
+                        android:text="标气3"
+                        android:layout_weight="1"
+                        android:textColor="@color/mul_add_select"
+
+                        android:textSize="@dimen/sp16"
+                        android:layout_height="wrap_content" />
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:layout_width="0dp"
+                        android:text="标气4"
+                        android:layout_weight="1"
+                        android:textColor="@color/mul_add_select"
+                        android:textSize="@dimen/sp16"
+                        android:layout_height="wrap_content" />
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:layout_width="0dp"
+                        android:text="二级稀释气"
+                        android:layout_weight="1"
+                        android:textColor="@color/mul_add_select"
+                        android:textSize="@dimen/sp16"
+                        android:layout_height="wrap_content" />
+                </RadioGroup>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_add_pressure_tip"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rg_add_sample"
+                    android:padding="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text="加压方式"
+                    android:textColor="@color/c_384051"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/sp_add_pressure"
+                    android:layout_width="@dimen/dp150"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/addPressureType"
+                    android:gravity="center"
+                    android:overlapAnchor="false"
+                    android:spinnerMode="dropdown"
+                    android:theme="@style/common_sp_add_pressure"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_add_pressure_tip"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tv_add_pressure_tip" />
+
+                <View
+                    android:id="@+id/line2"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:background="@color/c_DBE0E8"
+                    android:layout_width="0dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_add_pressure_tip"
+                    android:layout_height="1dp" />
+
+                <RadioGroup
+                    android:padding="@dimen/dp5"
+                    android:id="@+id/multiple_rg"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line2"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:layout_width="0dp"
+                        android:text="1.5倍"
+                        android:layout_weight="1"
+                        android:textColor="@color/mul_add_select"
+                        android:textSize="@dimen/sp16"
+                        android:layout_height="wrap_content" />
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:layout_width="0dp"
+                        android:text="2倍"
+                        android:layout_weight="1"
+                        android:textColor="@color/mul_add_select"
+                        android:textSize="@dimen/sp16"
+                        android:layout_height="wrap_content" />
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:layout_width="0dp"
+                        android:text="3倍"
+                        android:layout_weight="1"
+                        android:textColor="@color/mul_add_select"
+
+                        android:textSize="@dimen/sp16"
+                        android:layout_height="wrap_content" />
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:layout_width="0dp"
+                        android:text="4倍"
+                        android:layout_weight="1"
+                        android:textColor="@color/mul_add_select"
+                        android:textSize="@dimen/sp16"
+                        android:layout_height="wrap_content" />
+                </RadioGroup>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_marginLeft="@dimen/dp5"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line2"
+                    android:id="@+id/tv_absolute_pressure_val_tip"
+                    android:padding="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text="绝对压力值："
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_absolute_pressure_val"
+                    app:layout_constraintTop_toTopOf="@id/tv_absolute_pressure_val_tip"
+                    app:layout_constraintLeft_toRightOf="@id/tv_absolute_pressure_val_tip"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_absolute_pressure_val_tip"
+                    android:textSize="@dimen/sp16"
+                    android:singleLine="true"
+                    android:layout_width="@dimen/dp150"
+                    android:background="@drawable/big_corner_bg"
+                    android:textColor="@color/c_384051"
+                    android:layout_height="@dimen/dp35" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/g_abs_pressure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    app:constraint_referenced_ids="et_absolute_pressure_val,tv_absolute_pressure_val_tip" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/barrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="et_absolute_pressure_val,
+            multiple_rg" />
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_pressure_tip"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/barrier"
+                    android:padding="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text="压力值"
+                    android:textColor="@color/c_384051"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:background="@color/c_DBE0E8"
+                    android:layout_width="0dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_pressure_tip"
+                    android:layout_height="1dp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_margin="@dimen/dp5"
+                    android:id="@+id/tv_current_pressure_val_tip"
+                    app:layout_constraintTop_toBottomOf="@id/tv_pressure_tip"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:padding="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text="开始压力值："
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_current_pressure_val"
+                    android:singleLine="true"
+                    app:layout_constraintLeft_toRightOf="@id/tv_current_pressure_val_tip"
+                    app:layout_constraintTop_toTopOf="@id/tv_current_pressure_val_tip"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_current_pressure_val_tip"
+                    android:textSize="@dimen/sp16"
+                    android:text="自动"
+                    android:gravity="center_vertical"
+                    android:layout_width="@dimen/dp150"
+                    android:textColor="@color/c_384051"
+                    android:layout_height="@dimen/dp35" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_margin="@dimen/dp5"
+                    android:id="@+id/tv_target_pressure_val_tip"
+                    app:layout_constraintTop_toTopOf="@id/tv_current_pressure_val_tip"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_current_pressure_val_tip"
+                    app:layout_constraintLeft_toRightOf="@id/tv_current_pressure_val"
+                    android:padding="@dimen/dp10"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text="目标压力值："
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_target_pressure_val"
+                    app:layout_constraintTop_toTopOf="@id/tv_target_pressure_val_tip"
+                    app:layout_constraintLeft_toRightOf="@id/tv_target_pressure_val_tip"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_target_pressure_val_tip"
+                    android:textSize="@dimen/sp16"
+                    android:singleLine="true"
+                    android:layout_width="@dimen/dp150"
+                    android:background="@drawable/big_corner_bg"
+                    android:textColor="@color/c_384051"
+                    android:layout_height="@dimen/dp35" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </ScrollView>
 </layout>

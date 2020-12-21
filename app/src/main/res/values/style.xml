@@ -81,13 +81,22 @@
     <style name="mainTab">
         <item name="android:textColor">@color/main_tab_select</item>
         <item name="android:background">@drawable/main_tab_select</item>
-        <item name="android:padding">@dimen/dp10</item>
         <item name="android:gravity">center</item>
         <item name="android:button">@null</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:textSize">@dimen/sp20</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">@dimen/sp16</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">0dp</item>
+    </style>
+
+    <style name="common_spinner" parent="Widget.AppCompat.DropDownItem.Spinner">
+        <item name="android:textColor">@color/c_384051</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="common_sp_add_pressure" parent="common_spinner">
+        <item name="android:textColor">@color/c_16a5ff</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
 </resources>

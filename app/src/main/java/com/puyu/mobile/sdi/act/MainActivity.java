@@ -15,7 +15,7 @@ import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
 import com.puyu.mobile.sdi.databinding.ActivityMainBinding;
 import com.puyu.mobile.sdi.frag.AddSampleFrag;
-import com.puyu.mobile.sdi.frag.PressurizeConfigFrag;
+import com.puyu.mobile.sdi.frag.PressurizeFrag;
 import com.puyu.mobile.sdi.frag.RinseFrag;
 import com.puyu.mobile.sdi.frag.SetFrag;
 import com.puyu.mobile.sdi.frag.StandardGasConfigFrag;
@@ -53,7 +53,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(StandardGasConfigFrag.getInstance());
         fragments.add(RinseFrag.getInstance());
-        fragments.add(PressurizeConfigFrag.getInstance());
+        fragments.add(PressurizeFrag.getInstance());
         fragments.add(AddSampleFrag.getInstance());
         fragments.add(SetFrag.getInstance());
         binding.vp2.setOffscreenPageLimit(fragments.size());
@@ -81,19 +81,19 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.standard_gas_config:
-                        binding.vp2.setCurrentItem(0);
+                        binding.vp2.setCurrentItem(0, false);
                         break;
                     case R.id.rinse:
-                        binding.vp2.setCurrentItem(1);
+                        binding.vp2.setCurrentItem(1, false);
                         break;
                     case R.id.pressurize:
-                        binding.vp2.setCurrentItem(2);
+                        binding.vp2.setCurrentItem(2, false);
                         break;
                     case R.id.add_sample:
-                        binding.vp2.setCurrentItem(3);
+                        binding.vp2.setCurrentItem(3, false);
                         break;
                     case R.id.set:
-                        binding.vp2.setCurrentItem(4);
+                        binding.vp2.setCurrentItem(4, false);
                         break;
                 }
             }

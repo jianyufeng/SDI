@@ -15,31 +15,29 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.textview.MaterialTextView
-            android:layout_margin="@dimen/dp10"
+            android:layout_margin="@dimen/dp5"
             android:id="@+id/tv_gas_name_tip"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:padding="@dimen/dp10"
-            android:layout_marginLeft="@dimen/dp10"
-            android:textSize="@dimen/sp20"
+            android:textSize="@dimen/sp16"
             android:text="气体名称："
             android:textColor="@color/c_384051"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <com.google.android.material.textfield.TextInputEditText
-            android:layout_margin="@dimen/dp10"
-            android:layout_marginTop="@dimen/dp10"
             android:id="@+id/et_gas_name"
+            android:singleLine="true"
             app:layout_constraintLeft_toRightOf="@id/barrier1"
-            app:layout_constraintTop_toTopOf="parent"
-            android:padding="@dimen/dp10"
-            android:textSize="@dimen/sp20"
-            android:layout_width="@dimen/dp200"
+            app:layout_constraintTop_toTopOf="@id/tv_gas_name_tip"
+            app:layout_constraintBottom_toBottomOf="@id/tv_gas_name_tip"
+            android:textSize="@dimen/sp16"
+            android:layout_width="@dimen/dp150"
             android:maxEms="10"
             android:background="@drawable/big_corner_bg"
             android:textColor="@color/c_384051"
-            android:layout_height="wrap_content" />
+            android:layout_height="@dimen/dp35" />
 
 
         <com.google.android.material.textview.MaterialTextView
@@ -48,25 +46,26 @@
             app:layout_constraintLeft_toLeftOf="@id/tv_gas_name_tip"
             android:padding="@dimen/dp10"
             android:layout_marginTop="@dimen/dp10"
-            android:textSize="@dimen/sp20"
+            android:textSize="@dimen/sp16"
             android:text="初始值："
             android:textColor="@color/c_384051"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <com.google.android.material.textfield.TextInputEditText
-            android:layout_margin="@dimen/dp10"
             android:id="@+id/et_gas_initial_val"
-            android:layout_marginTop="@dimen/dp10"
-            app:layout_constraintTop_toBottomOf="@id/et_gas_name"
+            app:layout_constraintTop_toTopOf="@id/tv_gas_initial_val_tip"
+            app:layout_constraintBottom_toBottomOf="@id/tv_gas_initial_val_tip"
             app:layout_constraintLeft_toRightOf="@id/barrier1"
             android:padding="@dimen/dp10"
-            android:textSize="@dimen/sp20"
-            android:layout_width="@dimen/dp200"
+            android:textSize="@dimen/sp16"
+            android:singleLine="true"
+            android:inputType="numberDecimal"
+            android:layout_width="@dimen/dp150"
             android:maxEms="10"
             android:background="@drawable/big_corner_bg"
             android:textColor="@color/c_384051"
-            android:layout_height="wrap_content" />
+            android:layout_height="@dimen/dp35" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_gas_dilution_multiple_tip"
@@ -74,25 +73,25 @@
             app:layout_constraintLeft_toLeftOf="@id/tv_gas_initial_val_tip"
             android:padding="@dimen/dp10"
             android:layout_marginTop="@dimen/dp10"
-            android:textSize="@dimen/sp20"
+            android:textSize="@dimen/sp16"
             android:text="稀释倍数："
             android:textColor="@color/c_384051"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <com.google.android.material.textfield.TextInputEditText
-            android:layout_margin="@dimen/dp10"
-            android:layout_marginTop="@dimen/dp10"
             android:id="@+id/et_gas_dilution_multiple"
-            app:layout_constraintTop_toBottomOf="@id/et_gas_initial_val"
+            app:layout_constraintBottom_toBottomOf="@id/tv_gas_dilution_multiple_tip"
+            android:singleLine="true"
+            android:inputType="numberDecimal"
+            app:layout_constraintTop_toTopOf="@id/tv_gas_dilution_multiple_tip"
             app:layout_constraintLeft_toRightOf="@id/barrier1"
-            android:padding="@dimen/dp10"
-            android:textSize="@dimen/sp20"
-            android:layout_width="@dimen/dp200"
+            android:textSize="@dimen/sp16"
+            android:layout_width="@dimen/dp150"
             android:maxEms="10"
             android:background="@drawable/big_corner_bg"
             android:textColor="@color/c_384051"
-            android:layout_height="wrap_content" />
+            android:layout_height="@dimen/dp35" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_gas_passage_enable_tip"
@@ -100,14 +99,13 @@
             app:layout_constraintLeft_toLeftOf="@id/tv_gas_dilution_multiple_tip"
             android:padding="@dimen/dp10"
             android:layout_marginTop="@dimen/dp10"
-            android:textSize="@dimen/sp20"
+            android:textSize="@dimen/sp16"
             android:text="是否开启："
             android:textColor="@color/c_384051"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:layout_margin="@dimen/dp10"
             app:layout_constraintTop_toTopOf="@id/tv_gas_passage_enable_tip"
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_passage_enable_tip"
             app:layout_constraintLeft_toRightOf="@id/barrier1"
@@ -125,29 +123,30 @@
 
 
         <com.google.android.material.textview.MaterialTextView
-            android:layout_margin="@dimen/dp10"
+            android:layout_margin="@dimen/dp5"
             android:id="@+id/tv_gas_unit_tip"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_gas_name_tip"
+            app:layout_constraintBottom_toBottomOf="@id/tv_gas_name_tip"
             android:padding="@dimen/dp10"
-            android:layout_marginLeft="@dimen/dp10"
             app:layout_constraintLeft_toRightOf="@id/et_gas_name"
-            android:textSize="@dimen/sp20"
+            android:textSize="@dimen/sp16"
             android:text="单位："
             android:textColor="@color/c_384051"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_margin="@dimen/dp10"
-            android:id="@+id/et_gas_unit"
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/sp_gas_unit"
             app:layout_constraintLeft_toRightOf="@id/barrier2"
-            app:layout_constraintTop_toTopOf="parent"
-            android:padding="@dimen/dp10"
-            android:textSize="@dimen/sp20"
-            android:layout_width="@dimen/dp200"
-            android:maxEms="10"
-            android:background="@drawable/big_corner_bg"
-            android:textColor="@color/c_384051"
+            app:layout_constraintTop_toTopOf="@id/tv_gas_unit_tip"
+            app:layout_constraintBottom_toBottomOf="@id/tv_gas_unit_tip"
+            android:layout_width="@dimen/dp150"
+            android:theme="@style/common_spinner"
+            android:gravity="center"
+            style="@style/Widget.AppCompat.Spinner.Underlined"
+            android:overlapAnchor="false"
+            android:spinnerMode="dropdown"
+            android:entries="@array/unitType"
             android:layout_height="wrap_content" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -156,24 +155,23 @@
             app:layout_constraintLeft_toLeftOf="@id/tv_gas_unit_tip"
             android:padding="@dimen/dp10"
             android:layout_marginTop="@dimen/dp10"
-            android:textSize="@dimen/sp20"
+            android:textSize="@dimen/sp16"
             android:text="目标值："
             android:textColor="@color/c_384051"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <com.google.android.material.textfield.TextInputEditText
-            android:layout_margin="@dimen/dp10"
             android:id="@+id/et_gas_target_val"
-            app:layout_constraintTop_toBottomOf="@id/et_gas_unit"
+            app:layout_constraintTop_toTopOf="@id/tv_gas_target_val_tip"
             app:layout_constraintLeft_toRightOf="@id/barrier2"
-            android:padding="@dimen/dp10"
-            android:textSize="@dimen/sp20"
-            android:layout_width="@dimen/dp200"
-            android:maxEms="10"
+            app:layout_constraintBottom_toBottomOf="@id/tv_gas_target_val_tip"
+            android:textSize="@dimen/sp16"
+            android:singleLine="true"
+            android:layout_width="@dimen/dp150"
             android:background="@drawable/big_corner_bg"
             android:textColor="@color/c_384051"
-            android:layout_height="wrap_content" />
+            android:layout_height="@dimen/dp35" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_gas_deviation_tip"
@@ -181,22 +179,22 @@
             app:layout_constraintLeft_toLeftOf="@id/tv_gas_target_val_tip"
             android:padding="@dimen/dp10"
             android:layout_marginTop="@dimen/dp10"
-            android:textSize="@dimen/sp20"
+            android:textSize="@dimen/sp16"
             android:text="误差："
             android:textColor="@color/c_384051"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:layout_margin="@dimen/dp10"
             android:id="@+id/et_gas_deviation_tip"
-            app:layout_constraintTop_toBottomOf="@id/et_gas_target_val"
+            app:layout_constraintTop_toTopOf="@id/tv_gas_deviation_tip"
             app:layout_constraintLeft_toRightOf="@id/barrier2"
-            android:padding="@dimen/dp10"
+            app:layout_constraintBottom_toBottomOf="@id/tv_gas_deviation_tip"
             android:text="误差55555："
+            android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp20"
+            android:textSize="@dimen/sp16"
             android:textColor="@color/c_384051" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -205,23 +203,24 @@
             app:layout_constraintLeft_toLeftOf="@id/tv_gas_deviation_tip"
             android:padding="@dimen/dp10"
             android:layout_marginTop="@dimen/dp10"
-            android:textSize="@dimen/sp20"
+            android:textSize="@dimen/sp16"
             android:text="耗时："
             android:textColor="@color/c_384051"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:layout_margin="@dimen/dp10"
             android:id="@+id/et_gas_consume_time"
-            app:layout_constraintTop_toBottomOf="@id/et_gas_deviation_tip"
+            app:layout_constraintTop_toTopOf="@id/tv_gas_consume_time_tip"
+            app:layout_constraintBottom_toBottomOf="@id/tv_gas_consume_time_tip"
             app:layout_constraintLeft_toRightOf="@id/barrier2"
-            android:padding="@dimen/dp10"
             android:text="耗时："
+            android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp20"
+            android:textSize="@dimen/sp16"
             android:textColor="@color/c_384051" />
+
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier2"

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -25,11 +26,11 @@ import com.puyu.mobile.sdi.viewmodel.PressurizeViewModel;
  * desc   :
  * version: 1.0
  */
-public class PressurizeConfigFrag extends BaseFragment<FragPressurizeBinding, PressurizeViewModel> {
+public class PressurizeFrag extends BaseFragment<FragPressurizeBinding, PressurizeViewModel> {
     private static final String TAG = "11111111PressurizeConfigFrag";
-    public static PressurizeConfigFrag getInstance() {
+    public static PressurizeFrag getInstance() {
         // Required empty public constructor
-        return new PressurizeConfigFrag();
+        return new PressurizeFrag();
     }
 
 
@@ -49,6 +50,28 @@ public class PressurizeConfigFrag extends BaseFragment<FragPressurizeBinding, Pr
                 .getApplication(), new PressurizeRepository())).get(PressurizeViewModel.class);
 
     }
+
+    @Override
+    protected void initData() {
+        binding.spAddPressure.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position==0){
+                    binding.multipleRg.setVisibility(View.VISIBLE);
+                    binding.gAbsPressure.setVisibility(View.INVISIBLE);
+                }else {
+                    binding.gAbsPressure.setVisibility(View.VISIBLE);
+                    binding.multipleRg.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
     @Override
     public void onResume() {
         super.onResume();

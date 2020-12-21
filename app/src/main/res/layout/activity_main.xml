@@ -16,17 +16,24 @@
         android:background="@color/c_f3f3f3f"
         tools:context=".act.MainActivity">
 
+        <androidx.cardview.widget.CardView
+            app:cardElevation="2dp"
+            android:id="@+id/rg_card"
+            android:layout_margin="2dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
         <RadioGroup
             android:id="@+id/rg"
-            android:elevation="@dimen/dp1"
-            android:divider="@drawable/line"
+            android:divider="@drawable/line_w"
             android:orientation="horizontal"
             android:showDividers="beginning|middle|end"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="@dimen/dp45">
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/standard_gas_config"
@@ -54,19 +61,137 @@
                 android:text="@string/set" />
         </RadioGroup>
 
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            app:cardElevation="2dp"
+            android:id="@+id/layout_real_state"
+            android:layout_margin="2dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_height="@dimen/dp45">
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/tv_current_pressure_val_tip"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginStart="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text="当前PSIA："
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/tv_current_pressure_val"
+                    app:layout_constraintLeft_toRightOf="@id/tv_current_pressure_val_tip"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textSize="@dimen/sp16"
+                    android:text="15.478"
+                    android:minEms="3"
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/tv_target_pressure_val_tip"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/tv_current_pressure_val"
+                    android:textSize="@dimen/sp16"
+                    android:text="目标PSIA："
+                    android:layout_marginStart="@dimen/dp10"
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/tv_target_pressure_val"
+                    app:layout_constraintLeft_toRightOf="@id/tv_target_pressure_val_tip"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textSize="@dimen/sp16"
+                    android:text="15.478"
+                    android:minEms="3"
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/tv_all_time_tip"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/tv_target_pressure_val"
+                    android:layout_marginStart="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text="总耗时："
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/tv_all_time"
+                    app:layout_constraintLeft_toRightOf="@id/tv_all_time_tip"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textSize="@dimen/sp16"
+                    android:text="24时60分60秒"
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_marginEnd="@dimen/dp10"
+                    android:layout_marginTop="@dimen/dp5"
+                    android:layout_marginBottom="@dimen/dp5"
+                    android:id="@+id/btn_start"
+                    android:textColor="@color/c_ffffff"
+                    android:layout_width="wrap_content"
+                    android:text="启动"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textSize="@dimen/sp16"
+                    android:background="@drawable/big_corner_bg_blue"
+                    android:layout_height="0dp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_marginBottom="@dimen/dp5"
+                    android:layout_marginTop="@dimen/dp5"
+                    android:layout_marginEnd="@dimen/dp10"
+                    android:id="@+id/btn_print_label"
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:text="打印标签"
+                    app:layout_constraintRight_toLeftOf="@id/btn_start"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textSize="@dimen/sp16"
+                    android:background="@drawable/big_corner_bg"
+                    android:layout_height="0dp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp2"
-            app:layout_constrainedHeight="true"
-            app:layout_constraintTop_toBottomOf="@id/rg"
+            app:layout_constraintTop_toBottomOf="@id/rg_card"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/layout_real_state"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_height="@dimen/dp50"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </layout>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools">
 
     <data>
 
@@ -9,10 +11,303 @@
     </data>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:background="#843"
         android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.cardview.widget.CardView
+            app:cardBackgroundColor="@color/c_f3f3f3f"
+            app:cardCornerRadius="@dimen/dp5"
+            app:cardElevation="@dimen/dp5"
+            android:layout_margin="@dimen/dp5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:background="@color/c_ffffff"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_type_tip"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:padding="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text="传感器校准"
+                    android:textColor="@color/c_384051"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:id="@+id/line"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:background="@color/c_DBE0E8"
+                    android:layout_width="0dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_type_tip"
+                    android:layout_height="1dp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_0_calibration"
+                    app:layout_constraintTop_toBottomOf="@id/line"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:textSize="@dimen/sp16"
+                    android:text="零点校准"
+                    android:layout_marginLeft="@dimen/dp20"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:layout_marginBottom="@dimen/dp10"
+                    android:paddingLeft="@dimen/dp10"
+                    android:paddingRight="@dimen/dp10"
+                    android:gravity="center"
+                    android:background="@drawable/big_corner_bg"
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp35" />
+
+                <ImageView
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:src="@drawable/ic_baseline_help_outline_24"
+                    app:layout_constraintLeft_toRightOf="@id/tv_0_calibration"
+                    app:layout_constraintTop_toTopOf="@id/tv_0_calibration"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_0_calibration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_margin="@dimen/dp5"
+                    android:id="@+id/tv_normal_calibration_tip"
+                    app:layout_constraintTop_toTopOf="@id/tv_0_calibration"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_0_calibration"
+                    app:layout_constraintLeft_toRightOf="@+id/et_pressure_up_val"
+                    android:padding="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text="常压校准："
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:id="@+id/tv_normal_calibration"
+                    app:layout_constraintTop_toTopOf="@id/tv_normal_calibration_tip"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_normal_calibration_tip"
+                    app:layout_constraintLeft_toRightOf="@id/tv_normal_calibration_tip"
+                    android:background="@drawable/big_corner_bg"
+                    android:layout_width="@dimen/dp150"
+                    android:layout_height="@dimen/dp35">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:layout_width="0dp"
+                        android:padding="@dimen/dp10"
+                        android:textSize="@dimen/sp16"
+                        android:textColor="@color/c_384051"
+                        android:inputType="numberDecimal"
+                        android:background="@null"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:layout_width="1px"
+                        android:background="@color/c_16a5ff"
+                        android:layout_marginTop="@dimen/dp5"
+                        android:layout_marginBottom="@dimen/dp5"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:textSize="@dimen/sp16"
+                        android:textColor="@color/c_16a5ff"
+                        android:text="校准"
+                        android:paddingLeft="@dimen/dp10"
+                        android:paddingRight="@dimen/dp10"
+                        android:gravity="center"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/ig_normal_help"
+                    app:layout_constraintLeft_toRightOf="@id/tv_normal_calibration"
+                    android:src="@drawable/ic_baseline_help_outline_24"
+                    android:layout_marginStart="@dimen/dp10"
+                    app:layout_constraintTop_toTopOf="@id/tv_normal_calibration_tip"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_normal_calibration_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_pressure_tip"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_normal_calibration_tip"
+                    android:padding="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text="压力限值"
+                    android:textColor="@color/c_384051"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:id="@+id/line1"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:background="@color/c_DBE0E8"
+                    android:layout_width="0dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_pressure_tip"
+                    android:layout_height="1dp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_margin="@dimen/dp5"
+                    android:id="@+id/tv_pressure_up_val_tip"
+                    app:layout_constraintTop_toBottomOf="@id/line1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:padding="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text="压力上限："
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_pressure_up_val"
+                    android:singleLine="true"
+                    app:layout_constraintLeft_toRightOf="@id/tv_pressure_up_val_tip"
+                    app:layout_constraintTop_toTopOf="@id/tv_pressure_up_val_tip"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_pressure_up_val_tip"
+                    android:textSize="@dimen/sp16"
+                    android:gravity="center_vertical"
+                    android:layout_width="@dimen/dp150"
+                    android:textColor="@color/c_384051"
+                    android:background="@drawable/big_corner_bg"
+                    android:layout_height="@dimen/dp35" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_margin="@dimen/dp5"
+                    android:id="@+id/tv_pressure_down_val_tip"
+                    app:layout_constraintTop_toTopOf="@id/tv_pressure_up_val_tip"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_pressure_up_val_tip"
+                    app:layout_constraintLeft_toRightOf="@id/et_pressure_up_val"
+                    android:padding="@dimen/dp10"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text="压力下限："
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_pressure_down_val"
+                    app:layout_constraintTop_toTopOf="@id/tv_pressure_down_val_tip"
+                    app:layout_constraintLeft_toRightOf="@id/tv_pressure_down_val_tip"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_pressure_down_val_tip"
+                    android:textSize="@dimen/sp16"
+                    android:singleLine="true"
+                    android:layout_width="@dimen/dp150"
+                    android:background="@drawable/big_corner_bg"
+                    android:textColor="@color/c_384051"
+                    android:layout_height="@dimen/dp35" />
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_version_tip"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_pressure_up_val_tip"
+                    android:padding="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text="版本信息"
+                    android:textColor="@color/c_384051"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:id="@+id/line2"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:background="@color/c_DBE0E8"
+                    android:layout_width="0dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_version_tip"
+                    android:layout_height="1dp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_margin="@dimen/dp5"
+                    android:id="@+id/tv_version_tip_app_tip"
+                    app:layout_constraintTop_toBottomOf="@id/line2"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:padding="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text="APP版本："
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textview.MaterialTextView
+
+                    android:id="@+id/tv_version_tip_app"
+                    android:singleLine="true"
+                    app:layout_constraintLeft_toRightOf="@id/tv_version_tip_app_tip"
+                    app:layout_constraintTop_toTopOf="@id/tv_version_tip_app_tip"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_version_tip_app_tip"
+                    android:textSize="@dimen/sp16"
+                    android:gravity="center_vertical"
+                    android:layout_width="@dimen/dp150"
+                    android:textColor="@color/c_384051"
+                    android:layout_height="@dimen/dp35" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_margin="@dimen/dp5"
+                    android:id="@+id/tv_version_tip_mcu_tip"
+                    app:layout_constraintTop_toTopOf="@id/tv_version_tip_app_tip"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_version_tip_app_tip"
+                    app:layout_constraintLeft_toRightOf="@id/tv_version_tip_app"
+                    android:padding="@dimen/dp10"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text="压力下限："
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_version_tip_mcu"
+                    app:layout_constraintTop_toTopOf="@id/tv_version_tip_mcu_tip"
+                    app:layout_constraintLeft_toRightOf="@id/tv_version_tip_mcu_tip"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_version_tip_mcu_tip"
+                    android:textSize="@dimen/sp16"
+                    android:singleLine="true"
+                    android:layout_width="@dimen/dp150"
+                    android:textColor="@color/c_384051"
+                    android:layout_height="@dimen/dp35" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_tep_tip"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_version_tip_app_tip"
+                    android:padding="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text="环境温度（25 ℃）"
+                    android:textColor="@color/c_384051"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:id="@+id/line3"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:background="@color/c_DBE0E8"
+                    android:layout_width="0dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_tep_tip"
+                    android:layout_height="1dp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </ScrollView>
 </layout>

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
@@ -27,6 +28,7 @@ import com.puyu.mobile.sdi.viewmodel.AddSampViewModel;
  */
 public class AddSampleFrag extends BaseFragment<FragAddSampleBinding, AddSampViewModel> {
     private static final String TAG = "11111111AddSampleFrag";
+
     public static AddSampleFrag getInstance() {
         // Required empty public constructor
         return new AddSampleFrag();
@@ -48,6 +50,27 @@ public class AddSampleFrag extends BaseFragment<FragAddSampleBinding, AddSampVie
         return new ViewModelProvider(getActivity(), new ViewModelParamsFactory<>(getActivity()
                 .getApplication(), new AddSampRepository())).get(AddSampViewModel.class);
 
+    }
+
+    @Override
+    protected void initData() {
+        binding.spAddPressure.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position==0){
+                    binding.multipleRg.setVisibility(View.VISIBLE);
+                    binding.gAbsPressure.setVisibility(View.INVISIBLE);
+                }else {
+                    binding.gAbsPressure.setVisibility(View.VISIBLE);
+                    binding.multipleRg.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
@@ -73,13 +96,13 @@ public class AddSampleFrag extends BaseFragment<FragAddSampleBinding, AddSampVie
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.e(TAG, "onDestroyView: " );
+        Log.e(TAG, "onDestroyView: ");
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.e(TAG, "onViewCreated: " );
+        Log.e(TAG, "onViewCreated: ");
     }
 
     @Override

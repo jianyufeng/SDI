@@ -70,7 +70,7 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         binding.rvPassage.setLayoutManager(manager);
         DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-        divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.custom_divider_white));
+        divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.line_h));
         binding.rvPassage.addItemDecoration(divider);
         ArrayList<PassageBean> passageBeans = new ArrayList<>();
         passageBeans.add(new PassageBean("稀释气", 0, true));
@@ -87,7 +87,7 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
                 if (item == null) return;
                 if (view.getId() == R.id.layout_content) {
                     if (position < binding.vpPassageDetail.getAdapter().getItemCount()) {
-                        binding.vpPassageDetail.setCurrentItem(position);
+                        binding.vpPassageDetail.setCurrentItem(position,false);
                         stationAdapter.setShowIndex(position);
                     }
                 } else if (view.getId() == R.id.checkbox) {
