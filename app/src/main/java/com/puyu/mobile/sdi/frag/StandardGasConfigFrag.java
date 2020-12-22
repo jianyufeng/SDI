@@ -28,6 +28,7 @@ import com.puyu.mobile.sdi.mvvm.BaseFragment;
 import com.puyu.mobile.sdi.mvvm.ViewModelParamsFactory;
 import com.puyu.mobile.sdi.viewmodel.StandardGasConfigViewModel;
 
+import java.io.DataInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,6 +126,7 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
                 binding.rvPassage.smoothScrollToPosition(position);
             }
         });
+        DataInputStream dis = null;
     }
 
     @Override

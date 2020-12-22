@@ -2,9 +2,11 @@ package com.puyu.mobile.sdi.act;
 
 
 import android.content.Context;
+import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.Message;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
@@ -15,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.pgyersdk.update.PgyUpdateManager;
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
 import com.puyu.mobile.sdi.databinding.ActivityMainBinding;
@@ -41,16 +42,9 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewModel> {
+public class MainActivity1 extends BaseActivity<ActivityMainBinding, MainViewModel> {
 
 
-    /**
-     * 延时显示更新对话框
-     */
-    private void updateAPP() {
-        new PgyUpdateManager.Builder()
-                .register();
-    }
 
     @Override
     public int initContentView() {
@@ -126,11 +120,40 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
 
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        /**
-         * 先开启监听线程，在开启连接
-         */
-   /*     listenerThread = new ListenerThread(PORT, handler);
-        listenerThread.start();*/
+
+        //检查Wifi状态
+        if (!wifiManager.isWifiEnabled())
+            wifiManager.setWifiEnabled(true);
+        binding.tvCurrentPressureVal.setText("已连接到：" + wifiManager.getConnectionInfo().getSSID() +
+                "\nIP:" /*+ getIp()*/
+                + "\n路由：" + getWifiRouteIPAddress(MainActivity1.this));
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Socket socket = new Socket(getWifiRouteIPAddress(MainActivity1.this), PORT);
+                    connectThread = new ConnectThread(MainActivity1.this,socket, handler);
+                    connectThread.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            binding.tvCurrentPressureVal.setText("通信连接失败");
+                        }
+                    });
+
+                }
+            }
+        }).start();
+
+
+     //   listenerThread = new ListenerThread(PORT, handler);
+      //  listenerThread.start();
+
+
+      /*listenerThread = new ListenerThread(PORT, handler);
+        listenerThread.start();
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -149,7 +172,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                         ip = "192.168.43.1";
                     }
                     Socket socket = new Socket(ip, PORT);
-                    connectThread = new ConnectThread(MainActivity.this, socket, handler);
+                    connectThread = new ConnectThread(MainActivity1.this, socket, handler);
                     connectThread.start();
 
                 } catch (IOException e) {
@@ -163,9 +186,29 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
                 }
             }
-        }).start();
+        }).start();*/
 
     }
+
+    /**
+     * wifi获取 已连接网络路由  路由ip地址
+     * @param context
+     * @return
+     */
+    private static String getWifiRouteIPAddress(Context context) {
+        WifiManager wifi_service = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        DhcpInfo dhcpInfo = wifi_service.getDhcpInfo();
+        //        WifiInfo wifiinfo = wifi_service.getConnectionInfo();
+        //        System.out.println("Wifi info----->" + wifiinfo.getIpAddress());
+        //        System.out.println("DHCP info gateway----->" + Formatter.formatIpAddress(dhcpInfo.gateway));
+        //        System.out.println("DHCP info netmask----->" + Formatter.formatIpAddress(dhcpInfo.netmask));
+        //DhcpInfo中的ipAddress是一个int型的变量，通过Formatter将其转化为字符串IP地址
+        String routeIp = Formatter.formatIpAddress(dhcpInfo.gateway);
+        Log.i("route ip", "wifi route ip：" + routeIp);
+        return routeIp;
+    }
+
+
     private WifiManager   wifiManager;
     /**
      * 监听线程
