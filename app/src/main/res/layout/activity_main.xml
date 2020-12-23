@@ -16,52 +16,72 @@
         android:background="@color/c_f3f3f3f"
         tools:context=".act.MainActivity">
 
+        <LinearLayout
+            android:background="@color/c_2D3A54"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/top_state"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="@dimen/dp30">
+
+            <TextView
+                android:id="@+id/tv_wifi_state"
+                android:textColor="@color/c_ffffff"
+                android:text="连接状态"
+                android:textSize="@dimen/sp14"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
         <androidx.cardview.widget.CardView
             app:cardElevation="2dp"
             android:id="@+id/rg_card"
             android:layout_margin="2dp"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/top_state"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <RadioGroup
-            android:id="@+id/rg"
-            android:divider="@drawable/line_w"
-            android:orientation="horizontal"
-            android:showDividers="beginning|middle|end"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp45">
+            <RadioGroup
+                android:id="@+id/rg"
+                android:divider="@drawable/line_w"
+                android:orientation="horizontal"
+                android:showDividers="beginning|middle|end"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp45">
 
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/standard_gas_config"
-                android:text="@string/standard_gas_config"
-                style="@style/mainTab" />
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/standard_gas_config"
+                    android:text="@string/standard_gas_config"
+                    style="@style/mainTab" />
 
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                style="@style/mainTab"
-                android:id="@+id/rinse"
-                android:text="@string/rinse" />
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    style="@style/mainTab"
+                    android:id="@+id/rinse"
+                    android:text="@string/rinse" />
 
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                style="@style/mainTab"
-                android:id="@+id/pressurize"
-                android:text="@string/pressurize" />
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    style="@style/mainTab"
+                    android:id="@+id/pressurize"
+                    android:text="@string/pressurize" />
 
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                style="@style/mainTab"
-                android:id="@+id/add_sample"
-                android:text="@string/add_sample" />
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    style="@style/mainTab"
+                    android:id="@+id/add_sample"
+                    android:text="@string/add_sample" />
 
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                style="@style/mainTab"
-                android:id="@+id/set"
-                android:text="@string/set" />
-        </RadioGroup>
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    style="@style/mainTab"
+                    android:id="@+id/set"
+                    android:text="@string/set" />
+            </RadioGroup>
 
         </androidx.cardview.widget.CardView>
+
         <androidx.cardview.widget.CardView
             app:cardElevation="2dp"
             android:id="@+id/layout_real_state"

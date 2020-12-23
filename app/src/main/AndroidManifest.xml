@@ -49,7 +49,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 -->
-        <activity android:name=".act.MainActivity1"
+        <activity android:name=".act.MainActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

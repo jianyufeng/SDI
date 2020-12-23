@@ -1,16 +1,12 @@
 package com.puyu.mobile.sdi.act;
 
 
-import android.content.Context;
-import android.net.wifi.WifiManager;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -27,18 +23,11 @@ import com.puyu.mobile.sdi.frag.StandardGasConfigFrag;
 import com.puyu.mobile.sdi.model.MainRepository;
 import com.puyu.mobile.sdi.mvvm.BaseActivity;
 import com.puyu.mobile.sdi.mvvm.ViewModelParamsFactory;
-import com.puyu.mobile.sdi.server.Connect;
-import com.puyu.mobile.sdi.server.ConnectThread;
-import com.puyu.mobile.sdi.server.ListenerThread;
+import com.puyu.mobile.sdi.server.ChatController;
+import com.puyu.mobile.sdi.server.Params;
 import com.puyu.mobile.sdi.viewmodel.MainViewModel;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewModel> {
@@ -61,6 +50,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     public int initVariableId() {
         return BR.viewModel;
     }
+
     @Override
     public MainViewModel initViewModel() {
         ViewModelParamsFactory<MainRepository> factory = new ViewModelParamsFactory<>(getApplication(), new MainRepository());
@@ -72,6 +62,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     protected void initViewObservable() {
 
     }
+
     @Override
     protected void initData() {
         List<Fragment> fragments = new ArrayList<>();
@@ -122,108 +113,33 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                 }
             }
         });
-
-
-
-        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        /**
-         * 先开启监听线程，在开启连接
-         */
-   /*     listenerThread = new ListenerThread(PORT, handler);
-        listenerThread.start();*/
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //        开启连接线程
-        new Thread(new Runnable() {
+        viewModel.wifiState.observe(this, new Observer<String>() {
             @Override
-            public void run() {
-                try {
-                    Log.i("ip", "getWifiApIpAddress()" + getWifiApIpAddress());
-                    //本地路由开启通信
-                    String ip = getWifiApIpAddress();
-                    if (ip != null) {
-                    } else {
-                        ip = "192.168.43.1";
-                    }
-                    Socket socket = new Socket(ip, PORT);
-                    connectThread = new ConnectThread(MainActivity.this, socket, handler);
-                    connectThread.start();
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            binding.tvCurrentPressureVal.setText("创建通信失败");
-                        }
-                    });
-
+            public void onChanged(String integer) {
+                switch (integer) {
+                    case Params.click_link_error://客户端连接失败，可能是已经配对的服务器未打开
+                        binding.tvWifiState.setText("连接失败,设备未打开");
+                        //keyikongzhi = false;
+                        break;
+                    case Params.click_link_success://连接成功
+                        binding.tvWifiState.setText("连接成功");
+                        //keyikongzhi = true;
+                        break;
+                    case Params.communicate_link_error://交流断开
+                        binding.tvWifiState.setText("连接被断开");
+                        // keyikongzhi = false;
+                        break;
+                    case Params.MSG_Server_ERROR://服务端异常
+                        binding.tvWifiState.setText("服务端异常");
+                        break;
+                    case Params.MSG_Server_start: //服务端启动
+                        binding.tvWifiState.setText("服务端启动");
+                        break;
                 }
             }
-        }).start();
-
-    }
-    private WifiManager   wifiManager;
-    /**
-     * 监听线程
-     */
-    private ListenerThread listenerThread;
-    /**
-     * 连接线程
-     */
-    private ConnectThread connectThread;
-    /**
-     * 端口号
-     */
-    private static final int    PORT              = 54321;
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case Connect.DEVICE_CONNECTING:
-                    connectThread = new ConnectThread(getApplicationContext(),listenerThread.getSocket(), handler);
-                    connectThread.start();
-                    break;
-                case Connect.DEVICE_CONNECTED:
-                    binding.tvCurrentPressureVal.setText("设备连接成功");
-                    break;
-                case Connect.SEND_MSG_SUCCSEE:
-                    binding.tvCurrentPressureVal.setText("发送消息成功:" + msg.getData().getString("MSG"));
-                    break;
-                case Connect.SEND_MSG_ERROR:
-                    binding.tvCurrentPressureVal.setText("发送消息失败:" + msg.getData().getString("MSG"));
-                    break;
-                case Connect.GET_MSG:
-                    binding.tvCurrentPressureVal.setText("收到消息:" + msg.getData().getString("MSG"));
-                    break;
-            }
-        }
-    };
-
-    public String getWifiApIpAddress() {
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface
-                    .getNetworkInterfaces(); en.hasMoreElements(); ) {
-                NetworkInterface intf = en.nextElement();
-                if (intf.getName().contains("wlan")) {
-                    for (Enumeration<InetAddress> enumIpAddr = intf
-                            .getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
-                        InetAddress inetAddress = enumIpAddr.nextElement();
-                        if (!inetAddress.isLoopbackAddress()
-                                && (inetAddress.getAddress().length == 4)) {
-                            Log.d("Main", inetAddress.getHostAddress());
-                            return inetAddress.getHostAddress();
-                        }
-                    }
-                }
-            }
-        } catch (SocketException ex) {
-            Log.e("Main", ex.toString());
-        }
-        return null;
+        });
+        ChatController.getInstance().startChatWith(viewModel);
+//        ChatController.getInstance().waitingForFriends(viewModel);
     }
 
 
