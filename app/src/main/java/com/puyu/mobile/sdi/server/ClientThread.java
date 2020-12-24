@@ -17,10 +17,10 @@ import java.net.Socket;
  * version: 1.0
  */
 public class ClientThread extends Thread {
-     /**
+    /**
      * 客户端socket
      */
-    private  Socket mmSoket;
+    private Socket mmSoket;
 
     private BluetoothAdapter mBluetoothAdapter;
     /**
@@ -40,20 +40,15 @@ public class ClientThread extends Thread {
     public void run() {
         super.run();
         try {
+            mHandler.wifiState.postValue(Params.click_linking);
             // 连接服务器
-            mmSoket= new Socket(IPUtil.getWifiRouteIPAddress(APP.getInstance()), Params.PORT);
+            mmSoket = new Socket(IPUtil.getWifiRouteIPAddress(APP.getInstance()), Params.PORT);
         } catch (IOException e) {
             // 连接异常就关闭
             e.printStackTrace();
             //EventBus.getDefault().post(new ClientLinkError(Params.click_link_error));
             mHandler.wifiState.postValue(Params.click_link_error);
-            try {
-                if (mmSoket!=null){
-                    mmSoket.close();
-                }
-            } catch (IOException e1) {
-                e.printStackTrace();
-            }
+            cancle();
             return;
         }
 
@@ -74,7 +69,8 @@ public class ClientThread extends Thread {
      */
     public void cancle() {
         try {
-            mmSoket.close();
+            if (mmSoket != null)
+                mmSoket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

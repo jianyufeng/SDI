@@ -15,7 +15,7 @@ import java.net.Socket;
  */
 public class AccepThread extends Thread {
 
-     /**
+    /**
      * 服务端蓝牙Sokcet
      */
     private final ServerSocket mmServerSocket;
@@ -45,7 +45,7 @@ public class AccepThread extends Thread {
         while (true) {
             try {
                 // 获取连接的客户端socket
-              //  EventBus.getDefault().post(new SeverStarted(Params.MSG_Server_start));
+                //  EventBus.getDefault().post(new SeverStarted(Params.MSG_Server_start));
                 mHandler.wifiState.postValue(Params.MSG_Server_start);
                 socket = mmServerSocket.accept();
             } catch (IOException e) {
@@ -57,7 +57,7 @@ public class AccepThread extends Thread {
                 // 服务端退出一直监听线程
                 break;
             }
-           // EventBus.getDefault().post(new ClientLinkSuccess(Params.click_link_success, socket.getRemoteDevice()));
+            // EventBus.getDefault().post(new ClientLinkSuccess(Params.click_link_success, socket.getRemoteDevice()));
             mHandler.wifiState.postValue(Params.click_link_success);
 
             // 管理连接的客户端socket
@@ -87,7 +87,12 @@ public class AccepThread extends Thread {
      */
     public void cancle() {
         try {
+            //断开等待
             mmServerSocket.close();
+            //断开已经连接的客户端
+            if (mConnectedThread != null) {
+                mConnectedThread.cancle();
+            }
 //            mHandler.sendEmptyMessage(Constant.MSG_FINISH_LISTENING);
 //            EventBus.getDefault().post(new ServerFinishBean(Params.MSG_Server_finish));
         } catch (IOException e) {

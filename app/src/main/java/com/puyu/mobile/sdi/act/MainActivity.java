@@ -117,7 +117,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
             @Override
             public void onChanged(String integer) {
                 switch (integer) {
-                    case Params.click_link_error://客户端连接失败，可能是已经配对的服务器未打开
+                    case Params.click_linking://客户端开始连接
+                        binding.tvWifiState.setText("客户端开始连接");
+                        //keyikongzhi = false;
+                        break;
+                  case Params.click_link_error://客户端连接失败，可能是已经配对的服务器未打开
                         binding.tvWifiState.setText("连接失败,设备未打开");
                         //keyikongzhi = false;
                         break;

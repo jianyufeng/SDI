@@ -18,7 +18,7 @@ import java.net.Socket;
  */
 public class ConnectedThread extends Thread {
     /**
-     * 当前连接的客户端BluetoothSocket
+     * 当前连接的客户端Socket
      */
     private final Socket mmSokcet;
     /**
@@ -60,8 +60,8 @@ public class ConnectedThread extends Thread {
             try {
                 // 读取数据
                 int len = mmInputStream.read(buffer);
-                int available = mmInputStream.available();
-                String content;
+//                int available = mmInputStream.available();
+//                String content;
                 if (len > 0) {
                     byte[] r = new byte[len];
                     System.arraycopy(buffer, 0, r, 0, len);
@@ -72,11 +72,8 @@ public class ConnectedThread extends Thread {
                     // 把数据发送到主线程, 此处还可以用广播
 //                    Message message = mHandler.obtainMessage(Constant.MSG_GOT_DATA, data);
 //                    mHandler.sendMessage(message);
-                }else {
-                    mmSokcet.sendUrgentData(1);
                 }
-                Log.d(TAG, "messge size :" + len);
-            } catch (IOException e) {
+            } catch (IOException e) {//wifi 关闭会走异常 包括本地和服务端 不包括服务端软件关闭
                 e.printStackTrace();
 //                EventBus.getDefault().post(new CommunicateError(Params.communicate_link_error));
                 mHandler.wifiState.postValue(Params.communicate_link_error);

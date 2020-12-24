@@ -12,6 +12,7 @@ public class Params {
     public static final String Receive_msg = "receive_msg";  //收到的消息
     public static final String click_link_error = "click_link_error";  //客户端连接失败，可能是已经配对的服务器未打开
     public static final String click_link_success = "click_link_success";  //客户端成功
+    public static final String click_linking = "click_linking";  //客户端开始连接
     public static final String communicate_link_error = "communicate_link_error";  //交流断开
 
 

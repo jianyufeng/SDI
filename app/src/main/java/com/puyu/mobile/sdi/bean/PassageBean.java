@@ -4,10 +4,13 @@ package com.puyu.mobile.sdi.bean;
  * author : 简玉锋
  * e-mail : yufeng_jian@fpi-inc.com
  * date   : 2020/12/17 11:09
- * desc   :
+ * desc   : 通道
  * version: 1.0
  */
+
 public class PassageBean {
+
+
     private String name;
     private int prassage;
 
