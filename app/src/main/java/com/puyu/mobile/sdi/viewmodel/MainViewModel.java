@@ -15,7 +15,6 @@ import com.puyu.mobile.sdi.mvvm.command.BindingConsumer;
 public class MainViewModel extends BaseViewModel<MainRepository> {
     //tab切换
     public MutableLiveData<Integer> selectType = new MutableLiveData<>(0);
-    public MutableLiveData<String> wifiState = new MutableLiveData<>("");
 
     public MainViewModel(@NonNull Application application, MainRepository model) {
         super(application, model);

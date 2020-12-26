@@ -2,7 +2,7 @@ package com.puyu.mobile.sdi.server;
 
 import android.util.Log;
 
-import com.puyu.mobile.sdi.viewmodel.MainViewModel;
+import com.puyu.mobile.sdi.LiveDataStateBean;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,37 +24,31 @@ public class ConnectedThread extends Thread {
     /**
      * 读取数据流
      */
-    private final InputStream mmInputStream;
+    private InputStream mmInputStream;
     /**
      * 发送数据流
      */
-    private final OutputStream mmOutputStream;
-    /**
-     * 与主线程通信Handler
-     */
-    private MainViewModel mHandler;
+    private OutputStream mmOutputStream;
+
     private String TAG = "ConnectedThread";
 
-    public ConnectedThread(Socket socket, MainViewModel handler) {
+    public ConnectedThread(Socket socket) {
         mmSokcet = socket;
-        mHandler = handler;
-        InputStream tmpIn = null;
-        OutputStream tmpOut = null;
-        try {
-            tmpIn = socket.getInputStream();
-            tmpOut = socket.getOutputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-            //EventBus.getDefault().post(new CommunicateError(Params.communicate_link_error));
-            handler.wifiState.postValue(Params.communicate_link_error);
-        }
-        mmInputStream = tmpIn;
-        mmOutputStream = tmpOut;
     }
 
     @Override
     public void run() {
         super.run();
+        try {
+            mmInputStream = mmSokcet.getInputStream();
+            mmOutputStream = mmSokcet.getOutputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+            //EventBus.getDefault().post(new CommunicateError(Params.communicate_link_error));
+            LiveDataStateBean.getInstant().getWifiState().postValue(Params.communicate_link_error);
+            cancle();
+            return;
+        }
         byte[] buffer = new byte[1024];
         while (true) {
             try {
@@ -65,18 +59,12 @@ public class ConnectedThread extends Thread {
                 if (len > 0) {
                     byte[] r = new byte[len];
                     System.arraycopy(buffer, 0, r, 0, len);
-                    Log.d(TAG, "run messge: " +new String(r));
-//                    content = HexConvert.BinaryToHexString(r);
-//                    content = new String(buffer, 0, len, "utf-8");
-//                    EventBus.getDefault().post(new ReceiveMsgBean(Params.Receive_msg, content));
-                    // 把数据发送到主线程, 此处还可以用广播
-//                    Message message = mHandler.obtainMessage(Constant.MSG_GOT_DATA, data);
-//                    mHandler.sendMessage(message);
+                    Log.d(TAG, "run messge: " + new String(r));
                 }
             } catch (IOException e) {//wifi 关闭会走异常 包括本地和服务端 不包括服务端软件关闭
                 e.printStackTrace();
 //                EventBus.getDefault().post(new CommunicateError(Params.communicate_link_error));
-                mHandler.wifiState.postValue(Params.communicate_link_error);
+                LiveDataStateBean.getInstant().getWifiState().postValue(Params.communicate_link_error);
                 cancle();
                 break;
             }
@@ -100,11 +88,12 @@ public class ConnectedThread extends Thread {
      */
     public void write(byte[] data) {
         try {
+
             mmOutputStream.write(data);
         } catch (IOException e) {
             e.printStackTrace();
             // EventBus.getDefault().post(new CommunicateError(Params.communicate_link_error));
-            mHandler.wifiState.postValue(Params.communicate_link_error);
+            LiveDataStateBean.getInstant().getWifiState().postValue(Params.communicate_link_error);
         }
     }
 }

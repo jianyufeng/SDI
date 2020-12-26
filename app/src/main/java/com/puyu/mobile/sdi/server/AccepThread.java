@@ -1,6 +1,6 @@
 package com.puyu.mobile.sdi.server;
 
-import com.puyu.mobile.sdi.viewmodel.MainViewModel;
+import com.puyu.mobile.sdi.LiveDataStateBean;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -19,19 +19,16 @@ public class AccepThread extends Thread {
      * 服务端蓝牙Sokcet
      */
     private final ServerSocket mmServerSocket;
-    /**
-     * 线程中通信的更新UI的Handler
-     */
-    private final MainViewModel mHandler;
+
+
     private final int port;
     /**
      * 监听到有客户端连接，新建一个线程单独处理，不然在此线程中会堵塞
      */
     private ConnectedThread mConnectedThread;
 
-    public AccepThread(MainViewModel handler) throws IOException {
+    public AccepThread() throws IOException {
         this.port = Params.PORT;
-        this.mHandler = handler;
         // 获取服务端蓝牙socket
         mmServerSocket = new ServerSocket(port);  //监听本机的12345端口
     }
@@ -46,11 +43,11 @@ public class AccepThread extends Thread {
             try {
                 // 获取连接的客户端socket
                 //  EventBus.getDefault().post(new SeverStarted(Params.MSG_Server_start));
-                mHandler.wifiState.postValue(Params.MSG_Server_start);
+                LiveDataStateBean.getInstant().getWifiState().postValue(Params.MSG_Server_start);
                 socket = mmServerSocket.accept();
             } catch (IOException e) {
                 // 通知主线程更新UI, 获取异常
-                mHandler.wifiState.postValue(Params.MSG_Server_ERROR);
+                LiveDataStateBean.getInstant().getWifiState().postValue(Params.MSG_Server_ERROR);
                 // EventBus.getDefault().post(new SeverErrorModelBean(Params.MSG_Server_ERROR));
 //                mHandler.sendEmptyMessage();
                 e.printStackTrace();
@@ -58,7 +55,7 @@ public class AccepThread extends Thread {
                 break;
             }
             // EventBus.getDefault().post(new ClientLinkSuccess(Params.click_link_success, socket.getRemoteDevice()));
-            mHandler.wifiState.postValue(Params.click_link_success);
+            LiveDataStateBean.getInstant().getWifiState().postValue(Params.click_link_success);
 
             // 管理连接的客户端socket
             manageConnectSocket(socket);
@@ -78,7 +75,7 @@ public class AccepThread extends Thread {
         }
 
         // 新建一个线程,处理客户端发来的数据
-        mConnectedThread = new ConnectedThread(socket, mHandler);
+        mConnectedThread = new ConnectedThread(socket);
         mConnectedThread.start();
     }
 

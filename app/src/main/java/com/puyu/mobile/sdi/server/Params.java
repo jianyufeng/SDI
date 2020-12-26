@@ -1,8 +1,5 @@
 package com.puyu.mobile.sdi.server;
 
-/**
- * Created by Hu on 2017/4/4.
- */
 
 public class Params {
     public static final int PORT = 54321;

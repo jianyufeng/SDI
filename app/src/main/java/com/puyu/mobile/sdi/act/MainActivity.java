@@ -13,6 +13,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.pgyersdk.update.PgyUpdateManager;
 import com.puyu.mobile.sdi.BR;
+import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.R;
 import com.puyu.mobile.sdi.databinding.ActivityMainBinding;
 import com.puyu.mobile.sdi.frag.AddSampleFrag;
@@ -113,7 +114,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                 }
             }
         });
-        viewModel.wifiState.observe(this, new Observer<String>() {
+        LiveDataStateBean.getInstant().getWifiState().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String integer) {
                 switch (integer) {
@@ -142,7 +143,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                 }
             }
         });
-        ChatController.getInstance().startChatWith(viewModel);
+        ChatController.getInstance().startChatWith();
 //        ChatController.getInstance().waitingForFriends(viewModel);
     }
 

@@ -3,7 +3,7 @@ package com.puyu.mobile.sdi.server;
 import android.bluetooth.BluetoothAdapter;
 
 import com.puyu.mobile.sdi.APP;
-import com.puyu.mobile.sdi.viewmodel.MainViewModel;
+import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.util.IPUtil;
 
 import java.io.IOException;
@@ -26,42 +26,43 @@ public class ClientThread extends Thread {
     /**
      * 主线程通信的Handler
      */
-    private final MainViewModel mHandler;
+
     /**
      * 发送和接收数据的处理类
      */
     private ConnectedThread mConnectedThread;
 
-    public ClientThread(MainViewModel mUIhandler) {
-        mHandler = mUIhandler;
+    public ClientThread() {
+
     }
 
     @Override
     public void run() {
         super.run();
         try {
-            mHandler.wifiState.postValue(Params.click_linking);
+            LiveDataStateBean.getInstant().getWifiState().postValue(Params.click_linking);
             // 连接服务器
             mmSoket = new Socket(IPUtil.getWifiRouteIPAddress(APP.getInstance()), Params.PORT);
         } catch (IOException e) {
             // 连接异常就关闭
             e.printStackTrace();
             //EventBus.getDefault().post(new ClientLinkError(Params.click_link_error));
-            mHandler.wifiState.postValue(Params.click_link_error);
+            LiveDataStateBean.getInstant().getWifiState().postValue(Params.click_link_error);
             cancle();
             return;
         }
 
 //        EventBus.getDefault().post(new ClientLinkSuccess(Params.click_link_success,mmDevice));
-        mHandler.wifiState.postValue(Params.click_link_success);
+        LiveDataStateBean.getInstant().getWifiState().postValue(Params.click_link_success);
         manageConnectedSocket(mmSoket);
     }
 
     private void manageConnectedSocket(Socket mmSoket) {
 
         // 新建一个线程进行通讯,不然会发现线程堵塞
-        mConnectedThread = new ConnectedThread(mmSoket, mHandler);
-        mConnectedThread.start();
+       // mConnectedThread = new ConnectedThread(mmSoket);
+      //  mConnectedThread.start();
+        SocketConnected s = new SocketConnected(mmSoket);
     }
 
     /**

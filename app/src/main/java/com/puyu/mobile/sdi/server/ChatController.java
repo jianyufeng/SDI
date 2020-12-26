@@ -1,6 +1,6 @@
 package com.puyu.mobile.sdi.server;
 
-import com.puyu.mobile.sdi.viewmodel.MainViewModel;
+import com.puyu.mobile.sdi.LiveDataStateBean;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -69,8 +69,8 @@ public class ChatController {
     /**
      * 与服务器连接进行聊天
      */
-    public void startChatWith(MainViewModel handler) {
-        mConnectThread = new ClientThread( handler);
+    public void startChatWith() {
+        mConnectThread = new ClientThread();
         mConnectThread.start();
     }
 
@@ -78,14 +78,14 @@ public class ChatController {
      * 等待客户端来连接
      * handler : 用来跟主线程通信，更新UI用的
      */
-    public void waitingForFriends(MainViewModel handler) {
+    public void waitingForFriends() {
         try {
-            mAccepThread = new AccepThread(handler);
+            mAccepThread = new AccepThread();
             mAccepThread.start();
         } catch (IOException e) {
             e.printStackTrace();
 //            EventBus.getDefault().post(new SeverErrorModelBean(Params.MSG_Server_ERROR));
-            handler.wifiState.postValue(Params.MSG_Server_ERROR);
+            LiveDataStateBean.getInstant().getWifiState().postValue(Params.MSG_Server_ERROR);
         }
     }
 
