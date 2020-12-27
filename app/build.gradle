@@ -64,5 +64,6 @@ dependencies {
     annotationProcessor "io.objectbox:objectbox-processor:$objectboxVersion"
     debugImplementation "io.objectbox:objectbox-android-objectbrowser:$objectboxVersionDe"
     releaseImplementation "io.objectbox:objectbox-android:$objectboxVersion"
+    implementation group: 'io.netty', name: 'netty-all', version: '4.1.11.Final'
 
 }

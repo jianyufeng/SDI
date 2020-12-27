@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * author : 简玉锋
@@ -50,6 +51,7 @@ public class ConnectedThread extends Thread {
             return;
         }
         byte[] buffer = new byte[1024];
+        ArrayList<byte[]> bytes = new ArrayList<>();
         while (true) {
             try {
                 // 读取数据
@@ -59,9 +61,17 @@ public class ConnectedThread extends Thread {
                 if (len > 0) {
                     byte[] r = new byte[len];
                     System.arraycopy(buffer, 0, r, 0, len);
-                    Log.d(TAG, "run messge: " + new String(r));
+                    bytes.add(r);
+                    if (mmInputStream.available() == 0) { //一个请求
+                        for (int i = 0; i < bytes.size(); i++) {
+                            mmOutputStream.write(bytes.get(i));
+                        }
+                        mmOutputStream.flush();
+                    }
+                    Log.d(TAG, "run bytes.size: " + bytes.size());
+                    bytes.clear();
                 }
-            } catch (IOException e) {//wifi 关闭会走异常 包括本地和服务端 不包括服务端软件关闭
+            } catch (Exception e) {//wifi 关闭会走异常 包括本地和服务端 不包括服务端软件关闭
                 e.printStackTrace();
 //                EventBus.getDefault().post(new CommunicateError(Params.communicate_link_error));
                 LiveDataStateBean.getInstant().getWifiState().postValue(Params.communicate_link_error);
@@ -69,6 +79,7 @@ public class ConnectedThread extends Thread {
                 break;
             }
         }
+
     }
 
     // 踢掉当前客户端

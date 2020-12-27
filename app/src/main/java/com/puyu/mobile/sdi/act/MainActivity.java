@@ -144,7 +144,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
             }
         });
         ChatController.getInstance().startChatWith();
-//        ChatController.getInstance().waitingForFriends(viewModel);
+//        ChatController.getInstance().waitingForFriends();
     }
 
 

@@ -30,7 +30,7 @@ public class AccepThread extends Thread {
     public AccepThread() throws IOException {
         this.port = Params.PORT;
         // 获取服务端蓝牙socket
-        mmServerSocket = new ServerSocket(port);  //监听本机的12345端口
+        mmServerSocket = new ServerSocket(port);  //监听本机的54321端口
     }
 
     @Override
