@@ -33,6 +33,8 @@ import io.netty.handler.timeout.IdleStateHandler;
 public class NettyConnected extends Thread {
     public static String host = "192.168.43.1";
     public static int port = 54321;
+    private Bootstrap bootstrap;
+    private Channel channel;
 
     public NettyConnected() {
     }
@@ -41,37 +43,44 @@ public class NettyConnected extends Thread {
     public void run() {
         super.run();
         NioEventLoopGroup worker = new NioEventLoopGroup();
+        bootstrap = new Bootstrap()
+                .group(worker)// 指定EventLoopGroup
+                .channel(NioSocketChannel.class)// 指定channel类型
+                .handler(new ChannelInitializer() {
+                    @Override
+                    protected void initChannel(Channel ch) {
+                        ChannelPipeline pipeline = ch.pipeline();
+                        //添加心跳处理Handler
+                        pipeline.addLast("timeOut", new IdleStateHandler(5, 0, 0));
+                        pipeline.addLast("frame", new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
+                        pipeline.addLast("decoder", new StringDecoder()); //添加发送数据编码器
+                        pipeline.addLast("encoder", new StringEncoder());
+                        pipeline.addLast("handler", new ClientHandler(NettyConnected.this)); //添加数据处理器
+                    }
+                });// 指定Handler
+        // 连接到服务端
+        ChannelFuture channelFuture = bootstrap.connect(host,
+                port);
+        // 添加连接状态监听
+        channelFuture.addListener(new ConnectListener(NettyConnected.this));
         try {
-            bootstrap = new Bootstrap()
-                    .group(worker)// 指定EventLoopGroup
-                    .channel(NioSocketChannel.class)// 指定channel类型
-                    .handler(new ClientInitializer());// 指定Handler+
-            // 连接到服务端
-            ChannelFuture channelFuture = bootstrap.connect(host,
-                    port);
-            // 添加连接状态监听
-            channelFuture.addListener(new ConnectListener(NettyConnected.this));
             channel = channelFuture.sync().channel(); //获取连接通道
             System.out.println("客户端首次连接成功");
         } catch (Exception e) {
             System.out.println("客户端首次连接失败：" + e.getMessage());
             e.printStackTrace();
-            worker.shutdownGracefully();
         }
     }
-
-    private Bootstrap bootstrap;
-    private Channel channel;
 
     /**
      * 重连
      */
     public void reConnect() {
+        ChannelFuture channelFuture = bootstrap.connect(new InetSocketAddress(host, port));
+        System.out.println("重新连接中------：");
+        // 添加连接状态监听
+        channelFuture.addListener(new ConnectListener(NettyConnected.this));
         try {
-            ChannelFuture channelFuture = bootstrap.connect(new InetSocketAddress(host, port));
-            // 添加连接状态监听
-            channelFuture.addListener(new ConnectListener(NettyConnected.this));
-            System.out.println("重新连接中------：");
             channel = channelFuture.sync().channel();
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,6 +88,9 @@ public class NettyConnected extends Thread {
         }
     }
 
+    /**
+     * 关闭连接
+     */
     public void close() {
         if (channel != null && channel.isOpen()) {
             channel.close();
@@ -90,19 +102,6 @@ public class NettyConnected extends Thread {
 
     }
 
-
-    private class ClientInitializer extends ChannelInitializer {
-        @Override
-        protected void initChannel(Channel ch) {
-            ChannelPipeline pipeline = ch.pipeline();
-            //添加心跳处理Handler
-            pipeline.addLast("timeOut", new IdleStateHandler(5, 0, 0));
-            pipeline.addLast("frame", new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
-            pipeline.addLast("decoder", new StringDecoder()); //添加发送数据编码器
-            pipeline.addLast("encoder", new StringEncoder());
-            pipeline.addLast("handler", new ClientHandler(NettyConnected.this)); //添加数据处理器
-        }
-    }
 
     class ClientHandler extends SimpleChannelInboundHandler<String> {
         NettyConnected clientInitializer;
@@ -217,7 +216,6 @@ public class NettyConnected extends Thread {
 
     private class ConnectListener implements ChannelFutureListener {
         private NettyConnected nettyClient;
-
         public ConnectListener(NettyConnected nettyClient) {
             this.nettyClient = nettyClient;
         }

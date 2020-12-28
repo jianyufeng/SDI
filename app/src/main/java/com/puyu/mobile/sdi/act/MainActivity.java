@@ -24,6 +24,7 @@ import com.puyu.mobile.sdi.frag.StandardGasConfigFrag;
 import com.puyu.mobile.sdi.model.MainRepository;
 import com.puyu.mobile.sdi.mvvm.BaseActivity;
 import com.puyu.mobile.sdi.mvvm.ViewModelParamsFactory;
+import com.puyu.mobile.sdi.server.ChatController;
 import com.puyu.mobile.sdi.server.Params;
 import com.puyu.mobile.sdi.netty.NettyConnected;
 import com.puyu.mobile.sdi.viewmodel.MainViewModel;
