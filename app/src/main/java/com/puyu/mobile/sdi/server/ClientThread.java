@@ -4,7 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 
 import com.puyu.mobile.sdi.APP;
 import com.puyu.mobile.sdi.LiveDataStateBean;
-import com.puyu.mobile.util.IPUtil;
+import com.puyu.mobile.sdi.util.IPUtil;
 
 import java.io.IOException;
 import java.net.Socket;

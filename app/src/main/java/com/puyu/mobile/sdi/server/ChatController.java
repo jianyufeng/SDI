@@ -1,7 +1,6 @@
 package com.puyu.mobile.sdi.server;
 
 import com.puyu.mobile.sdi.LiveDataStateBean;
-import com.puyu.mobile.sdi.server.netty.NettyConnected;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -71,11 +70,8 @@ public class ChatController {
      * 与服务器连接进行聊天
      */
     public void startChatWith() {
-       // mConnectThread = new ClientThread();
-       // mConnectThread.start();
-        NettyConnected client = new NettyConnected();
-        client.start();
-
+         mConnectThread = new ClientThread();
+         mConnectThread.start();
     }
 
     /**

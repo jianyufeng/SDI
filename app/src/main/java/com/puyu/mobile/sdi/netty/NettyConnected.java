@@ -1,4 +1,4 @@
-package com.puyu.mobile.sdi.server.netty;
+package com.puyu.mobile.sdi.netty;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
@@ -18,6 +18,8 @@ import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
 
 /**
@@ -32,6 +34,9 @@ public class NettyConnected extends Thread {
     public static String host = "192.168.43.1";
     public static int port = 54321;
 
+    public NettyConnected() {
+    }
+
     @Override
     public void run() {
         super.run();
@@ -44,27 +49,15 @@ public class NettyConnected extends Thread {
             // 连接到服务端
             ChannelFuture channelFuture = bootstrap.connect(host,
                     port);
+            // 添加连接状态监听
             channelFuture.addListener(new ConnectListener(NettyConnected.this));
             channel = channelFuture.sync().channel(); //获取连接通道
-            System.out.println("连接成功111111：");
-            // 添加连接状态监听
-           /* while (true) {
-                boolean open = channel.isOpen();
-                boolean active = channel.isActive();
-                boolean registered = channel.isRegistered();
-                boolean writable = channel.isWritable();
-                channel.writeAndFlush("this msg  test come from client" + "\r\n");
-               Thread.currentThread();
-               Thread.sleep(10000);
-            }*/
-            Thread.sleep(15000);
+            System.out.println("客户端首次连接成功");
         } catch (Exception e) {
-            System.out.println("连接失败11111111111：" + e.getMessage());
+            System.out.println("客户端首次连接失败：" + e.getMessage());
             e.printStackTrace();
-        } finally {
             worker.shutdownGracefully();
         }
-
     }
 
     private Bootstrap bootstrap;
@@ -76,22 +69,35 @@ public class NettyConnected extends Thread {
     public void reConnect() {
         try {
             ChannelFuture channelFuture = bootstrap.connect(new InetSocketAddress(host, port));
+            // 添加连接状态监听
+            channelFuture.addListener(new ConnectListener(NettyConnected.this));
+            System.out.println("重新连接中------：");
             channel = channelFuture.sync().channel();
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("连接失败：" + e.getMessage());
+            System.out.println("重新连接失败：" + e.getMessage());
         }
     }
 
+    public void close() {
+        if (channel != null && channel.isOpen()) {
+            channel.close();
+        }
+        if (bootstrap != null) {
+            bootstrap.group().shutdownGracefully();
+        }
+    }
+
+
     private class ClientInitializer extends ChannelInitializer {
         @Override
-        protected void initChannel(Channel ch) throws Exception {
+        protected void initChannel(Channel ch) {
             ChannelPipeline pipeline = ch.pipeline();
             //添加心跳处理Handler
-            pipeline.addLast("timeOut",new IdleStateHandler(5, 0, 0));
-            pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
+            pipeline.addLast("timeOut", new IdleStateHandler(5, 0, 0));
+            pipeline.addLast("frame", new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
             pipeline.addLast("decoder", new StringDecoder()); //添加发送数据编码器
-            pipeline.addLast("eencoder", new StringEncoder());
+            pipeline.addLast("encoder", new StringEncoder());
             pipeline.addLast("handler", new ClientHandler(NettyConnected.this)); //添加数据处理器
         }
     }
@@ -114,13 +120,26 @@ public class NettyConnected extends Thread {
                     System.out.println("连接断开，发起重连");
                     clientInitializer.reConnect();
                 }
-            }, 10, TimeUnit.SECONDS);
+            }, 5, TimeUnit.SECONDS);
         }
 
         @Override
         public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
             super.userEventTriggered(ctx, evt);
-            System.out.println("[Server]: " + "userEventTriggered");
+            System.out.println("-------userEventTriggered" + "  超时\n");
+            if (evt instanceof IdleStateEvent) {
+                IdleStateEvent e = (IdleStateEvent) evt;
+                if (e.state() == IdleState.WRITER_IDLE) {
+                    System.out.println("-------userEventTriggered WRITER_IDLE" + "  超时\n");
+                    // TODO: 2018/6/13
+                    //ctx.writeAndFlush(HEARTBEAT_SEQUENCE.duplicate()).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+                } else if (e.state() == IdleState.READER_IDLE) {
+                    System.out.println("-------userEventTriggered READER_IDLE" + "  超时\n");
+
+                } else if (e.state() == IdleState.ALL_IDLE) {
+                    System.out.println("-------userEventTriggered ALL_IDLE" + "  超时\n");
+                }
+            }
             channel.writeAndFlush("this msg  test come from client3333" + "\r\n");
         }
 
@@ -132,8 +151,9 @@ public class NettyConnected extends Thread {
          * @throws Exception
          */
         @Override
-        protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
+        protected void messageReceived(ChannelHandlerContext ctx, String msg) throws Exception {
             System.out.println("[Server]: " + msg);
+
         }
 
         /**
@@ -146,7 +166,8 @@ public class NettyConnected extends Thread {
         public void channelActive(ChannelHandlerContext ctx) throws Exception {
             super.channelActive(ctx);//
             Channel channel = ctx.channel();
-            System.out.println("Client ：" + channel.remoteAddress() + "  在线\n");
+            System.out.println("-------channelActive" + "  在线\n");
+
         }
 
         /**
@@ -159,7 +180,7 @@ public class NettyConnected extends Thread {
         public void channelInactive(ChannelHandlerContext ctx) throws Exception {
             super.channelInactive(ctx);
             Channel channel = ctx.channel();
-            System.out.println("Client ：" + channel.remoteAddress() + "  离线\n");
+            System.out.println("-------channelInactive" + "  离线\n");
             //启动重连
             reConnect(ctx);
         }
@@ -170,7 +191,7 @@ public class NettyConnected extends Thread {
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
             super.exceptionCaught(ctx, cause);
             Channel channel = ctx.channel();
-            System.out.println("Client ：" + channel.remoteAddress() + "  异常\n");
+            System.out.println("-------exceptionCaught" + "  异常\n");
             cause.printStackTrace();
             ctx.close();
         }
@@ -178,26 +199,37 @@ public class NettyConnected extends Thread {
         @Override
         public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
             Channel channel = ctx.channel();
-            System.out.println("-------handlerAdded");
+            System.out.println("-------handlerAdded" + " 加入\n");
 
         }
+
+        @Override
+        public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+            System.out.println("-------handlerRemoved" + " 离开\n");
+
+        }
+
+
     }
 
 
     private class ConnectListener implements ChannelFutureListener {
         private NettyConnected nettyClient;
+
         public ConnectListener(NettyConnected nettyClient) {
             this.nettyClient = nettyClient;
         }
+
         @Override
         public void operationComplete(ChannelFuture channelFuture) {
             //连接失败发起重连
-            if (!channelFuture.isSuccess()) {
+            System.out.println("连接状态监听：连接状态 " + channelFuture.isSuccess());
+            if (!channelFuture.isSuccess()) {//重新连接
                 final EventLoop loop = channelFuture.channel().eventLoop();
                 loop.schedule(new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println("连接失败，发起重连!!!!!!!!!");
+                        System.out.println("连接状态监听中，发起重新连---");
                         nettyClient.reConnect();
                     }
                 }, 5, TimeUnit.SECONDS);

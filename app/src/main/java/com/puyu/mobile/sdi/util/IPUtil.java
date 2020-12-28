@@ -1,4 +1,4 @@
-package com.puyu.mobile.util;
+package com.puyu.mobile.sdi.util;
 
 import android.content.Context;
 import android.net.DhcpInfo;

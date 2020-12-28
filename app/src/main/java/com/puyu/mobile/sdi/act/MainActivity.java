@@ -24,8 +24,8 @@ import com.puyu.mobile.sdi.frag.StandardGasConfigFrag;
 import com.puyu.mobile.sdi.model.MainRepository;
 import com.puyu.mobile.sdi.mvvm.BaseActivity;
 import com.puyu.mobile.sdi.mvvm.ViewModelParamsFactory;
-import com.puyu.mobile.sdi.server.ChatController;
 import com.puyu.mobile.sdi.server.Params;
+import com.puyu.mobile.sdi.netty.NettyConnected;
 import com.puyu.mobile.sdi.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
@@ -122,7 +122,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                         binding.tvWifiState.setText("客户端开始连接");
                         //keyikongzhi = false;
                         break;
-                  case Params.click_link_error://客户端连接失败，可能是已经配对的服务器未打开
+                    case Params.click_link_error://客户端连接失败，可能是已经配对的服务器未打开
                         binding.tvWifiState.setText("连接失败,设备未打开");
                         //keyikongzhi = false;
                         break;
@@ -143,9 +143,17 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                 }
             }
         });
-        ChatController.getInstance().startChatWith();
+        client = new NettyConnected();
+        client.start();
 //        ChatController.getInstance().waitingForFriends();
     }
 
-
+    NettyConnected client;
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (client != null) {
+            client.close();
+        }
+    }
 }

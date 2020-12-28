@@ -1,4 +1,4 @@
-package com.puyu.mobile.sdi.server.netty;
+package com.puyu.mobile.sdi.netty;
 
 import android.util.Log;
 
@@ -9,6 +9,7 @@ import java.util.List;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -103,8 +104,11 @@ public class NettyServer {
          * @throws Exception
          */
         @Override
-        protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object o) throws Exception {
+        protected void messageReceived(ChannelHandlerContext channelHandlerContext, Object o) throws Exception {
             Log.d(TAG, "收到了解码器处理过的数据：" + o.toString());
+
+            Channel channel = channelHandlerContext.channel();
+            channel.writeAndFlush(o.toString());
         }
 
         /**
@@ -130,5 +134,7 @@ public class NettyServer {
             super.channelInactive(ctx);
             Log.d(TAG, "有客户端断开了连接：" + ctx.toString());
         }
+
+
     }
 }
