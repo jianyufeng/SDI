@@ -86,6 +86,8 @@ public class NettyConnected extends Thread {
         if (bootstrap != null) {
             bootstrap.group().shutdownGracefully();
         }
+        System.out.println("关闭连接：");
+
     }
 
 
