@@ -4,6 +4,7 @@ buildscript {
     ext.objectboxVersion = '2.8.1'
     ext.objectboxVersionDe = '2.5.1'
     repositories {
+        maven {url  'https://maven.aliyun.com/repository/public/'}
         google()
         jcenter()
         maven{ url 'http://central.maven.org/maven2/'}
@@ -19,9 +20,13 @@ buildscript {
 
 allprojects {
     repositories {
+        maven {url  'https://maven.aliyun.com/repository/public/'}
         google()
         jcenter()
         maven { url 'https://jitpack.io' }
+        maven {
+            url 'http://maven.aliyun.com/nexus/content/repositories/releases/'
+        }
     }
 }
 
