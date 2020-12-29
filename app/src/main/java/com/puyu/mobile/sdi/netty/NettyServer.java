@@ -104,7 +104,7 @@ public class NettyServer {
          * @throws Exception
          */
         @Override
-        protected void messageReceived(ChannelHandlerContext channelHandlerContext, Object o) throws Exception {
+        protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object o) throws Exception {
             Log.d(TAG, "收到了解码器处理过的数据：" + o.toString());
 
             Channel channel = channelHandlerContext.channel();

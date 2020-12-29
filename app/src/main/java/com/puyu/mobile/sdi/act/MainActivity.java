@@ -24,9 +24,8 @@ import com.puyu.mobile.sdi.frag.StandardGasConfigFrag;
 import com.puyu.mobile.sdi.model.MainRepository;
 import com.puyu.mobile.sdi.mvvm.BaseActivity;
 import com.puyu.mobile.sdi.mvvm.ViewModelParamsFactory;
-import com.puyu.mobile.sdi.server.ChatController;
-import com.puyu.mobile.sdi.server.Params;
 import com.puyu.mobile.sdi.netty.NettyConnected;
+import com.puyu.mobile.sdi.server.Params;
 import com.puyu.mobile.sdi.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
@@ -64,6 +63,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     protected void initViewObservable() {
 
     }
+
+    int indw = 0;
 
     @Override
     protected void initData() {
@@ -111,10 +112,22 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                         break;
                     case R.id.set:
                         binding.vp2.setCurrentItem(4, false);
+                        indw++;
+                        if (indw % 2 == 0) {
+
+                            byte[] bytes = {0x44,0x41,0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, 0x20, 0x55, 0x00, 0x00, 0x00};
+                            client.sendMsg(bytes);
+                        } else {
+
+                            byte[] bytes = {0x20,0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, 0x20, 0x55, 0x00, 0x00, 0x00, 0x7d, 0x7d};
+                            client.sendMsg(bytes);
+
+                        }
                         break;
                 }
             }
         });
+
         LiveDataStateBean.getInstant().getWifiState().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String integer) {
@@ -150,6 +163,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     }
 
     NettyConnected client;
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
