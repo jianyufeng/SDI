@@ -18,21 +18,43 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 public class HeaderEnderDecoder extends ByteToMessageDecoder {
     private ByteBuf header;
     private ByteBuf ender;
+    private ByteBuf fil;
 
 
     public HeaderEnderDecoder() {
         byte[] head = new byte[]{0x7D, 0x7B};
         byte[] end = new byte[]{0x7D, 0x7D};
+        byte[] f = new byte[]{0x7D, (byte) 0x82};
         header = Unpooled.copiedBuffer(head);
         ender = Unpooled.copiedBuffer(end);
+        fil = Unpooled.copiedBuffer(f);
     }
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         // 显示十六进制的接收码
         System.out.println("协议收到数据为:" + ByteBufUtil.hexDump(in));
-        // 调用decode方法，去除帧头和帧尾
+
+
+
+        //1、调用decode方法，去除帧头和帧尾
         ByteBuf childBuf = decode(in);
+        //2、验证数据帧7D82
+        if (childBuf!=null){
+            System.out.println("协议数据为去掉头尾----:" + ByteBufUtil.hexDump(childBuf));
+            int index;
+            while ((index=ByteBufUtil.indexOf(fil, childBuf))!=-1){
+                //有
+                int length = childBuf.readableBytes();
+                childBuf.writerIndex(index+1);
+                int length2 = childBuf.readableBytes();
+                childBuf.writeBytes(childBuf,index+fil.capacity(), length- childBuf.writerIndex()-1);
+                System.out.println("协议数据去掉7D82中的82----:" + ByteBufUtil.hexDump(childBuf));
+            }
+        }
+        //
+
+
         // 如果获得有效数据
         if (childBuf != null) {
             // 将有效数据备份加入接收列表
@@ -66,7 +88,7 @@ public class HeaderEnderDecoder extends ByteToMessageDecoder {
             int index = ByteBufUtil.indexOf(header, buf);
             // 帧头第一次出现位置找到
             if (index > -1 && index < buf.capacity()) {
-                // 设置帧头位置读取
+                // 设置帧头位置读取 丢弃之前的数据
                 buf.readerIndex(index);
                 // 将帧头位置保存
                 sliceStart = index;
@@ -91,10 +113,6 @@ public class HeaderEnderDecoder extends ByteToMessageDecoder {
             }
         }
         //去掉剩余的垃圾数据
-        if (sliceEnd == -1) {
-            //将可读数据设置为0
-            buf.skipBytes(buf.readableBytes());
-        }
         return null;
     }
 }

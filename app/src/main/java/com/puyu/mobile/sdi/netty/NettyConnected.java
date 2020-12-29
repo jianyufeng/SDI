@@ -4,6 +4,8 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -48,7 +50,7 @@ public class NettyConnected extends Thread {
                     protected void initChannel(Channel ch) {
                         ChannelPipeline pipeline = ch.pipeline();
                         //添加心跳处理Handler
-                        pipeline.addLast("timeOut", new IdleStateHandler(10, 5, 0));
+                        //pipeline.addLast("timeOut", new IdleStateHandler(10, 5, 0));
                         pipeline.addLast("frame", new HeaderEnderDecoder());
                         pipeline.addLast("encoder", new ByteArrayEncoder());
                       //  pipeline.addLast("frame1", new GT06MsgDecoder());
@@ -163,8 +165,7 @@ public class NettyConnected extends Thread {
          */
         @Override
         protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
-
-            System.out.println("[Server]: " + msg);
+            System.out.println("[Server]: " +  ByteBufUtil.hexDump((ByteBuf) msg));
         }
 
         /**

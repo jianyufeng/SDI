@@ -115,7 +115,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                         indw++;
                         if (indw % 2 == 0) {
 
-                            byte[] bytes = {0x44,0x41,0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, 0x20, 0x55, 0x00, 0x00, 0x00};
+                            byte[] bytes = {0x44,0x41,0x7d, 0x7b, 0x01, (byte) 0x7d, (byte) 0x82, (byte) 0xf3, 0x20, 0x7d, (byte) 0x82, 0x00, 0x00};
                             client.sendMsg(bytes);
                         } else {
 
