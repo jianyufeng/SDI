@@ -1,5 +1,6 @@
 package com.puyu.mobile.sdi.netty;
 
+import java.util.Arrays;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
@@ -18,16 +19,13 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 public class HeaderEnderDecoder extends ByteToMessageDecoder {
     private ByteBuf header;
     private ByteBuf ender;
-    private ByteBuf fil;
+    private ByteBuf filter;
 
 
     public HeaderEnderDecoder() {
-        byte[] head = new byte[]{0x7D, 0x7B};
-        byte[] end = new byte[]{0x7D, 0x7D};
-        byte[] f = new byte[]{0x7D, (byte) 0x82};
-        header = Unpooled.copiedBuffer(head);
-        ender = Unpooled.copiedBuffer(end);
-        fil = Unpooled.copiedBuffer(f);
+        header = Unpooled.copiedBuffer(ProtocolParams.frameHead);
+        ender = Unpooled.copiedBuffer(ProtocolParams.frameEnd);
+        filter = Unpooled.copiedBuffer(ProtocolParams.frameFilter);
     }
 
     @Override
@@ -35,25 +33,48 @@ public class HeaderEnderDecoder extends ByteToMessageDecoder {
         // 显示十六进制的接收码
         System.out.println("协议收到数据为:" + ByteBufUtil.hexDump(in));
 
-
-
-        //1、调用decode方法，去除帧头和帧尾
+        //1.验证7D7B 7D7D;调用decode方法，去除帧头和帧尾
         ByteBuf childBuf = decode(in);
+        if (childBuf == null) return;
+        //2.验证最小长度
+        int lengthD = childBuf.readableBytes();
+        if (lengthD < ProtocolParams.minLength) {
+            System.out.println("协议长度有问题 最小长度是:" + ProtocolParams.minLength + " 当前长度是:" + lengthD);
+            return;
+        }
+        //3.验证 地址
+        byte[] bytesAddr = new byte[4];
+        childBuf.getBytes(0, bytesAddr);
+        if (!Arrays.equals(ProtocolParams.receiveAddr, bytesAddr)) {
+            System.out.println("协议地址有问题:" + ByteBufUtil.hexDump(bytesAddr));
+            return;
+        }
+        //验证数据长度
+        byte[] dateLen = new byte[2];
+        childBuf.getBytes(6, dateLen);
+        int len = (dateLen[0] << 8) + dateLen[1];
+        System.out.println("验证数据长度----:" + ByteBufUtil.hexDump(dateLen));
+        System.out.println("验证数据长度:" + len);
+        if ((childBuf.readableBytes()-10)!=len){
+            System.out.println("数据长度不符,实际数据长度:" + (childBuf.readableBytes()-10));
+            return;
+        }
+        //CRC校验
+
+
         //2、验证数据帧7D82
-        if (childBuf!=null){
-            System.out.println("协议数据为去掉头尾----:" + ByteBufUtil.hexDump(childBuf));
+        if (childBuf != null) {
+            System.out.println("协议数据去掉头尾----:" + ByteBufUtil.hexDump(childBuf));
             int index;
-            while ((index=ByteBufUtil.indexOf(fil, childBuf))!=-1){
+            while ((index = ByteBufUtil.indexOf(filter, childBuf)) != -1) {
                 //有
                 int length = childBuf.readableBytes();
-                childBuf.writerIndex(index+1);
+                childBuf.writerIndex(index + 1);
                 int length2 = childBuf.readableBytes();
-                childBuf.writeBytes(childBuf,index+fil.capacity(), length- childBuf.writerIndex()-1);
+                childBuf.writeBytes(childBuf, index + filter.capacity(), length - childBuf.writerIndex() - 1);
                 System.out.println("协议数据去掉7D82中的82----:" + ByteBufUtil.hexDump(childBuf));
             }
         }
-        //
-
 
         // 如果获得有效数据
         if (childBuf != null) {
