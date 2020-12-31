@@ -38,7 +38,7 @@ public class ProtocolParams {
      *| 命令码+ | 命令扩展码+ | 通讯数据长度（2字节）+ | 数据区+
      * 20 55 00 00 ???
      */
-    //仪器ID
+    //仪器ID 指令
     public static byte CMD_DEVICE_ID=  (byte) 0x20;
 
 

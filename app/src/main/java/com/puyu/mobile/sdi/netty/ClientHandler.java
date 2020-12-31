@@ -73,6 +73,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
             byte cmd = cmdData.getByte(0);//命令码
            if (cmd==ProtocolParams.CMD_DEVICE_ID){
 
+           }else if (cmd==ProtocolParams.CMD_DEVICE_ID){
+
            }
 
             //byte cmdEx = ((ByteBuf) msg).getByte(0);//命令扩展码
