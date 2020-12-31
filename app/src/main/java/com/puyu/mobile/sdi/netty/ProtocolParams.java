@@ -33,4 +33,25 @@ public class ProtocolParams {
      */
     public static int minLength = 14 - 4;//去掉帧头和帧尾 并且没有数据
 
+
+    /**
+     *| 命令码+ | 命令扩展码+ | 通讯数据长度（2字节）+ | 数据区+
+     * 20 55 00 00 ???
+     */
+    //仪器ID
+    public static byte CMD_DEVICE_ID=  (byte) 0x20;
+
+
+
+    //命令扩展码
+    public static byte CMD_Ex_R=  (byte) 0x55;//读
+    public static byte CMD_Ex_W=  (byte) 0x66;//写
+
+    //写回复状态
+    public static byte WRITE_FAIL=  (byte) 0x99;// 写命令失败
+    public static byte WRITE_SUCCESS=  (byte) 0x88;//写命令成功
+    public static byte Write_ERROR=  (byte) 0xaa;//写入数据非法或者超限
+
+
+
 }

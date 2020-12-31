@@ -1,5 +1,7 @@
 package com.puyu.mobile.sdi.netty;
 
+import com.puyu.mobile.sdi.util.AppCRC;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,9 +19,9 @@ import io.netty.handler.codec.ByteToMessageDecoder;
  * version: 1.0
  */
 public class HeaderEnderDecoder extends ByteToMessageDecoder {
-    private ByteBuf header;
-    private ByteBuf ender;
-    private ByteBuf filter;
+    private final ByteBuf header;
+    private final ByteBuf ender;
+    private final ByteBuf filter;
 
 
     public HeaderEnderDecoder() {
@@ -36,33 +38,30 @@ public class HeaderEnderDecoder extends ByteToMessageDecoder {
         //1.验证7D7B 7D7D;调用decode方法，去除帧头和帧尾
         ByteBuf childBuf = decode(in);
         if (childBuf == null) return;
-        //2.验证最小长度
+        //2.验证最小长度已经去掉帧头和帧尾的 7d 7b 01 F1 01 F3 20 55 00 00 ??? 00 00 7d 7d
         int lengthD = childBuf.readableBytes();
         if (lengthD < ProtocolParams.minLength) {
             System.out.println("协议长度有问题 最小长度是:" + ProtocolParams.minLength + " 当前长度是:" + lengthD);
             return;
         }
-        //3.验证 地址
+        //3.验证 地址 及地址长度 发送方和接收方 主板F1  平板F3
         byte[] bytesAddr = new byte[4];
         childBuf.getBytes(0, bytesAddr);
         if (!Arrays.equals(ProtocolParams.receiveAddr, bytesAddr)) {
             System.out.println("协议地址有问题:" + ByteBufUtil.hexDump(bytesAddr));
             return;
         }
-        //验证数据长度
+        //4.验证数据位长度 数据帧中包含多少个字节数据
         byte[] dateLen = new byte[2];
         childBuf.getBytes(6, dateLen);
         int len = (dateLen[0] << 8) + dateLen[1];
         System.out.println("验证数据长度----:" + ByteBufUtil.hexDump(dateLen));
         System.out.println("验证数据长度:" + len);
-        if ((childBuf.readableBytes()-10)!=len){
-            System.out.println("数据长度不符,实际数据长度:" + (childBuf.readableBytes()-10));
+        if ((childBuf.readableBytes() - 10) != len) {
+            System.out.println("数据长度不符,实际数据长度:" + (childBuf.readableBytes() - 10));
             return;
         }
-        //CRC校验
-
-
-        //2、验证数据帧7D82
+        //5. 验证数据帧7D82
         if (childBuf != null) {
             System.out.println("协议数据去掉头尾----:" + ByteBufUtil.hexDump(childBuf));
             int index;
@@ -75,11 +74,19 @@ public class HeaderEnderDecoder extends ByteToMessageDecoder {
                 System.out.println("协议数据去掉7D82中的82----:" + ByteBufUtil.hexDump(childBuf));
             }
         }
-
+        //6.验证CRC校验
+        //CRC校验
+        byte[] crc = new byte[2];
+        childBuf.getBytes(childBuf.readableBytes() - 2, crc);
+        byte[] crcByte = AppCRC.GetCRC(childBuf);
+        if (!Arrays.equals(crc, crcByte)) {
+            System.out.println("帧CRC校验失败: 验证CRC:" + ByteBufUtil.hexDump(crc) + " 本地计算的CRC：" + ByteBufUtil.hexDump(crcByte));
+            return;
+        }
         // 如果获得有效数据
         if (childBuf != null) {
             // 将有效数据备份加入接收列表
-            out.add(childBuf.copy());
+            out.add(childBuf.copy(4,childBuf.readableBytes()-6));
         }
     }
 
