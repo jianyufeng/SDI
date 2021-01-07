@@ -2,8 +2,6 @@ package com.puyu.mobile.sdi;
 
 import android.app.Application;
 
-import com.puyu.mobile.sdi.db.ObjectBox;
-
 /**
  * author : 简玉锋
  * e-mail : yufeng_jian@fpi-inc.com
@@ -22,7 +20,7 @@ public class APP extends Application {
         app =this;
         init(this);
         //初始化数据库操作
-        ObjectBox.init(this);
+        //ObjectBox.init(this);
     }
 
     //初始化

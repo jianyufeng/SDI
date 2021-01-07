@@ -1,10 +1,21 @@
 package com.puyu.mobile.sdi.netty;
 
+import com.puyu.mobile.sdi.LiveDataStateBean;
+import com.puyu.mobile.sdi.bean.DeviceId;
+import com.puyu.mobile.sdi.bean.DeviceMCUVersion;
+import com.puyu.mobile.sdi.bean.DeviceType;
+import com.puyu.mobile.sdi.bean.LinkStateEnum;
+import com.puyu.mobile.sdi.bean.PressureLimit;
+import com.puyu.mobile.sdi.bean.SysStateEnum;
+import com.puyu.mobile.sdi.bean.SystemMonitor;
+import com.puyu.mobile.sdi.server.Params;
+
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.EventLoop;
@@ -78,28 +89,30 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
             if (cmd == ProtocolParams.CMD_DEVICE_ID) { //仪器ID
                 if (rw == ProtocolParams.CMD_Ex_R_R) { //读取仪器ID 返回 12个字节
                     //获取数据
-                    System.out.println("数据仪器ID:" + date.length);
+                    System.out.println("仪器ID:" + ByteBufUtil.hexDump(date));
+                    LiveDataStateBean.getInstant().deviceIdLiveData.postValue(new DeviceId(new String(date).trim()));
                 } else if (rw == ProtocolParams.CMD_Ex_W_R) { //写入仪器ID 返回 1个字节
                     if (date.length == 1) {
                         if (date[0] == ProtocolParams.CMD_Ex_W_R_s) {
                             //写入成功
-                            System.out.println("数据仪器ID 写入成功:" + date.length);
+                            System.out.println("仪器ID 写入成功:" + date.length);
 
                         } else if (date[0] == ProtocolParams.CMD_Ex_W_R_f) {
                             //写入失败
-                            System.out.println("数据仪器ID 写入失败:" + date.length);
+                            System.out.println("仪器ID 写入失败:" + date.length);
 
                         } else if (date[0] == ProtocolParams.CMD_Ex_W_R_e) {
                             //写入出错
-                            System.out.println("数据仪器ID 写入出错:" + date.length);
+                            System.out.println("仪器ID 写入出错:" + date.length);
 
                         }
                     }
                 }
-            } else if (cmd == ProtocolParams.CMD_DEVICE_Version) {//软件版本号读取
+            } else if (cmd == ProtocolParams.CMD_DEVICE_Version) { //软件版本号读取
                 if (rw == ProtocolParams.CMD_Ex_R_R) { //读取仪器ID 返回 32个字节
                     //获取数据
-                    System.out.println("软件版本号读取:" + date.length);
+                    System.out.println("软件版本号读取:" + ByteBufUtil.hexDump(date));
+                    LiveDataStateBean.getInstant().deviceVersion.postValue(new DeviceMCUVersion(new String(date).trim()));
                 }
 
             } else if (cmd == ProtocolParams.CMD_DEVICE_Type) { //仪器类型
@@ -107,7 +120,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                 if (rw == ProtocolParams.CMD_Ex_R_R) { //读取仪器ID 返回 1个字节 0x00:静态稀释仪
                     //获取数据
                     if (date.length == 1 && date[0] == 0x00) {//静态稀释仪
-                        System.out.println("仪器类型 读取:" + date.length);
+                        System.out.println("仪器类型 读取:" + ByteBufUtil.hexDump(date));
+                        LiveDataStateBean.getInstant().deviceType.postValue(new DeviceType("静态稀释仪"));
                     }
                 } else if (rw == ProtocolParams.CMD_Ex_W_R) { //写入仪器类型 返回 1个字节
                     if (date.length == 1) {
@@ -118,8 +132,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                         } else if (date[0] == ProtocolParams.CMD_Ex_W_R_f) {
                             //写入失败
                             System.out.println("写入仪器类型 写入失败:" + date.length);
-
-           }else if (cmd==ProtocolParams.CMD_DEVICE_ID){
 
                         } else if (date[0] == ProtocolParams.CMD_Ex_W_R_e) {
                             //写入出错
@@ -238,16 +250,25 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                 if (rw == ProtocolParams.CMD_Ex_R_R) {
                     //读取压力上下限 返回 8 个字节 4字节(FP32)上限压力(0-50psia)4字节(FP32)下限压力(0-1psia)
                     //获取数据
-                    System.out.println("读取压力上下限:" + date.length);
+                    if (date.length == 8) {
+                        ByteBuf byteBuf = Unpooled.copiedBuffer(date);
+                        float ul = byteBuf.readFloat();
+                        System.out.println("压力上限:" + ul);
+                        float ll = byteBuf.readFloat();
+                        System.out.println("压力下限:" + ll);
+                        byteBuf.release();
+                        LiveDataStateBean.getInstant().pressureLimit.postValue(new PressureLimit(ul, ll));
+                    }
+
                 } else if (rw == ProtocolParams.CMD_Ex_W_R) { //校准设置 返回 1个字节
                     if (date.length == 1) {
                         if (date[0] == ProtocolParams.CMD_set_R_s) { //方法设置成功
                             //写入成功
-                            System.out.println("读取压力上下限 设置成功:" + date.length);
+                            System.out.println("压力上下限 设置成功:" + date.length);
 
                         } else if (date[0] == ProtocolParams.CMD_set_R_f) { //方法设置失败
                             //写入失败
-                            System.out.println("读取压力上下限 设置失败:" + date.length);
+                            System.out.println("压力上下限 设置失败:" + date.length);
 
                         }
                     }
@@ -255,16 +276,20 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                 }
             } else if (cmd == ProtocolParams.CMD_system_monitoring) { //系统监控
                 if (rw == ProtocolParams.CMD_Ex_R_R) {
+                    SystemMonitor monitor = new SystemMonitor();
                     //系统监控 返回 76+N个字节  //获取数据
                     if (date.length >= 76) {
                         //1字节(INT8U)系统状态 系统状态0x00:Normal  0x01:Alarm  0x02:Err
                         byte sysState = date[0];
                         if (sysState == 0x00) {
                             System.out.println("系统状态 Normal");
+                            monitor.sysState = SysStateEnum.SysNormal;
                         } else if (sysState == 0x01) {
                             System.out.println("系统状态 Alarm");
+                            monitor.sysState = SysStateEnum.SysAlarm;
                         } else if (sysState == 0x02) {
                             System.out.println("系统状态 Err");
+                            monitor.sysState = SysStateEnum.SysErr;
                         }
                         //1字节(INT8U)当前运行流程 当前运行流程：
                         //0x00:空闲
@@ -284,6 +309,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                         } else if (runProcess == 0x04) {
                             System.out.println("当前运行流程 加样");
                         }
+                        monitor.runProcess = runProcess;
                         //1字节(INT8U)当前运行通道数:
                         //0x00:稀释气
                         //0x01:标气1
@@ -308,116 +334,136 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                         } else if (runPassage == 0x06) {
                             System.out.println("当前运行通道数 二级稀释气");
                         }
+                        monitor.runPassage = runProcess;
+
                         //4字节(FP32)当前压力(psi)
                         byte[] currentPress = new byte[]{date[3], date[4], date[5], date[6]};
                         float cp = ByteBuffer.wrap(currentPress).getFloat();
                         System.out.println("当前压力:" + cp);
+                        monitor.currentPress = cp;
+
                         //4字节(FP32)目标压力(psi)
                         byte[] targetPress = new byte[]{date[7], date[8], date[9], date[10]};
                         float tp = ByteBuffer.wrap(targetPress).getFloat();
                         System.out.println("目标压力:" + tp);
+                        monitor.targetPress = tp;
+
                         //4字节(FP32)平均压力(psi)
                         byte[] averagePress = new byte[]{date[11], date[12], date[13], date[14]};
                         float ap = ByteBuffer.wrap(averagePress).getFloat();
                         System.out.println("平均压力:" + ap);
+                        monitor.averagePress = ap;
+
                         //4字节(FP32)环境温度(℃)
                         byte[] surroundTem = new byte[]{date[15], date[16], date[17], date[18]};
                         float st = ByteBuffer.wrap(surroundTem).getFloat();
                         System.out.println("环境温度:" + st);
+                        monitor.surroundTem = st;
 
                         //4字节(FP32)稀释气配气误差
                         byte[] diluentDis = new byte[]{date[19], date[20], date[21], date[22]};
                         float ddis = ByteBuffer.wrap(diluentDis).getFloat();
                         System.out.println("稀释气配气误差:" + ddis);
+                        monitor.diluentDis = ddis;
+
                         //4字节(FP32)标气通道1配气误差
                         byte[] standP1Dis = new byte[]{date[23], date[24], date[25], date[26]};
                         float sp1Dis = ByteBuffer.wrap(standP1Dis).getFloat();
                         System.out.println("标气通道1配气误差:" + sp1Dis);
+                        monitor.standP1Dis = sp1Dis;
+
                         //4字节(FP32)标气通道2配气误差
                         byte[] standP2Dis = new byte[]{date[27], date[28], date[29], date[30]};
                         float sp2Dis = ByteBuffer.wrap(standP2Dis).getFloat();
                         System.out.println("标气通道2配气误差:" + sp2Dis);
+                        monitor.standP2Dis = sp2Dis;
+
                         //4字节(FP32)标气通道3配气误差
                         byte[] standP3Dis = new byte[]{date[31], date[32], date[33], date[34]};
                         float sp3Dis = ByteBuffer.wrap(standP3Dis).getFloat();
                         System.out.println("标气通道3配气误差:" + sp3Dis);
+                        monitor.standP3Dis = sp3Dis;
+
                         //4字节(FP32)标气通道4配气误差
                         byte[] standP4Dis = new byte[]{date[35], date[36], date[37], date[38]};
                         float sp4Dis = ByteBuffer.wrap(standP4Dis).getFloat();
                         System.out.println("标气通道4配气误差:" + sp4Dis);
+                        monitor.standP4Dis = sp4Dis;
+
                         //4字节(FP32)多级稀释气配气误差
                         byte[] mulDiluentDis = new byte[]{date[39], date[40], date[41], date[42]};
                         float mddis = ByteBuffer.wrap(mulDiluentDis).getFloat();
                         System.out.println("多级稀释气配气误差:" + mddis);
+                        monitor.mulDiluentDis = mddis;
+
                         //4字节(FP32)二级稀释气配气误差
                         byte[] diluent2Dis = new byte[]{date[43], date[44], date[45], date[46]};
                         float d2dis = ByteBuffer.wrap(diluent2Dis).getFloat();
                         System.out.println("二级稀释气配气误差:" + d2dis);
+                        monitor.diluent2Dis = d2dis;
+
                         //4字节(FP32)稀释气配气运行时间(s)
                         byte[] diluentRunTime = new byte[]{date[47], date[48], date[49], date[50]};
                         float drt = ByteBuffer.wrap(diluentRunTime).getFloat();
                         System.out.println("稀释气配气运行时间:" + drt);
+                        monitor.diluentRunTime = drt;
+
                         //4字节(FP32)标气通道1配气运行时间(s)
                         byte[] standP1RunTime = new byte[]{date[51], date[52], date[53], date[54]};
                         float sp1rt = ByteBuffer.wrap(standP1RunTime).getFloat();
                         System.out.println("标气通道1配气运行时间:" + sp1rt);
+                        monitor.standP1RunTime = sp1rt;
+
                         //4字节(FP32)标气通道2配气运行时间(s)
                         byte[] standP2RunTime = new byte[]{date[55], date[56], date[57], date[58]};
                         float sp2rt = ByteBuffer.wrap(standP2RunTime).getFloat();
                         System.out.println("标气通道2配气运行时间:" + sp2rt);
+                        monitor.standP2RunTime = sp2rt;
+
                         //4字节(FP32)标气通道3配气运行时间(s)
                         byte[] standP3RunTime = new byte[]{date[59], date[60], date[61], date[62]};
                         float sp3rt = ByteBuffer.wrap(standP3RunTime).getFloat();
                         System.out.println("标气通道3配气运行时间:" + sp3rt);
+                        monitor.standP3RunTime = sp3rt;
+
                         //4字节(FP32)标气通道4配气运行时间(s)
                         byte[] standP4RunTime = new byte[]{date[63], date[64], date[65], date[66]};
                         float sp4rt = ByteBuffer.wrap(standP4RunTime).getFloat();
                         System.out.println("标气通道4配气运行时间:" + sp4rt);
+                        monitor.standP4RunTime = sp4rt;
+
                         //4字节(FP32)多级稀释气配气运行时间(s)
                         byte[] mulDiluentRunTime = new byte[]{date[67], date[68], date[69], date[70]};
                         float mdrt = ByteBuffer.wrap(mulDiluentRunTime).getFloat();
                         System.out.println("多级稀释气配气运行时间:" + mdrt);
+                        monitor.mulDiluentRunTime = mdrt;
+
                         //4字节(FP32)二级稀释气配气运行时间(s)
                         byte[] diluent2RunTime = new byte[]{date[71], date[72], date[73], date[74]};
                         float d2rt = ByteBuffer.wrap(diluent2RunTime).getFloat();
                         System.out.println("二级稀释气配气运行时间:" + d2rt);
+                        monitor.diluent2RunTime = d2rt;
+
 
                         //1字节(INT8U)报警码个数N（0-10）
                         byte alarmNumber = date[75];
                         System.out.println("报警码个数N:" + alarmNumber);
+                        monitor.alarmNumber = alarmNumber;
+
+                        monitor.alarmCode = new byte[alarmNumber];
                         //第一个报警码:
                         for (int i = 0; i < alarmNumber; i++) {
                             System.out.println("第N个报警码N:" + i + " 是：" + ByteBufUtil.hexDump(date, 76 + i, 1));
+                            monitor.alarmCode[i] = date[76 + i];
                         }
                         //....
                         //第N个报警码:
-
+                        LiveDataStateBean.getInstant().systemMonitor.postValue(monitor);
                     }
-
-
                     System.out.println("系统监控:" + date.length);
-                } else if (rw == ProtocolParams.CMD_Ex_W_R) { //校准设置 返回 1个字节
-                    if (date.length == 1) {
-                        if (date[0] == ProtocolParams.CMD_set_R_s) { //方法设置成功
-                            //写入成功
-                            System.out.println("系统监控 设置成功:" + date.length);
-
-                        } else if (date[0] == ProtocolParams.CMD_set_R_f) { //方法设置失败
-                            //写入失败
-                            System.out.println("系统监控 设置失败:" + date.length);
-
-                        }
-                    }
-
                 }
             }
-
-            //byte cmdEx = ((ByteBuf) msg).getByte(0);//命令扩展码
-            //byte cmdEx = ((ByteBuf) msg).getByte(0);//获取数据
-
-
         }
-
         System.out.println("[Server]: " + ByteBufUtil.hexDump((ByteBuf) msg));
     }
 
@@ -446,6 +492,9 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
         super.channelInactive(ctx);
         Channel channel = ctx.channel();
         System.out.println("-------channelInactive" + "  离线\n");
+        LiveDataStateBean.getInstant().getWifiState().postValue(Params.communicate_link_error);
+        LiveDataStateBean.getInstant().wifiState1.postValue(LinkStateEnum.LinkDisConnect);
+
         //启动重连
         reConnect(ctx);
     }

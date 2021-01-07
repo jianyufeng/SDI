@@ -6,14 +6,12 @@ import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.pgyersdk.update.PgyUpdateManager;
 import com.puyu.mobile.sdi.BR;
-import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.R;
 import com.puyu.mobile.sdi.databinding.ActivityMainBinding;
 import com.puyu.mobile.sdi.frag.AddSampleFrag;
@@ -25,11 +23,12 @@ import com.puyu.mobile.sdi.model.MainRepository;
 import com.puyu.mobile.sdi.mvvm.BaseActivity;
 import com.puyu.mobile.sdi.mvvm.ViewModelParamsFactory;
 import com.puyu.mobile.sdi.netty.NettyConnected;
-import com.puyu.mobile.sdi.server.Params;
 import com.puyu.mobile.sdi.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewModel> {
 
@@ -103,6 +102,33 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                         break;
                     case R.id.rinse:
                         binding.vp2.setCurrentItem(1, false);
+                        indw++;
+                        if (indw == 1) {
+                            byte[] bytes = {0x44, 0x41, 0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf2, 0x7d, (byte) 0x82, (byte) 0xf3, 0x20, 0x7d, (byte) 0x82, 0x7d, 0x7d, 0x00, 0x00};
+                            client.sendMsg(bytes);
+                        } else if (indw == 2) {//仪器ID
+                            byte[] bytes = {0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, 0x20, (byte) 0xaa, 0x00, 0x0C,
+                                    0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x61, 0x62, 0x63, (byte) 0x4B, (byte) 0xdc, 0x7d, 0x7d};
+                            client.sendMsg(bytes);
+                        } else if (indw == 3) {//仪器版本
+                            byte[] bytes = {0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, 0x21, (byte) 0xaa, 0x00, 0x20,
+                                    0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+                                    0x4d, 0x43, 0x55, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
+                                    0x38, 0x39, 0x61, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
+                                    (byte) 0x36, (byte) 0x53, 0x7d, 0x7d};
+                            client.sendMsg(bytes);
+                        } else if (indw == 4) {//仪器类型
+                            byte[] bytes = {0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, 0x23, (byte) 0xaa, 0x00, 0x01,
+                                    0x00,
+                                    (byte) 0x28, (byte) 0x64, 0x7d, 0x7d};
+                            client.sendMsg(bytes);
+                        } else if (indw == 5) {//压力上下限
+                            byte[] bytes = {0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, 0x36, (byte) 0xaa, 0x00, 0x08,
+                                    0x42, 0x5E, 0x33, 0x33,
+                                    0x3E, 0x19, (byte) 0x99, (byte) 0x99,
+                                    (byte) 0x4a, (byte) 0x7b, 0x7d, 0x7d};
+                            client.sendMsg(bytes);
+                        }
                         break;
                     case R.id.pressurize:
                         binding.vp2.setCurrentItem(2, false);
@@ -112,44 +138,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                         break;
                     case R.id.set:
                         binding.vp2.setCurrentItem(4, false);
-                        indw++;
-                        if (indw % 2 == 0) {
-                            byte[] bytes = {0x44,0x41,0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf2,0x7d, (byte) 0x82, (byte) 0xf3, 0x20, 0x7d, (byte) 0x82, 0x7d, 0x7d,0x00, 0x00};
-                            client.sendMsg(bytes);
-                        } else {
-                            byte[] bytes = {0x20,0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, 0x20, (byte) 0xaa, 0x00, 0x01,0x01, (byte) 0xad, (byte) 0xa4, 0x7d, 0x7d,0x00,  0x00, 0x7d, 0x7b};
-                            client.sendMsg(bytes);
-                        }
-                        break;
-                }
-            }
-        });
 
-        LiveDataStateBean.getInstant().getWifiState().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String integer) {
-                switch (integer) {
-                    case Params.click_linking://客户端开始连接
-                        binding.tvWifiState.setText("客户端开始连接");
-                        //keyikongzhi = false;
-                        break;
-                    case Params.click_link_error://客户端连接失败，可能是已经配对的服务器未打开
-                        binding.tvWifiState.setText("连接失败,设备未打开");
-                        //keyikongzhi = false;
-                        break;
-                    case Params.click_link_success://连接成功
-                        binding.tvWifiState.setText("连接成功");
-                        //keyikongzhi = true;
-                        break;
-                    case Params.communicate_link_error://交流断开
-                        binding.tvWifiState.setText("连接被断开");
-                        // keyikongzhi = false;
-                        break;
-                    case Params.MSG_Server_ERROR://服务端异常
-                        binding.tvWifiState.setText("服务端异常");
-                        break;
-                    case Params.MSG_Server_start: //服务端启动
-                        binding.tvWifiState.setText("服务端启动");
                         break;
                 }
             }

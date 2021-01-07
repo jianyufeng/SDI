@@ -5,16 +5,17 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 
+import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.model.SetRepository;
 import com.puyu.mobile.sdi.mvvm.BaseViewModel;
 
 public class SetViewModel extends BaseViewModel<SetRepository> {
+    public final LiveDataStateBean liveDataStateBean;
 
 
     public SetViewModel(@NonNull Application application, SetRepository model) {
         super(application, model);
-        // account.set(this.model.getAccount());
-        // password.set(this.model.getPassword());
+        liveDataStateBean = LiveDataStateBean.getInstant();
     }
 
     //登录按钮的点击事件

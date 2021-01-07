@@ -6,6 +6,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.R;
 import com.puyu.mobile.sdi.model.MainRepository;
 import com.puyu.mobile.sdi.mvvm.BaseViewModel;
@@ -13,6 +14,8 @@ import com.puyu.mobile.sdi.mvvm.command.BindingCommand;
 import com.puyu.mobile.sdi.mvvm.command.BindingConsumer;
 
 public class MainViewModel extends BaseViewModel<MainRepository> {
+
+    public final LiveDataStateBean liveDataStateBean;
     //tab切换
     public MutableLiveData<Integer> selectType = new MutableLiveData<>(0);
 
@@ -20,6 +23,7 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
         super(application, model);
         // account.set(this.model.getAccount());
         // password.set(this.model.getPassword());
+        liveDataStateBean = LiveDataStateBean.getInstant();
     }
 
     //登录按钮的点击事件

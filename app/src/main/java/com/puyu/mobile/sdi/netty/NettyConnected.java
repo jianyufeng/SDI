@@ -1,5 +1,8 @@
 package com.puyu.mobile.sdi.netty;
 
+import com.puyu.mobile.sdi.LiveDataStateBean;
+import com.puyu.mobile.sdi.bean.LinkStateEnum;
+
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
@@ -46,7 +49,7 @@ public class NettyConnected extends Thread {
                         //pipeline.addLast("timeOut", new IdleStateHandler(10, 5, 0));
                         pipeline.addLast("frame", new HeaderEnderDecoder());
                         pipeline.addLast("encoder", new ByteArrayEncoder());
-                      //  pipeline.addLast("frame1", new GT06MsgDecoder());
+                        //  pipeline.addLast("frame1", new GT06MsgDecoder());
                         pipeline.addLast("handler", new ClientHandler(NettyConnected.this)); //添加数据处理器
                     }
                 });// 指定Handler
@@ -56,10 +59,13 @@ public class NettyConnected extends Thread {
         // 添加连接状态监听
         channelFuture.addListener(new ConnectListener(NettyConnected.this));
         try {
+            System.out.println("客户端首次开始连接");
             channel = channelFuture.sync().channel(); //获取连接通道
             System.out.println("客户端首次连接成功");
+            LiveDataStateBean.getInstant().wifiState1.postValue(LinkStateEnum.LinkSuccess);
         } catch (Exception e) {
             System.out.println("客户端首次连接失败：" + e.getMessage());
+            LiveDataStateBean.getInstant().wifiState1.postValue(LinkStateEnum.LinkFail);
             e.printStackTrace();
         }
     }
@@ -68,8 +74,8 @@ public class NettyConnected extends Thread {
      * 重连
      */
     public void reConnect() {
-        ChannelFuture channelFuture = bootstrap.connect(new InetSocketAddress(host, port));
         System.out.println("重新连接中------：");
+        ChannelFuture channelFuture = bootstrap.connect(new InetSocketAddress(host, port));
         // 添加连接状态监听
         channelFuture.addListener(new ConnectListener(NettyConnected.this));
         try {
@@ -77,6 +83,8 @@ public class NettyConnected extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("重新连接失败：" + e.getMessage());
+            LiveDataStateBean.getInstant().wifiState1.postValue(LinkStateEnum.LinkFail);
+
         }
     }
 
@@ -88,7 +96,7 @@ public class NettyConnected extends Thread {
             channel.close();
         }
         if (bootstrap != null) {
-            bootstrap.group().shutdownGracefully();
+            bootstrap.config().group().shutdownGracefully();
         }
         System.out.println("关闭连接：");
 
@@ -109,8 +117,6 @@ public class NettyConnected extends Thread {
     }
 
 
-
-
     private class ConnectListener implements ChannelFutureListener {
         private NettyConnected nettyClient;
 
@@ -123,6 +129,7 @@ public class NettyConnected extends Thread {
             //连接失败发起重连
             System.out.println("连接状态监听：连接状态 " + channelFuture.isSuccess());
             if (!channelFuture.isSuccess()) {//重新连接
+                LiveDataStateBean.getInstant().wifiState1.postValue(LinkStateEnum.LinkFail);
                 final EventLoop loop = channelFuture.channel().eventLoop();
                 loop.schedule(new Runnable() {
                     @Override
@@ -131,6 +138,8 @@ public class NettyConnected extends Thread {
                         nettyClient.reConnect();
                     }
                 }, 5, TimeUnit.SECONDS);
+            } else {
+                LiveDataStateBean.getInstant().wifiState1.postValue(LinkStateEnum.LinkSuccess);
             }
         }
     }

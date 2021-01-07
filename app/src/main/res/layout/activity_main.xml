@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="com.puyu.mobile.sdi.bean.SysStateEnum" />
+
         <variable
             name="viewModel"
             type="com.puyu.mobile.sdi.viewmodel.MainViewModel" />
@@ -16,7 +18,7 @@
         android:background="@color/c_f3f3f3f"
         tools:context=".act.MainActivity">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:background="@color/c_2D3A54"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -26,14 +28,39 @@
             android:layout_height="@dimen/dp30">
 
             <TextView
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 android:id="@+id/tv_wifi_state"
                 android:textColor="@color/c_ffffff"
-                android:text="连接状态"
+                android:text="@{viewModel.liveDataStateBean.wifiState1.value}"
                 android:textSize="@dimen/sp14"
                 android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
-        </LinearLayout>
+
+            <TextView
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/tv_device_id"
+                android:textColor="@color/c_ffffff"
+                android:text="@{`静态稀释仪 `+(viewModel.liveDataStateBean.deviceIdLiveData.deviceId??``)}"
+                android:textSize="@dimen/sp14"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+            <TextView
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/tv_sys_state"
+                android:textColor="@color/c_ffffff"
+                android:text="@{viewModel.liveDataStateBean.systemMonitor.sysState.value??SysStateEnum.SysNormal.value}"
+                android:textSize="@dimen/sp14"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.cardview.widget.CardView
             app:cardElevation="2dp"
@@ -57,21 +84,25 @@
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/standard_gas_config"
                     android:text="@string/standard_gas_config"
+                    android:drawableBottom="@{viewModel.liveDataStateBean.systemMonitor.runProcess==0x1?@android:drawable/ic_notification_overlay:null}"
                     style="@style/mainTab" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     style="@style/mainTab"
                     android:id="@+id/rinse"
+                    android:drawableBottom="@{viewModel.liveDataStateBean.systemMonitor.runProcess==0x3?@android:drawable/ic_notification_overlay:null}"
                     android:text="@string/rinse" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     style="@style/mainTab"
                     android:id="@+id/pressurize"
+                    android:drawableBottom="@{viewModel.liveDataStateBean.systemMonitor.runProcess==0x2?@android:drawable/ic_notification_overlay:null}"
                     android:text="@string/pressurize" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     style="@style/mainTab"
                     android:id="@+id/add_sample"
+                    android:drawableBottom="@{viewModel.liveDataStateBean.systemMonitor.runProcess==0x4?@android:drawable/ic_notification_overlay:null}"
                     android:text="@string/add_sample" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton

@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="com.puyu.mobile.sdi.util.APPVersionUtil" />
+
+        <import type="com.puyu.mobile.sdi.util.NumberUtil" />
+
+        <import type="com.puyu.mobile.sdi.APP" />
 
         <variable
             name="viewModel"
             type="com.puyu.mobile.sdi.viewmodel.SetViewModel" />
+
     </data>
 
 
@@ -180,6 +186,7 @@
                     app:layout_constraintTop_toTopOf="@id/tv_pressure_up_val_tip"
                     app:layout_constraintBottom_toBottomOf="@id/tv_pressure_up_val_tip"
                     android:textSize="@dimen/sp16"
+                    android:text="@{String.valueOf(NumberUtil.keepPrecision(viewModel.liveDataStateBean.pressureLimit.upLimit,2))}"
                     android:gravity="center_vertical"
                     android:layout_width="@dimen/dp150"
                     android:textColor="@color/c_384051"
@@ -207,6 +214,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/tv_pressure_down_val_tip"
                     android:textSize="@dimen/sp16"
                     android:singleLine="true"
+                    android:text="@{String.valueOf(NumberUtil.keepPrecision(viewModel.liveDataStateBean.pressureLimit.lowLimit,2))}"
                     android:layout_width="@dimen/dp150"
                     android:background="@drawable/big_corner_bg"
                     android:textColor="@color/c_384051"
@@ -248,9 +256,9 @@
                     android:layout_height="wrap_content" />
 
                 <com.google.android.material.textview.MaterialTextView
-
                     android:id="@+id/tv_version_tip_app"
                     android:singleLine="true"
+                    android:text="@{APPVersionUtil.getVersionName(APP.getInstance())}"
                     app:layout_constraintLeft_toRightOf="@id/tv_version_tip_app_tip"
                     app:layout_constraintTop_toTopOf="@id/tv_version_tip_app_tip"
                     app:layout_constraintBottom_toBottomOf="@id/tv_version_tip_app_tip"
@@ -269,7 +277,7 @@
                     android:padding="@dimen/dp10"
                     android:layout_marginTop="@dimen/dp10"
                     android:textSize="@dimen/sp16"
-                    android:text="压力下限："
+                    android:text="MCU版本："
                     android:textColor="@color/c_384051"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -281,6 +289,8 @@
                     app:layout_constraintBottom_toBottomOf="@id/tv_version_tip_mcu_tip"
                     android:textSize="@dimen/sp16"
                     android:singleLine="true"
+                    android:text="@{viewModel.liveDataStateBean.deviceVersion.deviceVersion}"
+                    android:gravity="center_vertical"
                     android:layout_width="@dimen/dp150"
                     android:textColor="@color/c_384051"
                     android:layout_height="@dimen/dp35" />

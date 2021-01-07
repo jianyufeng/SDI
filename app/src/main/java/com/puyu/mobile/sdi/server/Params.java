@@ -12,11 +12,4 @@ public class Params {
     public static final String click_linking = "click_linking";  //客户端开始连接
     public static final String communicate_link_error = "communicate_link_error";  //交流断开
 
-
-    public static final int MY_PERMISSION_REQUEST_CONSTANT = 12;   //权限请求
-    public static final int REQUEST_ENABLE_BT = 11;
-    public static final int REQUEST_ENABLE_VISIBILITY = 22;
-
-
-    public static final String NAME = "QiaoJimBluetooth";
 }

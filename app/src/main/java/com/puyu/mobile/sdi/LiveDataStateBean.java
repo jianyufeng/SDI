@@ -2,6 +2,13 @@ package com.puyu.mobile.sdi;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.puyu.mobile.sdi.bean.DeviceId;
+import com.puyu.mobile.sdi.bean.DeviceMCUVersion;
+import com.puyu.mobile.sdi.bean.DeviceType;
+import com.puyu.mobile.sdi.bean.LinkStateEnum;
+import com.puyu.mobile.sdi.bean.PressureLimit;
+import com.puyu.mobile.sdi.bean.SystemMonitor;
+
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -19,6 +26,16 @@ public class LiveDataStateBean {
 
 
     private MutableLiveData<String> wifiState = new MutableLiveData<>("");
+
+    public MutableLiveData<LinkStateEnum> wifiState1 = new MutableLiveData<>(LinkStateEnum.LinkStart);
+
+    public MutableLiveData<DeviceId> deviceIdLiveData = new MutableLiveData<>();//仪器ID
+    public MutableLiveData<DeviceMCUVersion> deviceVersion = new MutableLiveData<>();//仪器MCU版本
+    public MutableLiveData<DeviceType> deviceType = new MutableLiveData<>();//仪器类型
+
+    public MutableLiveData<PressureLimit> pressureLimit = new MutableLiveData<>();//压力上下限
+
+    public MutableLiveData<SystemMonitor> systemMonitor = new MutableLiveData<>();//系统监控
 
     public static LiveDataStateBean getInstant() {
         return dataStateBean;
