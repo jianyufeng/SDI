@@ -1,13 +1,17 @@
 package com.puyu.mobile.sdi.frag;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +21,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
 import com.puyu.mobile.sdi.bean.PassageBean;
+import com.puyu.mobile.sdi.bean.SystemMonitor;
 import com.puyu.mobile.sdi.databinding.FragRinseBinding;
 import com.puyu.mobile.sdi.model.RinseRepository;
 import com.puyu.mobile.sdi.mvvm.BaseFragment;
@@ -35,6 +40,8 @@ import java.util.List;
  */
 public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
     private static final String TAG = "11111111RinseFrag";
+    PassageAdapter stationAdapter;
+
     public static RinseFrag getInstance() {
         // Required empty public constructor
         return new RinseFrag();
@@ -60,7 +67,7 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
 
     @Override
     protected void initData() {
-        LinearLayoutManager manager = new GridLayoutManager(getContext(),4);
+        LinearLayoutManager manager = new GridLayoutManager(getContext(), 4);
         binding.rvPassage.setLayoutManager(manager);
         ArrayList<PassageBean> passageBeans = new ArrayList<>();
         passageBeans.add(new PassageBean("稀释气", 0, true));
@@ -68,8 +75,8 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
         passageBeans.add(new PassageBean("标气2", 2, true));
         passageBeans.add(new PassageBean("标气3", 3, true));
         passageBeans.add(new PassageBean("标气4", 4, true));
-        passageBeans.add(new PassageBean("二级稀释气", 5, true));
-        PassageAdapter stationAdapter = new PassageAdapter(passageBeans);
+        passageBeans.add(new PassageBean("二级稀释气", 6, true));
+        stationAdapter = new PassageAdapter(passageBeans);
         binding.rvPassage.setAdapter(stationAdapter);
         stationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
@@ -83,6 +90,16 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
             }
         });
 
+    }
+
+    @Override
+    protected void initViewObservable() {
+        viewModel.liveDataStateBean.systemMonitor.observe(this, new Observer<SystemMonitor>() {
+            @Override
+            public void onChanged(SystemMonitor systemMonitor) {
+                stationAdapter.setRun(systemMonitor.runProcess, systemMonitor.runPassage);
+            }
+        });
     }
 
     @Override
@@ -108,13 +125,13 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.e(TAG, "onDestroyView: " );
+        Log.e(TAG, "onDestroyView: ");
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.e(TAG, "onViewCreated: " );
+        Log.e(TAG, "onViewCreated: ");
     }
 
     @Override
@@ -130,10 +147,12 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
     }
 
     private class PassageAdapter extends BaseQuickAdapter<PassageBean, BaseViewHolder> {
+        private Drawable md;
+        private byte mPassage = -1; //上次通道
 
         public PassageAdapter(List<PassageBean> data) {
             super(R.layout.item_passage_1, data);
-
+            md = ContextCompat.getDrawable(getActivity(), android.R.drawable.ic_notification_overlay);
         }
 
         @Override
@@ -141,6 +160,21 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
             holder.setText(R.id.checkbox, item.getName() + "(" + item.getPrassage() + ")")
                     .setChecked(R.id.checkbox, item.isSelected())
                     .addOnClickListener(R.id.layout_content);
+            ((TextView) holder.getView(R.id.checkbox)).setCompoundDrawables(
+                    item.getPrassage() == mPassage ? md : null, null,
+                    null, null);
+        }
+
+        public void setRun(byte cRunProcess, byte cRunPassage) {
+            if (cRunProcess == (byte) 0x03) { //冲洗
+                if (cRunPassage != mPassage) {
+                    mPassage = cRunPassage;
+                    notifyDataSetChanged();
+                }
+            } else if (mPassage != -1) {
+                mPassage = -1;
+                notifyDataSetChanged();
+            }
         }
     }
 }

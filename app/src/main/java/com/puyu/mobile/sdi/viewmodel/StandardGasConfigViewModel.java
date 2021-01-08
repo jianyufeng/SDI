@@ -5,16 +5,18 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 
+import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.model.StandardGasConfigRepository;
 import com.puyu.mobile.sdi.mvvm.BaseViewModel;
 
 public class StandardGasConfigViewModel extends BaseViewModel<StandardGasConfigRepository> {
+    public final LiveDataStateBean liveDataStateBean;
 
 
     public StandardGasConfigViewModel(@NonNull Application application, StandardGasConfigRepository model) {
         super(application, model);
-        // account.set(this.model.getAccount());
-        // password.set(this.model.getPassword());
+        liveDataStateBean = LiveDataStateBean.getInstant();
+
     }
 
     //登录按钮的点击事件

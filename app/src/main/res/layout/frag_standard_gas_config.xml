@@ -60,6 +60,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/btn_import_method"
                     android:singleLine="true"
                     android:textSize="@dimen/sp16"
+                    android:text="@{String.format(`%.2f`,viewModel.liveDataStateBean.systemMonitor.targetPress)}"
                     android:inputType="numberDecimal"
                     android:background="@drawable/big_corner_bg"
                     android:textColor="@color/c_384051"

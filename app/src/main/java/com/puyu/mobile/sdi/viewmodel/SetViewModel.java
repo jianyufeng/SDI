@@ -10,7 +10,7 @@ import com.puyu.mobile.sdi.model.SetRepository;
 import com.puyu.mobile.sdi.mvvm.BaseViewModel;
 
 public class SetViewModel extends BaseViewModel<SetRepository> {
-    public final LiveDataStateBean liveDataStateBean;
+    public LiveDataStateBean liveDataStateBean;
 
 
     public SetViewModel(@NonNull Application application, SetRepository model) {

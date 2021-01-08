@@ -4,16 +4,18 @@ package com.puyu.mobile.sdi.viewmodel;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.ObservableField;
 
+import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.model.AddSampRepository;
 import com.puyu.mobile.sdi.mvvm.BaseViewModel;
 
 public class AddSampViewModel extends BaseViewModel<AddSampRepository> {
-
+    public LiveDataStateBean liveDataStateBean;
+    public ObservableField<Byte> runPassage = new ObservableField<Byte>((byte) -1);
     public AddSampViewModel(@NonNull Application application, AddSampRepository model) {
         super(application, model);
-        // account.set(this.model.getAccount());
-        // password.set(this.model.getPassword());
+        liveDataStateBean = LiveDataStateBean.getInstant();
     }
 
     //登录按钮的点击事件

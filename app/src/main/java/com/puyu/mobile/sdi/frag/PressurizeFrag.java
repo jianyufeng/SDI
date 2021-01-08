@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
+import com.puyu.mobile.sdi.bean.SystemMonitor;
 import com.puyu.mobile.sdi.databinding.FragPressurizeBinding;
 import com.puyu.mobile.sdi.model.PressurizeRepository;
 import com.puyu.mobile.sdi.mvvm.BaseFragment;
@@ -23,11 +25,12 @@ import com.puyu.mobile.sdi.viewmodel.PressurizeViewModel;
  * author : 简玉锋
  * e-mail : yufeng_jian@fpi-inc.com
  * date   : 2020/12/16 16:30
- * desc   :
+ * desc   : 加压
  * version: 1.0
  */
 public class PressurizeFrag extends BaseFragment<FragPressurizeBinding, PressurizeViewModel> {
     private static final String TAG = "11111111PressurizeConfigFrag";
+
     public static PressurizeFrag getInstance() {
         // Required empty public constructor
         return new PressurizeFrag();
@@ -56,10 +59,10 @@ public class PressurizeFrag extends BaseFragment<FragPressurizeBinding, Pressuri
         binding.spAddPressure.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position==0){
+                if (position == 0) {
                     binding.multipleRg.setVisibility(View.VISIBLE);
                     binding.gAbsPressure.setVisibility(View.INVISIBLE);
-                }else {
+                } else {
                     binding.gAbsPressure.setVisibility(View.VISIBLE);
                     binding.multipleRg.setVisibility(View.INVISIBLE);
                 }
@@ -68,6 +71,22 @@ public class PressurizeFrag extends BaseFragment<FragPressurizeBinding, Pressuri
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+    }
+
+    @Override
+    protected void initViewObservable() {
+        viewModel.liveDataStateBean.systemMonitor.observe(this, new Observer<SystemMonitor>() {
+            @Override
+            public void onChanged(SystemMonitor systemMonitor) {
+                byte cRunProcess = systemMonitor.runProcess;
+                byte cRunPassage = systemMonitor.runPassage;
+                if (cRunProcess == (byte) 0x02) { //加压
+
+                } else {
+                    binding.tvCurrentPressureVal.setText(String.format("%.2f", systemMonitor.currentPress));
+                }
             }
         });
     }
@@ -95,13 +114,13 @@ public class PressurizeFrag extends BaseFragment<FragPressurizeBinding, Pressuri
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.e(TAG, "onDestroyView: " );
+        Log.e(TAG, "onDestroyView: ");
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.e(TAG, "onViewCreated: " );
+        Log.e(TAG, "onViewCreated: ");
     }
 
     @Override

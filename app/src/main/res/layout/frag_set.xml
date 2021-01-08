@@ -301,7 +301,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_version_tip_app_tip"
                     android:padding="@dimen/dp10"
                     android:textSize="@dimen/sp16"
-                    android:text="环境温度（25 ℃）"
+                    android:text="@{String.format(`环境温度（%.1f℃）`,viewModel.liveDataStateBean.systemMonitor.surroundTem)}"
                     android:textColor="@color/c_384051"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />

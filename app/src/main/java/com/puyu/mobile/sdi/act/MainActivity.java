@@ -2,10 +2,10 @@ package com.puyu.mobile.sdi.act;
 
 
 import android.view.View;
-import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -27,7 +27,6 @@ import com.puyu.mobile.sdi.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewModel> {
@@ -60,42 +59,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
     @Override
     protected void initViewObservable() {
-
-    }
-
-    int indw = 0;
-
-    @Override
-    protected void initData() {
-        List<Fragment> fragments = new ArrayList<>();
-        fragments.add(StandardGasConfigFrag.getInstance());
-        fragments.add(RinseFrag.getInstance());
-        fragments.add(PressurizeFrag.getInstance());
-        fragments.add(AddSampleFrag.getInstance());
-        fragments.add(SetFrag.getInstance());
-        binding.vp2.setOffscreenPageLimit(fragments.size());
-        binding.vp2.setAdapter(new FragmentStateAdapter(this) {
-            @NonNull
+        viewModel.selectType.observe(this, new Observer<Integer>() {
             @Override
-            public Fragment createFragment(int position) {
-                return fragments.get(position);
-            }
-
-            @Override
-            public int getItemCount() {
-                return fragments.size();
-            }
-        });
-        binding.vp2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                View childAt = binding.rg.getChildAt(position);
-                binding.rg.check(childAt.getId());
-            }
-        });
-        binding.rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
+            public void onChanged(Integer checkedId) {
                 switch (checkedId) {
                     case R.id.standard_gas_config:
                         binding.vp2.setCurrentItem(0, false);
@@ -128,6 +94,32 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                                     0x3E, 0x19, (byte) 0x99, (byte) 0x99,
                                     (byte) 0x4a, (byte) 0x7b, 0x7d, 0x7d};
                             client.sendMsg(bytes);
+                        } else if (indw == 6) {//监测状态
+                            byte[] bytes = {0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, 0x45, (byte) 0xaa, 0x00, 0x4c,
+                                    0x00,
+                                    0x00,
+                                    0x00,
+                                    0x3F, 0x26, 0x66, 0x66,
+                                    0x40, (byte) 0xB9, (byte) 0x99, (byte) 0x99,
+                                    0x40, (byte) 0xB9, (byte) 0x99, (byte) 0x99,
+                                    (byte) 0xC0, (byte) 0x20, (byte) 0x00, (byte) 0x00,//温度
+                                    (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,//误差
+                                    (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
+                                    (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
+                                    (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
+                                    (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
+                                    (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
+                                    (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
+                                    0x40, (byte) 0xA0, 0x00, 0x00, //时间
+                                    0x40, (byte) 0xA0, 0x00, 0x00, //时间
+                                    0x40, (byte) 0xA0, 0x00, 0x00, //时间
+                                    0x40, (byte) 0xA0, 0x00, 0x00, //时间
+                                    0x40, (byte) 0xA0, 0x00, 0x00, //时间
+                                    0x40, (byte) 0xA0, 0x00, 0x00, //时间
+                                    0x40, (byte) 0xA0, 0x00, 0x00, //时间
+                                    0x00,
+                                    (byte) 0x76, (byte) 0x41, 0x7d, 0x7d};
+                            client.sendMsg(bytes);
                         }
                         break;
                     case R.id.pressurize:
@@ -141,6 +133,38 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
                         break;
                 }
+            }
+        });
+    }
+
+    int indw = 0;
+
+    @Override
+    protected void initData() {
+        List<Fragment> fragments = new ArrayList<>();
+        fragments.add(StandardGasConfigFrag.getInstance());
+        fragments.add(RinseFrag.getInstance());
+        fragments.add(PressurizeFrag.getInstance());
+        fragments.add(AddSampleFrag.getInstance());
+        fragments.add(SetFrag.getInstance());
+        binding.vp2.setOffscreenPageLimit(fragments.size());
+        binding.vp2.setAdapter(new FragmentStateAdapter(this) {
+            @NonNull
+            @Override
+            public Fragment createFragment(int position) {
+                return fragments.get(position);
+            }
+
+            @Override
+            public int getItemCount() {
+                return fragments.size();
+            }
+        });
+        binding.vp2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                View childAt = binding.rg.getChildAt(position);
+                binding.rg.check(childAt.getId());
             }
         });
         client = new NettyConnected();

@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
+import com.puyu.mobile.sdi.bean.SystemMonitor;
 import com.puyu.mobile.sdi.databinding.FragAddSampleBinding;
 import com.puyu.mobile.sdi.model.AddSampRepository;
 import com.puyu.mobile.sdi.mvvm.BaseFragment;
@@ -23,7 +25,7 @@ import com.puyu.mobile.sdi.viewmodel.AddSampViewModel;
  * author : 简玉锋
  * e-mail : yufeng_jian@fpi-inc.com
  * date   : 2020/12/16 16:30
- * desc   :
+ * desc   : 加样
  * version: 1.0
  */
 public class AddSampleFrag extends BaseFragment<FragAddSampleBinding, AddSampViewModel> {
@@ -57,10 +59,10 @@ public class AddSampleFrag extends BaseFragment<FragAddSampleBinding, AddSampVie
         binding.spAddPressure.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position==0){
+                if (position == 0) {
                     binding.multipleRg.setVisibility(View.VISIBLE);
                     binding.gAbsPressure.setVisibility(View.INVISIBLE);
-                }else {
+                } else {
                     binding.gAbsPressure.setVisibility(View.VISIBLE);
                     binding.multipleRg.setVisibility(View.INVISIBLE);
                 }
@@ -69,6 +71,24 @@ public class AddSampleFrag extends BaseFragment<FragAddSampleBinding, AddSampVie
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+    }
+
+    @Override
+    protected void initViewObservable() {
+        viewModel.liveDataStateBean.systemMonitor.observe(this, new Observer<SystemMonitor>() {
+            @Override
+            public void onChanged(SystemMonitor systemMonitor) {
+                byte cRunProcess = systemMonitor.runProcess;
+                byte cRunPassage = systemMonitor.runPassage;
+                if (cRunProcess == (byte) 0x04) { //加样
+                    if (cRunPassage != viewModel.runPassage.get()) {
+                        viewModel.runPassage.set(cRunPassage);
+                    }
+                } else if (viewModel.runPassage.get() != -1) {
+                    viewModel.runPassage.set((byte) -1);
+                }
             }
         });
     }

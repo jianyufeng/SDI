@@ -5,15 +5,16 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 
+import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.model.PressurizeRepository;
 import com.puyu.mobile.sdi.mvvm.BaseViewModel;
 
 public class PressurizeViewModel extends BaseViewModel<PressurizeRepository> {
+    public LiveDataStateBean liveDataStateBean;
 
     public PressurizeViewModel(@NonNull Application application, PressurizeRepository model) {
         super(application, model);
-        // account.set(this.model.getAccount());
-        // password.set(this.model.getPassword());
+        liveDataStateBean = LiveDataStateBean.getInstant();
     }
 
     //登录按钮的点击事件

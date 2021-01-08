@@ -62,12 +62,14 @@
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
                         android:text="标气1"
+                        android:drawableLeft="@{viewModel.runPassage==0x1?@android:drawable/ic_notification_overlay:null}"
                         android:layout_weight="1"
                         android:textColor="@color/mul_add_select"
                         android:textSize="@dimen/sp16"
                         android:layout_height="wrap_content" />
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:drawableLeft="@{viewModel.runPassage==0x2?@android:drawable/ic_notification_overlay:null}"
                         android:layout_width="0dp"
                         android:text="标气2"
                         android:layout_weight="1"
@@ -78,6 +80,7 @@
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
+                        android:drawableLeft="@{viewModel.runPassage==0x3?@android:drawable/ic_notification_overlay:null}"
                         android:text="标气3"
                         android:layout_weight="1"
                         android:textColor="@color/mul_add_select"
@@ -89,6 +92,7 @@
                         android:layout_width="0dp"
                         android:text="标气4"
                         android:layout_weight="1"
+                        android:drawableLeft="@{viewModel.runPassage==0x4?@android:drawable/ic_notification_overlay:null}"
                         android:textColor="@color/mul_add_select"
                         android:textSize="@dimen/sp16"
                         android:layout_height="wrap_content" />
@@ -96,6 +100,7 @@
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
                         android:text="二级稀释气"
+                        android:drawableLeft="@{viewModel.runPassage==0x6?@android:drawable/ic_notification_overlay:null}"
                         android:layout_weight="1"
                         android:textColor="@color/mul_add_select"
                         android:textSize="@dimen/sp16"

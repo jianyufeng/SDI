@@ -37,6 +37,16 @@ public class LiveDataStateBean {
 
     public MutableLiveData<SystemMonitor> systemMonitor = new MutableLiveData<>();//系统监控
 
+
+    //发数据
+    public MutableLiveData<String> stand1GasName = new MutableLiveData<>("");
+    public MutableLiveData<String> stand2GasName = new MutableLiveData<>("");
+    public MutableLiveData<String> stand3GasName = new MutableLiveData<>("");
+    public MutableLiveData<String> stand4GasName = new MutableLiveData<>("");
+
+
+
+
     public static LiveDataStateBean getInstant() {
         return dataStateBean;
     }

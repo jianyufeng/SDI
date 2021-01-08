@@ -5,17 +5,19 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 
+import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.model.RinseRepository;
 import com.puyu.mobile.sdi.mvvm.BaseViewModel;
 
 public class RinseViewModel extends BaseViewModel<RinseRepository> {
-    //tab切换
+
+    public  LiveDataStateBean liveDataStateBean;
 
 
     public RinseViewModel(@NonNull Application application, RinseRepository model) {
         super(application, model);
-        // account.set(this.model.getAccount());
-        // password.set(this.model.getPassword());
+        liveDataStateBean = LiveDataStateBean.getInstant();
+
     }
 
     //登录按钮的点击事件

@@ -114,7 +114,7 @@
                     android:padding="@dimen/dp10"
                     android:layout_marginTop="@dimen/dp10"
                     android:textSize="@dimen/sp16"
-                    android:text="目标值："
+                    android:text="标气冲洗时间："
                     android:textColor="@color/c_384051"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

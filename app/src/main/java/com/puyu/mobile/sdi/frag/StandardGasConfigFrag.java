@@ -1,16 +1,19 @@
 package com.puyu.mobile.sdi.frag;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,13 +25,13 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
 import com.puyu.mobile.sdi.bean.PassageBean;
+import com.puyu.mobile.sdi.bean.SystemMonitor;
 import com.puyu.mobile.sdi.databinding.FragStandardGasConfigBinding;
 import com.puyu.mobile.sdi.model.StandardGasConfigRepository;
 import com.puyu.mobile.sdi.mvvm.BaseFragment;
 import com.puyu.mobile.sdi.mvvm.ViewModelParamsFactory;
 import com.puyu.mobile.sdi.viewmodel.StandardGasConfigViewModel;
 
-import java.io.DataInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +44,7 @@ import java.util.List;
  */
 public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBinding, StandardGasConfigViewModel> {
     private static final String TAG = "11111111StandardGasConfigFrag";
+    PassageAdapter stationAdapter;
 
     public static StandardGasConfigFrag getInstance() {
         // Required empty public constructor
@@ -79,8 +83,8 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
         passageBeans.add(new PassageBean("标气2", 2, true));
         passageBeans.add(new PassageBean("标气3", 3, true));
         passageBeans.add(new PassageBean("标气4", 4, true));
-        passageBeans.add(new PassageBean("二级稀释气", 5, true));
-        PassageAdapter stationAdapter = new PassageAdapter(passageBeans);
+        passageBeans.add(new PassageBean("多级稀释气", 6, true));
+        stationAdapter = new PassageAdapter(passageBeans);
         stationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -88,7 +92,7 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
                 if (item == null) return;
                 if (view.getId() == R.id.layout_content) {
                     if (position < binding.vpPassageDetail.getAdapter().getItemCount()) {
-                        binding.vpPassageDetail.setCurrentItem(position,false);
+                        binding.vpPassageDetail.setCurrentItem(position, false);
                         stationAdapter.setShowIndex(position);
                     }
                 } else if (view.getId() == R.id.checkbox) {
@@ -99,12 +103,12 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
         });
         binding.rvPassage.setAdapter(stationAdapter);
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(GasDetailFrag.getInstance());
-        fragments.add(GasDetailFrag.getInstance());
-        fragments.add(GasDetailFrag.getInstance());
-        fragments.add(GasDetailFrag.getInstance());
-        fragments.add(GasDetailFrag.getInstance());
-        fragments.add(GasDetailFrag.getInstance());
+        fragments.add(GasDiluentDetailFrag.getInstance());
+        fragments.add(GasStand1DetailFrag.getInstance());
+        fragments.add(GasStand2DetailFrag.getInstance());
+        fragments.add(GasStand3DetailFrag.getInstance());
+        fragments.add(GasStand4DetailFrag.getInstance());
+        fragments.add(GasMulDiluentDetailFrag.getInstance());
         binding.vpPassageDetail.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
         binding.vpPassageDetail.setOffscreenPageLimit(fragments.size());
         binding.vpPassageDetail.setAdapter(new FragmentStateAdapter(this) {
@@ -126,7 +130,18 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
                 binding.rvPassage.smoothScrollToPosition(position);
             }
         });
-        DataInputStream dis = null;
+
+
+    }
+
+    @Override
+    protected void initViewObservable() {
+        viewModel.liveDataStateBean.systemMonitor.observe(this, new Observer<SystemMonitor>() {
+            @Override
+            public void onChanged(SystemMonitor systemMonitor) {
+                stationAdapter.setRun(systemMonitor.runProcess, systemMonitor.runPassage);
+            }
+        });
     }
 
     @Override
@@ -175,9 +190,13 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
 
     private class PassageAdapter extends BaseQuickAdapter<PassageBean, BaseViewHolder> {
         private int shwoIndex = 0;
+        private Drawable md;
+        private byte mPassage = -1; //上次通道
+
 
         public PassageAdapter(List<PassageBean> data) {
             super(R.layout.item_passage, data);
+            md = ContextCompat.getDrawable(getActivity(), android.R.drawable.ic_notification_overlay);
 
         }
 
@@ -195,7 +214,22 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
                             R.color.c_16a5ff : R.color.c_384051))
                     .setVisible(R.id.show_flag, holder.getLayoutPosition() == shwoIndex)
                     .setChecked(R.id.checkbox, item.isSelected())
-                    .addOnClickListener(R.id.layout_content,R.id.checkbox);
+                    .addOnClickListener(R.id.layout_content, R.id.checkbox);
+            ((TextView) holder.getView(R.id.tv_name)).setCompoundDrawables(
+                    item.getPrassage() == mPassage ? md : null, null,
+                    null, null);
+        }
+
+        public void setRun(byte cRunProcess, byte cRunPassage) {
+            if (cRunProcess == (byte) 0x01) { //配气
+                if (cRunPassage != mPassage) {
+                    mPassage = cRunPassage;
+                    notifyDataSetChanged();
+                }
+            } else if (mPassage != -1) {
+                mPassage = -1;
+                notifyDataSetChanged();
+            }
         }
     }
 }
