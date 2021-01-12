@@ -7,30 +7,40 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
+
 import com.puyu.mobile.sdi.bean.PassageBean;
 import com.puyu.mobile.sdi.bean.SystemMonitor;
 import com.puyu.mobile.sdi.databinding.FragStandardGasConfigBinding;
+import com.puyu.mobile.sdi.databinding.ItemPassageBinding;
 import com.puyu.mobile.sdi.model.StandardGasConfigRepository;
 import com.puyu.mobile.sdi.mvvm.BaseFragment;
 import com.puyu.mobile.sdi.mvvm.ViewModelParamsFactory;
+import com.puyu.mobile.sdi.mvvm.command.BindingAction;
+import com.puyu.mobile.sdi.mvvm.command.BindingCommand;
 import com.puyu.mobile.sdi.viewmodel.StandardGasConfigViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,20 +82,18 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
     @Override
     protected void initData() {
         super.initData();
-        LinearLayoutManager manager = new LinearLayoutManager(getContext());
-        binding.rvPassage.setLayoutManager(manager);
         DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.line_h));
         binding.rvPassage.addItemDecoration(divider);
         ArrayList<PassageBean> passageBeans = new ArrayList<>();
-        passageBeans.add(new PassageBean("稀释气", 0, true));
-        passageBeans.add(new PassageBean("标气1", 1, viewModel.liveDataStateBean.pass1Swich.getValue()));
-        passageBeans.add(new PassageBean("标气2", 2, viewModel.liveDataStateBean.pass2Swich.getValue()));
-        passageBeans.add(new PassageBean("标气3", 3, viewModel.liveDataStateBean.pass3Swich.getValue()));
-        passageBeans.add(new PassageBean("标气4", 4, viewModel.liveDataStateBean.pass4Swich.getValue()));
-        passageBeans.add(new PassageBean("多级稀释气", 6, true));
+        passageBeans.add(new PassageBean("稀释气", 0, new MutableLiveData<>(true)));
+        passageBeans.add(new PassageBean("标气1", 1, viewModel.liveDataStateBean.pass1Swich));
+        passageBeans.add(new PassageBean("标气2", 2, viewModel.liveDataStateBean.pass2Swich));
+        passageBeans.add(new PassageBean("标气3", 3, viewModel.liveDataStateBean.pass3Swich));
+        passageBeans.add(new PassageBean("标气4", 4, viewModel.liveDataStateBean.pass4Swich));
+        passageBeans.add(new PassageBean("多级稀释气", 6, new MutableLiveData<>(true)));
         stationAdapter = new PassageAdapter(passageBeans);
-        stationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        stationAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 PassageBean item = (PassageBean) adapter.getItem(position);
@@ -95,7 +103,7 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
                         binding.vpPassageDetail.setCurrentItem(position, false);
                         stationAdapter.setShowIndex(position);
                     }
-                } else if (view.getId() == R.id.checkbox) {
+                } /*else if (view.getId() == R.id.checkbox) {
                     boolean selected = !item.isSelected();
                     if (item.getPrassage() == 1) {
                         viewModel.liveDataStateBean.pass1Swich.setValue(selected);
@@ -111,7 +119,7 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
                     }
                     item.setSelected(selected);
                     stationAdapter.notifyItemChanged(position);
-                }
+                }*/
             }
         });
         binding.rvPassage.setAdapter(stationAdapter);
@@ -152,14 +160,14 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
         viewModel.liveDataStateBean.systemMonitor.observe(this, new Observer<SystemMonitor>() {
             @Override
             public void onChanged(SystemMonitor systemMonitor) {
-                stationAdapter.setRun(systemMonitor.runProcess, systemMonitor.runPassage);
+                //  stationAdapter.setRun(systemMonitor.runProcess, systemMonitor.runPassage);
             }
         });
 
         viewModel.liveDataStateBean.pass1Swich.observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                stationAdapter.setCheckPass(aBoolean);
+                //  stationAdapter.setCheckPass(aBoolean);
 
             }
         });
@@ -227,7 +235,7 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
         Log.e(TAG, "onDestroy: ");
     }
 
-    private class PassageAdapter extends BaseQuickAdapter<PassageBean, BaseViewHolder> {
+    public class PassageAdapter extends BaseQuickAdapter<PassageBean, BaseViewHolder> {
         private int shwoIndex = 0;
         private Drawable md;
         private byte mPassage = -1; //上次通道
@@ -236,7 +244,21 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
         public PassageAdapter(List<PassageBean> data) {
             super(R.layout.item_passage, data);
             md = ContextCompat.getDrawable(getActivity(), android.R.drawable.ic_notification_overlay);
+        }
 
+        public void itemClick(View v,PassageBean passageBean,int pos){
+            showToast(passageBean.name);
+        };
+
+        /**
+         * 当 ViewHolder 创建完毕以后，会执行此回掉
+         * 可以在这里做任何你想做的事情
+         */
+        @Override
+        protected void onItemViewHolderCreated(@NotNull BaseViewHolder viewHolder, int viewType) {
+            super.onItemViewHolderCreated(viewHolder, viewType);
+            // 绑定 view
+            DataBindingUtil.bind(viewHolder.itemView);
         }
 
         public void setShowIndex(int newIndex) {
@@ -247,33 +269,61 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, PassageBean item) {
-            holder.setText(R.id.tv_name, item.getName() + "(" + item.getPrassage() + ")")
-                    .setTextColor(R.id.tv_name, ContextCompat.getColor(getContext(), item.isSelected() ?
-                            R.color.c_16a5ff : R.color.c_384051))
-                    .setVisible(R.id.show_flag, holder.getLayoutPosition() == shwoIndex)
-                    .setChecked(R.id.checkbox, item.isSelected())
-                    .addOnClickListener(R.id.layout_content, R.id.checkbox);
-            ((TextView) holder.getView(R.id.tv_name)).setCompoundDrawables(
-                    item.getPrassage() == mPassage ? md : null, null,
-                    null, null);
-        }
+        protected void convert(BaseViewHolder helper, PassageBean item) {
+            if (item == null) {
+                return;
+            }
 
-        public void setRun(byte cRunProcess, byte cRunPassage) {
-            if (cRunProcess == (byte) 0x01) { //配气
-                if (cRunPassage != mPassage) {
-                    mPassage = cRunPassage;
-                    notifyDataSetChanged();
-                }
-            } else if (mPassage != -1) {
-                mPassage = -1;
-                notifyDataSetChanged();
+            // 获取 Binding
+            ItemPassageBinding binding = DataBindingUtil.getBinding(helper.itemView);
+            if (binding != null) {
+                // 设置数据
+                binding.setViewModel(item);
+                binding.setAdapter(this);
+                binding.executePendingBindings();
+                binding.setPos(helper.getLayoutPosition());
             }
         }
 
-        public void setCheckPass(Boolean aBoolean) {
+/*
+            holder.setText(R.id.tv_name,item.getName()+"("+item.getPrassage()+")")
+                .
 
+        setTextColor(R.id.tv_name, ContextCompat.getColor(getContext(),item.
+
+        isSelected() ?
+        R.color.c_16a5ff :R.color.c_384051))
+                .
+
+        setVisible(R.id.show_flag, holder.getLayoutPosition() ==shwoIndex)
+                .
+
+        setChecked(R.id.checkbox, item.isSelected())
+                .
+
+        addOnClickListener(R.id.layout_content, R.id.checkbox);
+            ((TextView)holder.getView(R.id.tv_name)).
+
+        setCompoundDrawables(
+                item.getPrassage() ==mPassage ?md :null,null,
+                null,null);
+    }
+
+    public void setRun(byte cRunProcess, byte cRunPassage) {
+        if (cRunProcess == (byte) 0x01) { //配气
+            if (cRunPassage != mPassage) {
+                mPassage = cRunPassage;
+                notifyDataSetChanged();
+            }
+        } else if (mPassage != -1) {
+            mPassage = -1;
+            notifyDataSetChanged();
         }
+    }
+
+    public void setCheckPass(Boolean aBoolean) {
+
+    }*/
     }
 }
 

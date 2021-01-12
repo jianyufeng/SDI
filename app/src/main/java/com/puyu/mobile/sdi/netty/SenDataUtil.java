@@ -48,10 +48,10 @@ public class SenDataUtil {
         byteBuf.writeByte(0x34);
         byteBuf.writeByte(0x66);
         byteBuf.writeShort(84);
-        add20(byteBuf, gasNameConfig.sGasName1, 20, true);
+     /*   add20(byteBuf, gasNameConfig.sGasName1, 20, true);
         add20(byteBuf, gasNameConfig.sGasName2, 20, true);
         add20(byteBuf, gasNameConfig.sGasName3, 20, true);
-        add20(byteBuf, gasNameConfig.sGasName4, 20, true);
+        add20(byteBuf, gasNameConfig.sGasName4, 20, true);*/
         byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
         byteBuf.writeBytes(crcByte);
         byteBuf.writeBytes(ProtocolParams.frameEnd);

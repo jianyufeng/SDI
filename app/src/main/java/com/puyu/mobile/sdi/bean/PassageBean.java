@@ -1,5 +1,7 @@
 package com.puyu.mobile.sdi.bean;
 
+import androidx.lifecycle.MutableLiveData;
+
 /**
  * author : 简玉锋
  * e-mail : yufeng_jian@fpi-inc.com
@@ -11,40 +13,17 @@ package com.puyu.mobile.sdi.bean;
 public class PassageBean {
 
 
-    private String name;
-    private int prassage;
+    public String name;
+    public int prassage;
 
-    private boolean selected;
-
-    public PassageBean(String name, int prassage, boolean selected) {
+    public MutableLiveData<Boolean> pass1Swich;
+    public PassageBean(String name, int prassage, MutableLiveData<Boolean> pass1Swich) {
         this.name = name;
         this.prassage = prassage;
-        this.selected = selected;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getPrassage() {
-        return prassage;
-    }
-
-    public void setPrassage(int prassage) {
-        this.prassage = prassage;
+        this.pass1Swich = pass1Swich;
     }
 
 
 
-    public boolean isSelected() {
-        return selected;
-    }
 
-    public void setSelected(boolean selected) {
-        this.selected = selected;
-    }
 }

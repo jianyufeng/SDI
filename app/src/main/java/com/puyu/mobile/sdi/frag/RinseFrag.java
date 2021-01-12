@@ -17,7 +17,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
 import com.puyu.mobile.sdi.bean.PassageBean;
@@ -70,21 +71,21 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
         LinearLayoutManager manager = new GridLayoutManager(getContext(), 4);
         binding.rvPassage.setLayoutManager(manager);
         ArrayList<PassageBean> passageBeans = new ArrayList<>();
-        passageBeans.add(new PassageBean("稀释气", 0, true));
+       /* passageBeans.add(new PassageBean("稀释气", 0, true));
         passageBeans.add(new PassageBean("标气1", 1, true));
         passageBeans.add(new PassageBean("标气2", 2, true));
         passageBeans.add(new PassageBean("标气3", 3, true));
         passageBeans.add(new PassageBean("标气4", 4, true));
-        passageBeans.add(new PassageBean("二级稀释气", 6, true));
+        passageBeans.add(new PassageBean("二级稀释气", 6, true));*/
         stationAdapter = new PassageAdapter(passageBeans);
         binding.rvPassage.setAdapter(stationAdapter);
-        stationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        stationAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 PassageBean item = (PassageBean) adapter.getItem(position);
                 if (item == null) return;
                 if (view.getId() == R.id.layout_content) {
-                    item.setSelected(!item.isSelected());
+                    //item.setSelected(!item.isSelected());
                     stationAdapter.notifyItemChanged(position);
                 }
             }
@@ -157,12 +158,12 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
 
         @Override
         protected void convert(BaseViewHolder holder, PassageBean item) {
-            holder.setText(R.id.checkbox, item.getName() + "(" + item.getPrassage() + ")")
+          /*  holder.setText(R.id.checkbox, item.getName() + "(" + item.getPrassage() + ")")
                     .setChecked(R.id.checkbox, item.isSelected())
                     .addOnClickListener(R.id.layout_content);
             ((TextView) holder.getView(R.id.checkbox)).setCompoundDrawables(
                     item.getPrassage() == mPassage ? md : null, null,
-                    null, null);
+                    null, null);*/
         }
 
         public void setRun(byte cRunProcess, byte cRunPassage) {
