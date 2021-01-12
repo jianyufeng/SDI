@@ -78,7 +78,7 @@ public class HeaderEnderDecoder extends ByteToMessageDecoder {
         //CRC校验
         byte[] crc = new byte[2];
         childBuf.getBytes(childBuf.readableBytes() - 2, crc);
-        byte[] crcByte = AppCRC.GetCRC(childBuf);
+        byte[] crcByte = AppCRC.GetCRC(childBuf,0,childBuf.readableBytes()-2);
         if (!Arrays.equals(crc, crcByte)) {
             System.out.println("帧CRC校验失败: 验证CRC:" + ByteBufUtil.hexDump(crc) + " 本地计算的CRC：" + ByteBufUtil.hexDump(crcByte));
             return;

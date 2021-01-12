@@ -112,6 +112,7 @@
             app:layout_constraintTop_toTopOf="@id/tv_gas_passage_enable_tip"
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_passage_enable_tip"
             app:layout_constraintLeft_toRightOf="@id/barrier1"
+            android:checked="@={viewModel.liveDataStateBean.pass4Swich}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

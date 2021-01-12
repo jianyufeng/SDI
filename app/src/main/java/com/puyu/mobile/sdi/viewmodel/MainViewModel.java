@@ -17,17 +17,14 @@ import com.puyu.mobile.sdi.mvvm.command.BindingConsumer;
 import com.puyu.mobile.sdi.netty.SenDataUtil;
 import com.puyu.mobile.sdi.util.StringUtil;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-
-import io.netty.buffer.ByteBufUtil;
-import io.netty.util.CharsetUtil;
-
 public class MainViewModel extends BaseViewModel<MainRepository> {
 
     public final LiveDataStateBean liveDataStateBean;
     //tab切换
     public MutableLiveData<Integer> selectType = new MutableLiveData<>(0);
+
+    //启动还是停止
+    public MutableLiveData<Boolean> runing = new MutableLiveData<>(false);
 
     public MainViewModel(@NonNull Application application, MainRepository model) {
         super(application, model);
@@ -51,7 +48,7 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                     System.out.println("标气3名称：" + name3);
                     System.out.println("标气4名称：" + name4);
                     //2、校验标气名称
-                   /* if (StringUtil.isEmpty(name1)) {
+                    if (StringUtil.isEmpty(name1)) {
                         showToast("标气1名称为空");
                         return;
                     }
@@ -83,10 +80,15 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                     if (name4.getBytes().length > 20) {
                         showToast("标气4名称过长");
                         return;
-                    }*/
+                    }
                     GasNameConfig gasNameConfig = new GasNameConfig(name1, name2, name3, name4);
+                    //发送配气方法名称设置
+                    SenDataUtil.sendGasName(gasNameConfig);
+                    //配气方法设置
+                    Boolean run = runing.getValue();
 
-                    SenDataUtil.add7D7B(name1.getBytes());
+                    SenDataUtil.sendGasConfig();
+
 
                     break;
                 case R.id.rinse: //冲洗启动

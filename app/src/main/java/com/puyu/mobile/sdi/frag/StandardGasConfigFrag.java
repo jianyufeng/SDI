@@ -79,10 +79,10 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
         binding.rvPassage.addItemDecoration(divider);
         ArrayList<PassageBean> passageBeans = new ArrayList<>();
         passageBeans.add(new PassageBean("稀释气", 0, true));
-        passageBeans.add(new PassageBean("标气1", 1, true));
-        passageBeans.add(new PassageBean("标气2", 2, true));
-        passageBeans.add(new PassageBean("标气3", 3, true));
-        passageBeans.add(new PassageBean("标气4", 4, true));
+        passageBeans.add(new PassageBean("标气1", 1, viewModel.liveDataStateBean.pass1Swich.getValue()));
+        passageBeans.add(new PassageBean("标气2", 2, viewModel.liveDataStateBean.pass2Swich.getValue()));
+        passageBeans.add(new PassageBean("标气3", 3, viewModel.liveDataStateBean.pass3Swich.getValue()));
+        passageBeans.add(new PassageBean("标气4", 4, viewModel.liveDataStateBean.pass4Swich.getValue()));
         passageBeans.add(new PassageBean("多级稀释气", 6, true));
         stationAdapter = new PassageAdapter(passageBeans);
         stationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -96,7 +96,20 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
                         stationAdapter.setShowIndex(position);
                     }
                 } else if (view.getId() == R.id.checkbox) {
-                    item.setSelected(!item.isSelected());
+                    boolean selected = !item.isSelected();
+                    if (item.getPrassage() == 1) {
+                        viewModel.liveDataStateBean.pass1Swich.setValue(selected);
+
+                    } else if (item.getPrassage() == 2) {
+                        viewModel.liveDataStateBean.pass2Swich.setValue(selected);
+
+                    } else if (item.getPrassage() == 3) {
+                        viewModel.liveDataStateBean.pass3Swich.setValue(selected);
+
+                    } else if (item.getPrassage() == 4) {
+                        viewModel.liveDataStateBean.pass4Swich.setValue(selected);
+                    }
+                    item.setSelected(selected);
                     stationAdapter.notifyItemChanged(position);
                 }
             }
@@ -140,6 +153,32 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
             @Override
             public void onChanged(SystemMonitor systemMonitor) {
                 stationAdapter.setRun(systemMonitor.runProcess, systemMonitor.runPassage);
+            }
+        });
+
+        viewModel.liveDataStateBean.pass1Swich.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                stationAdapter.setCheckPass(aBoolean);
+
+            }
+        });
+        viewModel.liveDataStateBean.pass2Swich.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+
+            }
+        });
+        viewModel.liveDataStateBean.pass3Swich.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+
+            }
+        });
+        viewModel.liveDataStateBean.pass4Swich.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+
             }
         });
     }
@@ -230,6 +269,10 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
                 mPassage = -1;
                 notifyDataSetChanged();
             }
+        }
+
+        public void setCheckPass(Boolean aBoolean) {
+
         }
     }
 }

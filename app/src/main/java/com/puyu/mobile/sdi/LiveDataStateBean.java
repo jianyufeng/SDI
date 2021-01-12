@@ -38,13 +38,17 @@ public class LiveDataStateBean {
     public MutableLiveData<SystemMonitor> systemMonitor = new MutableLiveData<>();//系统监控
 
 
-    //发数据
+    //发数据标气名称
     public MutableLiveData<String> stand1GasName = new MutableLiveData<>("");
     public MutableLiveData<String> stand2GasName = new MutableLiveData<>("");
     public MutableLiveData<String> stand3GasName = new MutableLiveData<>("");
     public MutableLiveData<String> stand4GasName = new MutableLiveData<>("");
 
-
+    //发数据标气通道开关
+    public MutableLiveData<Boolean> pass1Swich = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> pass2Swich = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> pass3Swich = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> pass4Swich = new MutableLiveData<>(false);
 
 
     public static LiveDataStateBean getInstant() {

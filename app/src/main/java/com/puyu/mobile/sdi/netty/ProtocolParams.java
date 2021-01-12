@@ -12,14 +12,9 @@ public class ProtocolParams {
     public static byte[] frameEnd = new byte[]{0x7D, 0x7D};
     public static byte[] frameFilter = new byte[]{0x7D, (byte) 0x82};
 
+    public static byte[] receiveAddr = new byte[]{0x01, (byte) 0xF3, 0x01, (byte) 0xF1};
 
-    /* public static byte phoneAddrLength = (byte) 0x01;
-     public static byte phoneAddr = (byte) 0xF3;
-     public static byte mcuAddrLebgth = (byte) 0x01;
-     public static byte mcuAddr = (byte) 0xF1;*/
-    public static byte[] receiveAddr = new byte[]{0x01, (byte) 0xF1, 0x01, (byte) 0xF3};
-
-    public static byte[] sendAddr = new byte[]{0x01, (byte) 0xF3, 0x01, (byte) 0xF1};
+    public static byte[] sendAddr = new byte[]{0x01, (byte) 0xF1, 0x01, (byte) 0xF3};
 
 
     /**
