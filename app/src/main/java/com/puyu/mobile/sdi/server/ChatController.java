@@ -85,7 +85,7 @@ public class ChatController {
         } catch (IOException e) {
             e.printStackTrace();
 //            EventBus.getDefault().post(new SeverErrorModelBean(Params.MSG_Server_ERROR));
-            LiveDataStateBean.getInstant().getWifiState().postValue(Params.MSG_Server_ERROR);
+           // LiveDataStateBean.getInstant().getWifiState().postValue(Params.MSG_Server_ERROR);
         }
     }
 

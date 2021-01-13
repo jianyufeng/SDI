@@ -8,7 +8,6 @@ import com.puyu.mobile.sdi.bean.LinkStateEnum;
 import com.puyu.mobile.sdi.bean.PressureLimit;
 import com.puyu.mobile.sdi.bean.SysStateEnum;
 import com.puyu.mobile.sdi.bean.SystemMonitor;
-import com.puyu.mobile.sdi.server.Params;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
@@ -492,8 +491,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
         super.channelInactive(ctx);
         Channel channel = ctx.channel();
         System.out.println("-------channelInactive" + "  离线\n");
-        LiveDataStateBean.getInstant().getWifiState().postValue(Params.communicate_link_error);
-        LiveDataStateBean.getInstant().wifiState1.postValue(LinkStateEnum.LinkDisConnect);
+        LiveDataStateBean.getInstant().wifiState.postValue(LinkStateEnum.LinkDisConnect);
 
         //启动重连
         reConnect(ctx);

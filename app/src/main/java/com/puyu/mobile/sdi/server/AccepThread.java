@@ -43,11 +43,11 @@ public class AccepThread extends Thread {
             try {
                 // 获取连接的客户端socket
                 //  EventBus.getDefault().post(new SeverStarted(Params.MSG_Server_start));
-                LiveDataStateBean.getInstant().getWifiState().postValue(Params.MSG_Server_start);
+                //LiveDataStateBean.getInstant().getWifiState().postValue(Params.MSG_Server_start);
                 socket = mmServerSocket.accept();
             } catch (IOException e) {
                 // 通知主线程更新UI, 获取异常
-                LiveDataStateBean.getInstant().getWifiState().postValue(Params.MSG_Server_ERROR);
+               // LiveDataStateBean.getInstant().getWifiState().postValue(Params.MSG_Server_ERROR);
                 // EventBus.getDefault().post(new SeverErrorModelBean(Params.MSG_Server_ERROR));
 //                mHandler.sendEmptyMessage();
                 e.printStackTrace();
@@ -55,7 +55,7 @@ public class AccepThread extends Thread {
                 break;
             }
             // EventBus.getDefault().post(new ClientLinkSuccess(Params.click_link_success, socket.getRemoteDevice()));
-            LiveDataStateBean.getInstant().getWifiState().postValue(Params.click_link_success);
+           // LiveDataStateBean.getInstant().getWifiState().postValue(Params.click_link_success);
 
             // 管理连接的客户端socket
             manageConnectSocket(socket);

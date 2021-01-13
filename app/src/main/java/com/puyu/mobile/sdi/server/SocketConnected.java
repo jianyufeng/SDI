@@ -37,7 +37,7 @@ public class SocketConnected {
             mmOutputStream = socket.getOutputStream();
         } catch (IOException e) {
             e.printStackTrace();
-            LiveDataStateBean.getInstant().getWifiState().postValue(Params.communicate_link_error);
+          //  LiveDataStateBean.getInstant().getWifiState().postValue(Params.communicate_link_error);
             return;
         }
         new ReceiveThread().start();

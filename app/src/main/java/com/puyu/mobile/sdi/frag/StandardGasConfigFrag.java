@@ -79,15 +79,14 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
                 passageAdapter.setShowIndex(position);
 
             } else if (view.getId() == R.id.checkbox) {
-                boolean selected = !item.passageBean.selected;
                 //实体反转状态
-                item.passageBean.selected = selected;
+                item.passageBean.selected = !item.passageBean.selected;
                 //修改视图
                 passageAdapter.notifyItemChanged(position);
-                //点击切换 标气设置页面
-                binding.vpPassageDetail.setCurrentItem(position, true);
                 //修改 标气设置页面中的选中
                 viewModel.standardGases.setValue(viewModel.standardGases.getValue());
+                //点击切换 标气设置页面
+                binding.vpPassageDetail.setCurrentItem(position, true);
                 //点击改变自身
                 passageAdapter.setShowIndex(position);
 
@@ -126,8 +125,13 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
                         passageAdapter.setRun(systemMonitor.runProcess, systemMonitor.runPassage);
                     }
                 });
-
-
+        //标气设置页面中的选中 发生变化
+        viewModel.changePassage.observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer pos) {
+                passageAdapter.notifyItemChanged(binding.vpPassageDetail.getCurrentItem());
+            }
+        });
     }
 }
 

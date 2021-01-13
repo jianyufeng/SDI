@@ -62,10 +62,10 @@ public class NettyConnected extends Thread {
             System.out.println("客户端首次开始连接");
             channel = channelFuture.sync().channel(); //获取连接通道
             System.out.println("客户端首次连接成功");
-            LiveDataStateBean.getInstant().wifiState1.postValue(LinkStateEnum.LinkSuccess);
+            LiveDataStateBean.getInstant().wifiState.postValue(LinkStateEnum.LinkSuccess);
         } catch (Exception e) {
             System.out.println("客户端首次连接失败：" + e.getMessage());
-            LiveDataStateBean.getInstant().wifiState1.postValue(LinkStateEnum.LinkFail);
+            LiveDataStateBean.getInstant().wifiState.postValue(LinkStateEnum.LinkFail);
             e.printStackTrace();
         }
     }
@@ -83,7 +83,7 @@ public class NettyConnected extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("重新连接失败：" + e.getMessage());
-            LiveDataStateBean.getInstant().wifiState1.postValue(LinkStateEnum.LinkFail);
+            LiveDataStateBean.getInstant().wifiState.postValue(LinkStateEnum.LinkFail);
 
         }
     }
@@ -129,7 +129,7 @@ public class NettyConnected extends Thread {
             //连接失败发起重连
             System.out.println("连接状态监听：连接状态 " + channelFuture.isSuccess());
             if (!channelFuture.isSuccess()) {//重新连接
-                LiveDataStateBean.getInstant().wifiState1.postValue(LinkStateEnum.LinkFail);
+                LiveDataStateBean.getInstant().wifiState.postValue(LinkStateEnum.LinkFail);
                 final EventLoop loop = channelFuture.channel().eventLoop();
                 loop.schedule(new Runnable() {
                     @Override
@@ -139,7 +139,7 @@ public class NettyConnected extends Thread {
                     }
                 }, 5, TimeUnit.SECONDS);
             } else {
-                LiveDataStateBean.getInstant().wifiState1.postValue(LinkStateEnum.LinkSuccess);
+                LiveDataStateBean.getInstant().wifiState.postValue(LinkStateEnum.LinkSuccess);
             }
         }
     }

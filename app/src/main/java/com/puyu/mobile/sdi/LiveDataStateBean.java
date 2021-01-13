@@ -24,9 +24,9 @@ public class LiveDataStateBean {
     public LinkedBlockingQueue<String> sendData = new LinkedBlockingQueue<String>();
 
 
-    private SingleLiveEvent<String> wifiState = new SingleLiveEvent<>("");
 
-    public SingleLiveEvent<LinkStateEnum> wifiState1 = new SingleLiveEvent<>(LinkStateEnum.LinkStart);
+
+    public SingleLiveEvent<LinkStateEnum> wifiState = new SingleLiveEvent<>(LinkStateEnum.LinkStart);
 
     public SingleLiveEvent<DeviceId> deviceIdLiveData = new SingleLiveEvent<>();//仪器ID
     public SingleLiveEvent<DeviceMCUVersion> deviceVersion = new SingleLiveEvent<>();//仪器MCU版本
@@ -54,7 +54,5 @@ public class LiveDataStateBean {
         return dataStateBean;
     }
 
-    public SingleLiveEvent<String> getWifiState() {
-        return wifiState;
-    }
+
 }

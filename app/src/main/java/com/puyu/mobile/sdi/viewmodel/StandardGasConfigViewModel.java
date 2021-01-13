@@ -4,6 +4,7 @@ package com.puyu.mobile.sdi.viewmodel;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 
 import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.bean.PassageBean;
@@ -18,8 +19,9 @@ import java.util.List;
 public class StandardGasConfigViewModel extends BaseViewModel<StandardGasConfigRepository> {
     public final LiveDataStateBean liveDataStateBean;
 
-    public SingleLiveEvent<List<StandardGas>> standardGases = new SingleLiveEvent<>();
-    public SingleLiveEvent<Boolean> changePassage = new SingleLiveEvent<>();
+    public MutableLiveData<List<StandardGas>> standardGases = new MutableLiveData<>();
+
+    public SingleLiveEvent<Integer> changePassage = new SingleLiveEvent<>();
 
     public StandardGasConfigViewModel(@NonNull Application application, StandardGasConfigRepository model) {
         super(application, model);
@@ -52,8 +54,8 @@ public class StandardGasConfigViewModel extends BaseViewModel<StandardGasConfigR
     }
 
     //选中事件
-    public void choeckWhich() {
-        changePassage.setValue(true);
+    public void choseWhich(int pos, boolean swicth) {
+        changePassage.setValue(pos);
     }
 
 

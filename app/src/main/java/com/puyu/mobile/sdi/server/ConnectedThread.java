@@ -46,7 +46,7 @@ public class ConnectedThread extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
             //EventBus.getDefault().post(new CommunicateError(Params.communicate_link_error));
-            LiveDataStateBean.getInstant().getWifiState().postValue(Params.communicate_link_error);
+          //  LiveDataStateBean.getInstant().getWifiState().postValue(Params.communicate_link_error);
             cancle();
             return;
         }
@@ -74,7 +74,7 @@ public class ConnectedThread extends Thread {
             } catch (Exception e) {//wifi 关闭会走异常 包括本地和服务端 不包括服务端软件关闭
                 e.printStackTrace();
 //                EventBus.getDefault().post(new CommunicateError(Params.communicate_link_error));
-                LiveDataStateBean.getInstant().getWifiState().postValue(Params.communicate_link_error);
+             //   LiveDataStateBean.getInstant().getWifiState().postValue(Params.communicate_link_error);
                 cancle();
                 break;
             }
@@ -104,7 +104,7 @@ public class ConnectedThread extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
             // EventBus.getDefault().post(new CommunicateError(Params.communicate_link_error));
-            LiveDataStateBean.getInstant().getWifiState().postValue(Params.communicate_link_error);
+          //  LiveDataStateBean.getInstant().getWifiState().postValue(Params.communicate_link_error);
         }
     }
 }

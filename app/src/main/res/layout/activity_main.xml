@@ -32,7 +32,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:id="@+id/tv_wifi_state"
                 android:textColor="@color/c_ffffff"
-                android:text="@{viewModel.liveDataStateBean.wifiState1.value}"
+                android:text="@{viewModel.liveDataStateBean.wifiState.value}"
                 android:textSize="@dimen/sp14"
                 android:gravity="center"
                 android:layout_width="wrap_content"

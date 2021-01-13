@@ -4,7 +4,6 @@
 
     <data>
 
-        <import type="com.puyu.mobile.sdi.util.TimeUtil" />
 
         <variable
             name="viewModel"

@@ -84,7 +84,7 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
                 PassageBean item = (PassageBean) adapter.getItem(position);
                 if (item == null) return;
                 if (view.getId() == R.id.layout_content) {
-                    item.selected = !item.selected;
+                   // item.selected = !item.selected;
                     stationAdapter.notifyItemChanged(position);
                 }
             }

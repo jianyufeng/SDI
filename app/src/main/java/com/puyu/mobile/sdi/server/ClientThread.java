@@ -40,20 +40,20 @@ public class ClientThread extends Thread {
     public void run() {
         super.run();
         try {
-            LiveDataStateBean.getInstant().getWifiState().postValue(Params.click_linking);
+          //  LiveDataStateBean.getInstant().getWifiState().postValue(Params.click_linking);
             // 连接服务器
             mmSoket = new Socket(IPUtil.getWifiRouteIPAddress(APP.getInstance()), Params.PORT);
         } catch (IOException e) {
             // 连接异常就关闭
             e.printStackTrace();
             //EventBus.getDefault().post(new ClientLinkError(Params.click_link_error));
-            LiveDataStateBean.getInstant().getWifiState().postValue(Params.click_link_error);
+         //   LiveDataStateBean.getInstant().getWifiState().postValue(Params.click_link_error);
             cancle();
             return;
         }
 
 //        EventBus.getDefault().post(new ClientLinkSuccess(Params.click_link_success,mmDevice));
-        LiveDataStateBean.getInstant().getWifiState().postValue(Params.click_link_success);
+       // LiveDataStateBean.getInstant().getWifiState().postValue(Params.click_link_success);
         manageConnectedSocket(mmSoket);
     }
 

@@ -84,6 +84,7 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                     GasNameConfig gasNameConfig = new GasNameConfig(name1, name2, name3, name4);
                     //发送配气方法名称设置
                     SenDataUtil.sendGasName(gasNameConfig);
+
                     //配气方法设置
                     Boolean run = runing.getValue();
 

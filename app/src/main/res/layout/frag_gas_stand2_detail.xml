@@ -4,8 +4,6 @@
 
     <data>
 
-        <import type="com.puyu.mobile.sdi.util.TimeUtil" />
-
         <variable
             name="viewModel"
             type="com.puyu.mobile.sdi.viewmodel.StandardGasConfigViewModel" />
@@ -115,6 +113,7 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_passage_enable_tip"
             app:layout_constraintLeft_toRightOf="@id/barrier1"
             android:layout_width="wrap_content"
+            android:onCheckedChanged="@{()-> viewModel.choseWhich(2,viewModel.standardGases[2].passageBean.selected)}"
             android:checked="@={viewModel.standardGases[2].passageBean.selected}"
             android:layout_height="wrap_content" />
 
