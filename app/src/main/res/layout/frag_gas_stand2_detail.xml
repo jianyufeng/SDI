@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="com.puyu.mobile.sdi.util.TimeUtil" />
 
         <variable
@@ -34,10 +35,11 @@
             app:layout_constraintTop_toTopOf="@id/tv_gas_name_tip"
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_name_tip"
             android:textSize="@dimen/sp16"
-            android:text="@={viewModel.liveDataStateBean.stand2GasName}"
+            android:background="@drawable/big_corner_bg"
+            android:text="@={viewModel.standardGases[2].gasName}"
+            android:gravity="center_vertical"
             android:layout_width="@dimen/dp150"
             android:maxEms="10"
-            android:background="@drawable/big_corner_bg"
             android:textColor="@color/c_384051"
             android:layout_height="@dimen/dp35" />
 
@@ -59,9 +61,9 @@
             app:layout_constraintTop_toTopOf="@id/tv_gas_initial_val_tip"
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_initial_val_tip"
             app:layout_constraintLeft_toRightOf="@id/barrier1"
-            android:padding="@dimen/dp10"
             android:textSize="@dimen/sp16"
             android:singleLine="true"
+            android:text="@={viewModel.standardGases[2].initVal}"
             android:inputType="numberDecimal"
             android:layout_width="@dimen/dp150"
             android:maxEms="10"
@@ -90,6 +92,7 @@
             app:layout_constraintLeft_toRightOf="@id/barrier1"
             android:textSize="@dimen/sp16"
             android:layout_width="@dimen/dp150"
+            android:text="@={viewModel.standardGases[2].dilutionMul}"
             android:maxEms="10"
             android:background="@drawable/big_corner_bg"
             android:textColor="@color/c_384051"
@@ -111,8 +114,8 @@
             app:layout_constraintTop_toTopOf="@id/tv_gas_passage_enable_tip"
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_passage_enable_tip"
             app:layout_constraintLeft_toRightOf="@id/barrier1"
-            android:checked="@={viewModel.liveDataStateBean.pass2Swich}"
             android:layout_width="wrap_content"
+            android:checked="@={viewModel.standardGases[2].passageBean.selected}"
             android:layout_height="wrap_content" />
 
         <androidx.constraintlayout.widget.Barrier
@@ -172,6 +175,7 @@
             android:textSize="@dimen/sp16"
             android:singleLine="true"
             android:layout_width="@dimen/dp150"
+            android:text="@={viewModel.standardGases[2].targetVal}"
             android:background="@drawable/big_corner_bg"
             android:textColor="@color/c_384051"
             android:layout_height="@dimen/dp35" />
@@ -193,7 +197,7 @@
             app:layout_constraintTop_toTopOf="@id/tv_gas_deviation_tip"
             app:layout_constraintLeft_toRightOf="@id/barrier2"
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_deviation_tip"
-            android:text="@{String.format(`%.2f`,viewModel.liveDataStateBean.systemMonitor.standP2Dis)}"
+            android:text="@{viewModel.standardGases[2].deviation}"
             android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -217,7 +221,7 @@
             app:layout_constraintTop_toTopOf="@id/tv_gas_consume_time_tip"
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_consume_time_tip"
             app:layout_constraintLeft_toRightOf="@id/barrier2"
-            android:text="@{TimeUtil.getDate(viewModel.liveDataStateBean.systemMonitor.standP2RunTime)}"
+            android:text="@{viewModel.standardGases[2].consumeTime}"
             android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

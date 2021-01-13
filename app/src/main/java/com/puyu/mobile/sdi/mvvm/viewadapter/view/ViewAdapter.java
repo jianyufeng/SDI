@@ -5,7 +5,6 @@ import android.view.View;
 import androidx.databinding.BindingAdapter;
 
 import com.jakewharton.rxbinding2.view.RxView;
-import com.puyu.mobile.sdi.bean.PassageBean;
 import com.puyu.mobile.sdi.mvvm.command.BindingCommand;
 
 import java.util.concurrent.TimeUnit;
@@ -17,40 +16,6 @@ import io.reactivex.functions.Consumer;
  */
 
 public class ViewAdapter {
-    /**
-     * requireAll 是意思是是否需要绑定全部参数, false为否
-     * View的onClick事件绑定
-     * onClickCommand 绑定的命令,
-     * isThrottleFirst 是否开启防止过快点击
-     */
-    @BindingAdapter(value = {"onParamsClickCommand", "isThrottleFirst", "params","position"}, requireAll = false)
-    public static void onParamsClickCommand(View view, final BindingCommand<PassageBean> clickCommand,
-                                            final boolean isThrottleFirst, PassageBean params,int pos) {
-        if (isThrottleFirst) {
-            RxView.clicks(view)
-                    .subscribe(new Consumer<Object>() {
-                        @Override
-                        public void accept(Object object) throws Exception {
-                            if (clickCommand != null) {
-                                clickCommand.execute(params);
-                            }
-                        }
-                    });
-        } else {
-            RxView.clicks(view)
-                    .throttleFirst(CLICK_INTERVAL, TimeUnit.SECONDS)//1秒钟内只允许点击1次
-                    .subscribe(new Consumer<Object>() {
-                        @Override
-                        public void accept(Object object) throws Exception {
-                            if (clickCommand != null) {
-                                clickCommand.execute(params);
-                            }
-                        }
-                    });
-        }
-    }
-
-
     //防重复点击间隔(秒)
     public static final int CLICK_INTERVAL = 1;
 

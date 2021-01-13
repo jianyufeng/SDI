@@ -1,13 +1,12 @@
 package com.puyu.mobile.sdi;
 
-import androidx.lifecycle.MutableLiveData;
-
 import com.puyu.mobile.sdi.bean.DeviceId;
 import com.puyu.mobile.sdi.bean.DeviceMCUVersion;
 import com.puyu.mobile.sdi.bean.DeviceType;
 import com.puyu.mobile.sdi.bean.LinkStateEnum;
 import com.puyu.mobile.sdi.bean.PressureLimit;
 import com.puyu.mobile.sdi.bean.SystemMonitor;
+import com.puyu.mobile.sdi.mvvm.livedata.SingleLiveEvent;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -25,37 +24,37 @@ public class LiveDataStateBean {
     public LinkedBlockingQueue<String> sendData = new LinkedBlockingQueue<String>();
 
 
-    private MutableLiveData<String> wifiState = new MutableLiveData<>("");
+    private SingleLiveEvent<String> wifiState = new SingleLiveEvent<>("");
 
-    public MutableLiveData<LinkStateEnum> wifiState1 = new MutableLiveData<>(LinkStateEnum.LinkStart);
+    public SingleLiveEvent<LinkStateEnum> wifiState1 = new SingleLiveEvent<>(LinkStateEnum.LinkStart);
 
-    public MutableLiveData<DeviceId> deviceIdLiveData = new MutableLiveData<>();//仪器ID
-    public MutableLiveData<DeviceMCUVersion> deviceVersion = new MutableLiveData<>();//仪器MCU版本
-    public MutableLiveData<DeviceType> deviceType = new MutableLiveData<>();//仪器类型
+    public SingleLiveEvent<DeviceId> deviceIdLiveData = new SingleLiveEvent<>();//仪器ID
+    public SingleLiveEvent<DeviceMCUVersion> deviceVersion = new SingleLiveEvent<>();//仪器MCU版本
+    public SingleLiveEvent<DeviceType> deviceType = new SingleLiveEvent<>();//仪器类型
 
-    public MutableLiveData<PressureLimit> pressureLimit = new MutableLiveData<>();//压力上下限
+    public SingleLiveEvent<PressureLimit> pressureLimit = new SingleLiveEvent<>();//压力上下限
 
-    public MutableLiveData<SystemMonitor> systemMonitor = new MutableLiveData<>();//系统监控
+    public SingleLiveEvent<SystemMonitor> systemMonitor = new SingleLiveEvent<>();//系统监控
 
 
     //发数据标气名称
-    public MutableLiveData<String> stand1GasName = new MutableLiveData<>("");
-    public MutableLiveData<String> stand2GasName = new MutableLiveData<>("");
-    public MutableLiveData<String> stand3GasName = new MutableLiveData<>("");
-    public MutableLiveData<String> stand4GasName = new MutableLiveData<>("");
+    public SingleLiveEvent<String> stand1GasName = new SingleLiveEvent<>("");
+    public SingleLiveEvent<String> stand2GasName = new SingleLiveEvent<>("");
+    public SingleLiveEvent<String> stand3GasName = new SingleLiveEvent<>("");
+    public SingleLiveEvent<String> stand4GasName = new SingleLiveEvent<>("");
 
     //发数据标气通道开关
-    public MutableLiveData<Boolean> pass1Swich = new MutableLiveData<>(false);
-    public MutableLiveData<Boolean> pass2Swich = new MutableLiveData<>(false);
-    public MutableLiveData<Boolean> pass3Swich = new MutableLiveData<>(false);
-    public MutableLiveData<Boolean> pass4Swich = new MutableLiveData<>(false);
+    public SingleLiveEvent<Boolean> pass1Swich = new SingleLiveEvent<>(false);
+    public SingleLiveEvent<Boolean> pass2Swich = new SingleLiveEvent<>(false);
+    public SingleLiveEvent<Boolean> pass3Swich = new SingleLiveEvent<>(false);
+    public SingleLiveEvent<Boolean> pass4Swich = new SingleLiveEvent<>(false);
 
 
     public static LiveDataStateBean getInstant() {
         return dataStateBean;
     }
 
-    public MutableLiveData<String> getWifiState() {
+    public SingleLiveEvent<String> getWifiState() {
         return wifiState;
     }
 }

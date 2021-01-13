@@ -42,6 +42,13 @@ public class SingleLiveEvent<T> extends MutableLiveData<T> {
     //原子变量 线程安全
     private final AtomicBoolean mPending = new AtomicBoolean(false);
 
+    public SingleLiveEvent(T value) {
+        super(value);
+    }
+
+    public SingleLiveEvent() {
+    }
+
     @MainThread
     public void observe(LifecycleOwner owner, final Observer<? super T> observer) {
 

@@ -50,12 +50,11 @@ dependencies {
     //Gson
     implementation 'com.google.code.gson:gson:2.8.6'
     //更简单的写RecyclerView的Adapter
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50'
     //6.0权限控制，谷歌官方依赖
     implementation 'pub.devrel:easypermissions:1.0.1'
     //防止多次点击
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
-
     // Arch
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.2.0"
     implementation "androidx.lifecycle:lifecycle-runtime:2.2.0"
