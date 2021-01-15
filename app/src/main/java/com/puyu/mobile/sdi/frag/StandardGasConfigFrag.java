@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.puyu.mobile.adapter.MyFragmentStateAdapter;
-import com.puyu.mobile.adapter.StandGasPassageAdapter;
+import com.puyu.mobile.sdi.adapter.MyFragmentStateAdapter;
+import com.puyu.mobile.sdi.adapter.StandGasPassageAdapter;
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
 import com.puyu.mobile.sdi.bean.StandardGas;
@@ -62,12 +62,13 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
     protected void initData() {
         super.initData();
         //设置左边的通道页面
+        binding.etFinalPressure.getEditableText();
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         binding.rvPassage.setLayoutManager(manager);
         DividerItemDecoration divider = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.line_h));
         binding.rvPassage.addItemDecoration(divider);
-        passageAdapter = new StandGasPassageAdapter(binding.rvPassage, viewModel.standardGases.getValue());
+        passageAdapter = new StandGasPassageAdapter(binding.rvPassage, viewModel.liveDataStateBean.standardGases.getValue());
         //通道点击事件
         passageAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             StandardGas item = (StandardGas) adapter.getItem(position);
@@ -84,7 +85,7 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
                 //修改视图
                 passageAdapter.notifyItemChanged(position);
                 //修改 标气设置页面中的选中
-                viewModel.standardGases.setValue(viewModel.standardGases.getValue());
+                viewModel.liveDataStateBean.standardGases.setValue(viewModel.liveDataStateBean.standardGases.getValue());
                 //点击切换 标气设置页面
                 binding.vpPassageDetail.setCurrentItem(position, true);
                 //点击改变自身
@@ -129,6 +130,7 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
         viewModel.changePassage.observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer pos) {
+                //实体数据应经修改，但是RecycleView不是bading的需要手动刷新
                 passageAdapter.notifyItemChanged(binding.vpPassageDetail.getCurrentItem());
             }
         });

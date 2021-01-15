@@ -1,4 +1,4 @@
-package com.puyu.mobile.adapter;
+package com.puyu.mobile.sdi.adapter;
 
 import android.graphics.drawable.Drawable;
 import android.widget.TextView;
@@ -29,7 +29,7 @@ public class StandGasPassageAdapter extends BaseQuickAdapter<StandardGas, BaseVi
 
 
     public StandGasPassageAdapter(RecyclerView recyclerView, List<StandardGas> standardGases) {
-        super(R.layout.item_passage, standardGases);
+        super(R.layout.item_passage, standardGases.subList(0, standardGases.size() - 1));
         this.recyclerView = recyclerView;
         md = ContextCompat.getDrawable(APP.getInstance(), android.R.drawable.ic_notification_overlay);
 

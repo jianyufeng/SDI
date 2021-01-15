@@ -12,7 +12,7 @@ public class SystemMonitor {
     public byte runProcess;//当前运行流程
     public byte runPassage;//当前运行通道数
     public float currentPress;//当前压力
-    public float targetPress;//目标压力
+    public String targetPress = 50+"";//目标压力
     public float averagePress;//平均压力
     public float surroundTem;//环境温度
 

@@ -1,5 +1,7 @@
 package com.puyu.mobile.sdi.bean;
 
+import java.util.List;
+
 /**
  * author : 简玉锋
  * e-mail : yufeng_jian@fpi-inc.com
@@ -16,7 +18,7 @@ public class GasNameConfig {
 
     private int wResult; //写入返回
 
-    public GasNameConfig() {
+    public GasNameConfig(List<StandardGas> gasList) {
     }
 
     public GasNameConfig(String sGasName1, String sGasName2, String sGasName3, String sGasName4) {

@@ -1,4 +1,4 @@
-package com.puyu.mobile.adapter;
+package com.puyu.mobile.sdi.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

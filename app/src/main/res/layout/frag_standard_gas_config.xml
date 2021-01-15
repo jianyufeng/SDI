@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="com.puyu.mobile.sdi.util.NumberUtil" />
+
         <variable
             name="viewModel"
             type="com.puyu.mobile.sdi.viewmodel.StandardGasConfigViewModel" />
@@ -59,13 +61,16 @@
                     app:layout_constraintTop_toTopOf="@id/btn_import_method"
                     app:layout_constraintBottom_toBottomOf="@id/btn_import_method"
                     android:singleLine="true"
+                    android:padding="0dp"
+                    android:gravity="center_vertical"
                     android:textSize="@dimen/sp16"
-                    android:text="@{String.format(`%.2f`,viewModel.liveDataStateBean.systemMonitor.targetPress)}"
+                    android:text="@={viewModel.liveDataStateBean.systemMonitor.targetPress}"
                     android:inputType="numberDecimal"
-                    android:background="@drawable/big_corner_bg"
+                    android:background="@{((NumberUtil.parseFloat(viewModel.liveDataStateBean.systemMonitor.targetPress,-1.0f)&lt;0)||(NumberUtil.parseFloat(viewModel.liveDataStateBean.systemMonitor.targetPress,-1.0f)&gt;50))?@drawable/big_strocke_bg_red:@drawable/big_corner_bg}"
                     android:textColor="@color/c_384051"
                     android:layout_width="@dimen/dp150"
                     android:layout_height="@dimen/dp35" />
+
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_pressure_tip"

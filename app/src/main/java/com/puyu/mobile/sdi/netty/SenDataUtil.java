@@ -1,7 +1,9 @@
 package com.puyu.mobile.sdi.netty;
 
 import com.puyu.mobile.sdi.bean.GasNameConfig;
+import com.puyu.mobile.sdi.bean.StandConfigSend;
 import com.puyu.mobile.sdi.util.AppCRC;
+import com.puyu.mobile.sdi.util.NumberUtil;
 
 import java.nio.charset.StandardCharsets;
 
@@ -41,17 +43,31 @@ public class SenDataUtil {
 
     }
 
-    public static void sendGasConfig() {
+    public static void sendGasConfig(StandConfigSend configSend) {
+        System.out.println(configSend);
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
-        byteBuf.writeByte(0x34);
+        byteBuf.writeByte(0x33);
         byteBuf.writeByte(0x66);
-        byteBuf.writeShort(84);
-     /*   add20(byteBuf, gasNameConfig.sGasName1, 20, true);
-        add20(byteBuf, gasNameConfig.sGasName2, 20, true);
-        add20(byteBuf, gasNameConfig.sGasName3, 20, true);
-        add20(byteBuf, gasNameConfig.sGasName4, 20, true);*/
+        byteBuf.writeShort(50);
+        byteBuf.writeBoolean(configSend.start);
+        byteBuf.writeBoolean(configSend.pass1);
+        byteBuf.writeBoolean(configSend.pass2);
+        byteBuf.writeBoolean(configSend.pass3);
+        byteBuf.writeBoolean(configSend.pass4);
+        byteBuf.writeBoolean(configSend.pass5);
+        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.initV1));
+        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.initV2));
+        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.initV3));
+        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.initV4));
+        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.initV5));
+        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.targetV1));
+        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.targetV2));
+        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.targetV3));
+        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.targetV4));
+        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.targetV5));
+        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.targetPress));
         byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
         byteBuf.writeBytes(crcByte);
         byteBuf.writeBytes(ProtocolParams.frameEnd);

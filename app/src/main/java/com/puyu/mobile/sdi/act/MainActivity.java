@@ -5,7 +5,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -59,80 +58,77 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
     @Override
     protected void initViewObservable() {
-        viewModel.selectType.observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer checkedId) {
-                switch (checkedId) {
-                    case R.id.standard_gas_config:
-                        binding.vp2.setCurrentItem(0, false);
-                        break;
-                    case R.id.rinse:
-                        binding.vp2.setCurrentItem(1, false);
-                        indw++;
-                        if (indw == 1) {
-                            byte[] bytes = {0x44, 0x41, 0x7d, 0x7b, 0x01, (byte) 0xf3, 0x01, (byte) 0xf2, 0x7d, (byte) 0x82, (byte) 0xf3, 0x20, 0x7d, (byte) 0x82, 0x7d, 0x7d, 0x00, 0x00};
-                            client.sendMsg(bytes);
-                        } else if (indw == 2) {//仪器ID
-                            byte[] bytes = {0x7d, 0x7b, 0x01, (byte) 0xf3, 0x01, (byte) 0xf1, 0x20, (byte) 0xaa, 0x00, 0x0C,
-                                    0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x61, 0x62, 0x63, (byte) 0x93, (byte) 0x04, 0x7d, 0x7d};
-                            client.sendMsg(bytes);
-                        } else if (indw == 3) {//仪器版本
-                            byte[] bytes = {0x7d, 0x7b, 0x01, (byte) 0xf3, 0x01, (byte) 0xf1, 0x21, (byte) 0xaa, 0x00, 0x20,
-                                    0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
-                                    0x4d, 0x43, 0x55, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
-                                    0x38, 0x39, 0x61, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
-                                    (byte) 0x1e, (byte) 0x2b, 0x7d, 0x7d};
-                            client.sendMsg(bytes);
-                        } else if (indw == 4) {//仪器类型
-                            byte[] bytes = {0x7d, 0x7b, 0x01, (byte) 0xf3, 0x01, (byte) 0xf1, 0x23, (byte) 0xaa, 0x00, 0x01,
-                                    0x00,
-                                    (byte) 0xa8, (byte) 0x5f, 0x7d, 0x7d};
-                            client.sendMsg(bytes);
-                        } else if (indw == 5) {//压力上下限
-                            byte[] bytes = {0x7d, 0x7b, 0x01, (byte) 0xf3, 0x01, (byte) 0xf1, 0x36, (byte) 0xaa, 0x00, 0x08,
-                                    0x42, 0x5E, 0x33, 0x33,
-                                    0x3E, 0x19, (byte) 0x99, (byte) 0x99,
-                                    (byte) 0xcf, (byte) 0x38, 0x7d, 0x7d};
-                            client.sendMsg(bytes);
-                        } else if (indw == 6) {//监测状态
-                            byte[] bytes = {0x7d, 0x7b, 0x01, (byte) 0xf3, 0x01, (byte) 0xf1, 0x45, (byte) 0xaa, 0x00, 0x4c,
-                                    0x00,
-                                    0x00,
-                                    0x00,
-                                    0x3F, 0x26, 0x66, 0x66,
-                                    0x40, (byte) 0xB9, (byte) 0x99, (byte) 0x99,
-                                    0x40, (byte) 0xB9, (byte) 0x99, (byte) 0x99,
-                                    (byte) 0xC0, (byte) 0x20, (byte) 0x00, (byte) 0x00,//温度
-                                    (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,//误差
-                                    (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
-                                    (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
-                                    (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
-                                    (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
-                                    (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
-                                    (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
-                                    0x40, (byte) 0xA0, 0x00, 0x00, //时间
-                                    0x40, (byte) 0xA0, 0x00, 0x00, //时间
-                                    0x40, (byte) 0xA0, 0x00, 0x00, //时间
-                                    0x40, (byte) 0xA0, 0x00, 0x00, //时间
-                                    0x40, (byte) 0xA0, 0x00, 0x00, //时间
-                                    0x40, (byte) 0xA0, 0x00, 0x00, //时间
-                                    0x40, (byte) 0xA0, 0x00, 0x00, //时间
-                                    0x00,
-                                    (byte) 0x98, (byte) 0x2d, 0x7d, 0x7d};
-                            client.sendMsg(bytes);
-                        }
-                        break;
-                    case R.id.pressurize:
-                        binding.vp2.setCurrentItem(2, false);
-                        break;
-                    case R.id.add_sample:
-                        binding.vp2.setCurrentItem(3, false);
-                        break;
-                    case R.id.set:
-                        binding.vp2.setCurrentItem(4, false);
+        viewModel.selectType.observe(this, checkedId -> {
+            switch (checkedId) {
+                case R.id.standard_gas_config:
+                    binding.vp2.setCurrentItem(0, false);
+                    break;
+                case R.id.rinse:
+                    binding.vp2.setCurrentItem(1, false);
+                    indw++;
+                    if (indw == 1) {
+                        byte[] bytes = {0x44, 0x41, 0x7d, 0x7b, 0x01, (byte) 0xf3, 0x01, (byte) 0xf2, 0x7d, (byte) 0x82, (byte) 0xf3, 0x20, 0x7d, (byte) 0x82, 0x7d, 0x7d, 0x00, 0x00};
+                        client.sendMsg(bytes);
+                    } else if (indw == 2) {//仪器ID
+                        byte[] bytes = {0x7d, 0x7b, 0x01, (byte) 0xf3, 0x01, (byte) 0xf1, 0x20, (byte) 0xaa, 0x00, 0x0C,
+                                0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x61, 0x62, 0x63, (byte) 0x93, (byte) 0x04, 0x7d, 0x7d};
+                        client.sendMsg(bytes);
+                    } else if (indw == 3) {//仪器版本
+                        byte[] bytes = {0x7d, 0x7b, 0x01, (byte) 0xf3, 0x01, (byte) 0xf1, 0x21, (byte) 0xaa, 0x00, 0x20,
+                                0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+                                0x4d, 0x43, 0x55, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
+                                0x38, 0x39, 0x61, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
+                                (byte) 0x1e, (byte) 0x2b, 0x7d, 0x7d};
+                        client.sendMsg(bytes);
+                    } else if (indw == 4) {//仪器类型
+                        byte[] bytes = {0x7d, 0x7b, 0x01, (byte) 0xf3, 0x01, (byte) 0xf1, 0x23, (byte) 0xaa, 0x00, 0x01,
+                                0x00,
+                                (byte) 0xa8, (byte) 0x5f, 0x7d, 0x7d};
+                        client.sendMsg(bytes);
+                    } else if (indw == 5) {//压力上下限
+                        byte[] bytes = {0x7d, 0x7b, 0x01, (byte) 0xf3, 0x01, (byte) 0xf1, 0x36, (byte) 0xaa, 0x00, 0x08,
+                                0x42, 0x5E, 0x33, 0x33,
+                                0x3E, 0x19, (byte) 0x99, (byte) 0x99,
+                                (byte) 0xcf, (byte) 0x38, 0x7d, 0x7d};
+                        client.sendMsg(bytes);
+                    } else if (indw == 6) {//监测状态
+                        byte[] bytes = {0x7d, 0x7b, 0x01, (byte) 0xf3, 0x01, (byte) 0xf1, 0x45, (byte) 0xaa, 0x00, 0x4c,
+                                0x00,
+                                0x00,
+                                0x00,
+                                0x3F, 0x26, 0x66, 0x66,
+                                0x40, (byte) 0xB9, (byte) 0x99, (byte) 0x99,
+                                0x40, (byte) 0xB9, (byte) 0x99, (byte) 0x99,
+                                (byte) 0xC0, (byte) 0x20, (byte) 0x00, (byte) 0x00,//温度
+                                (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,//误差
+                                (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
+                                (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
+                                (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
+                                (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
+                                (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
+                                (byte) 0xBE, 0x19, (byte) 0x99, (byte) 0x99,
+                                0x40, (byte) 0xA0, 0x00, 0x00, //时间
+                                0x40, (byte) 0xA0, 0x00, 0x00, //时间
+                                0x40, (byte) 0xA0, 0x00, 0x00, //时间
+                                0x40, (byte) 0xA0, 0x00, 0x00, //时间
+                                0x40, (byte) 0xA0, 0x00, 0x00, //时间
+                                0x40, (byte) 0xA0, 0x00, 0x00, //时间
+                                0x40, (byte) 0xA0, 0x00, 0x00, //时间
+                                0x00,
+                                (byte) 0x98, (byte) 0x2d, 0x7d, 0x7d};
+                        client.sendMsg(bytes);
+                    }
+                    break;
+                case R.id.pressurize:
+                    binding.vp2.setCurrentItem(2, false);
+                    break;
+                case R.id.add_sample:
+                    binding.vp2.setCurrentItem(3, false);
+                    break;
+                case R.id.set:
+                    binding.vp2.setCurrentItem(4, false);
 
-                        break;
-                }
+                    break;
             }
         });
     }

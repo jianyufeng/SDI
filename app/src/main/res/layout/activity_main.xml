@@ -172,7 +172,7 @@
                     app:layout_constraintLeft_toRightOf="@id/tv_target_pressure_val_tip"
                     app:layout_constraintTop_toTopOf="parent"
                     android:textSize="@dimen/sp16"
-                    android:text="@{String.format(`%.2f`,viewModel.liveDataStateBean.systemMonitor.targetPress)}"
+                    android:text="@{viewModel.liveDataStateBean.systemMonitor.targetPress}"
                     android:minEms="3"
                     android:textColor="@color/c_384051"
                     android:layout_width="wrap_content"
@@ -206,16 +206,17 @@
                     android:layout_marginTop="@dimen/dp5"
                     android:layout_marginBottom="@dimen/dp5"
                     android:id="@+id/btn_start"
+                    android:padding="0dp"
                     android:textColor="@color/c_ffffff"
                     android:layout_width="wrap_content"
-                    android:text="@{viewModel.runing?`停止`:`启动`}"
+                    android:text="@{viewModel.liveDataStateBean.systemMonitor.runProcess!=0x00?`停止`:`启动`}"
                     app:isThrottleFirst="@{true}"
                     app:onClickCommand="@{viewModel.startRun}"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:textSize="@dimen/sp16"
-                    android:background="@{viewModel.runing?@drawable/big_corner_bg_red:@drawable/big_corner_bg_blue}"
+                    android:background="@{viewModel.liveDataStateBean.systemMonitor.runProcess!=0x00?@drawable/big_corner_bg_red:@drawable/big_corner_bg_blue}"
                     android:layout_height="0dp" />
 
                 <androidx.appcompat.widget.AppCompatButton

@@ -70,7 +70,7 @@ public class NumberUtil {
         }
         String mstr = value.toString();
         Pattern pattern1 = Pattern.compile("^[-\\+]?[\\d]*$");
-        Pattern pattern2 = Pattern.compile("-?[0-9]+.?[0-9]+");
+        Pattern pattern2 = Pattern.compile("-?[0-9]+.?[0-9]*");
         return pattern1.matcher(mstr).matches() || pattern2.matcher(mstr).matches();
     }
 
