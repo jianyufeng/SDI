@@ -1,4 +1,4 @@
-package com.puyu.mobile.sdi.mvvm.viewadapter.textview;
+package com.puyu.mobile.sdi.myviewadapter.textview;
 
 import android.widget.TextView;
 
