@@ -51,6 +51,7 @@ public class StandGasPassageAdapter extends BaseQuickAdapter<StandardGas, BaseVi
                 .setTextColor(R.id.tv_name, ContextCompat.getColor(APP.getInstance(), item.passageBean.selected ?
                         R.color.c_16a5ff : R.color.c_384051))
                 .setVisible(R.id.show_flag, holder.getLayoutPosition() == shwoIndex)
+                .setVisible(R.id.checkbox, item.passageBean.prassage != 0)
                 .setChecked(R.id.checkbox, item.passageBean.selected)
                 .addOnClickListener(R.id.layout_content, R.id.checkbox);
         ((TextView) holder.getView(R.id.tv_name)).setCompoundDrawables(

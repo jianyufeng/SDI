@@ -82,9 +82,10 @@ public class LiveDataStateBean {
 
     //通道 - 配气的过程
     public MutableLiveData<List<StandardGas>> standardGases = new MutableLiveData<>();
+    //目标压力值
+    public MutableLiveData<String> targetPress = new MutableLiveData<>();
 
-
-    private MutableLiveData<View> focusView = new MutableLiveData<>();
+    private SingleLiveEvent<View> focusView = new SingleLiveEvent<>();
 
     public void viewFocus(View view, boolean focus) {
         Log.d("TTTTTTTTTTTTTTTTTTT", "viewFocus: " + focus);
@@ -115,6 +116,26 @@ public class LiveDataStateBean {
         standardGases.getValue().get(pos).targetVal = String.valueOf(NumberUtil.keepPrecision(initV / mulV, 2));
         //刷新页面
         standardGases.setValue(standardGases.getValue());
+    }
+
+    //单位发生变化
+    public void unitChange(int pos) {
+        Log.d("TTTTTTTTTTTTTTTTTTTUnit", "unitChange: ");
+    /*    View value = focusView.getValue();
+        if (value instanceof EditText && ((EditText) value).getEditableText() == editable) {
+            float initV = NumberUtil.parseFloat(init);
+            float targetV = NumberUtil.parseFloat(target);
+            if (initV == 0 || targetV == 0) {
+                standardGases.getValue().get(pos).dilutionMul = "";
+                standardGases.setValue(standardGases.getValue());
+                return;
+            }
+            //更新数据
+            standardGases.getValue().get(pos).dilutionMul = String.valueOf(NumberUtil.keepPrecision(initV / targetV, 2));
+            //刷新页面
+            standardGases.setValue(standardGases.getValue());
+        }*/
+
     }
 
     //目标值发生变化 计算稀释倍数

@@ -1,5 +1,7 @@
 package com.puyu.mobile.sdi.bean;
 
+import androidx.databinding.ObservableField;
+
 /**
  * author : 简玉锋
  * e-mail : yufeng_jian@fpi-inc.com
@@ -8,7 +10,7 @@ package com.puyu.mobile.sdi.bean;
  * version: 1.0
  */
 public class StandardGas {
-    public String gasName;
+    public ObservableField<String> gasName;
     public String gasUnit;
     public String initVal;
     public String targetVal;
@@ -25,7 +27,7 @@ public class StandardGas {
     public StandardGas(String gasName, String gasUnit, String initVal, String targetVal,
                        String dilutionMul, String deviation,
                        String consumeTime, PassageBean passageBean) {
-        this.gasName = gasName;
+        this.gasName = new ObservableField<>(gasName);
         this.gasUnit = gasUnit;
         this.initVal = initVal;
         this.targetVal = targetVal;

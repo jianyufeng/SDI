@@ -64,9 +64,9 @@
                     android:padding="0dp"
                     android:gravity="center_vertical"
                     android:textSize="@dimen/sp16"
-                    android:text="@={viewModel.liveDataStateBean.systemMonitor.targetPress}"
+                    android:text="@={viewModel.liveDataStateBean.targetPress}"
                     android:inputType="numberDecimal"
-                    android:background="@{((NumberUtil.parseFloat(viewModel.liveDataStateBean.systemMonitor.targetPress,-1.0f)&lt;0)||(NumberUtil.parseFloat(viewModel.liveDataStateBean.systemMonitor.targetPress,-1.0f)&gt;50))?@drawable/big_strocke_bg_red:@drawable/big_corner_bg}"
+                    android:background="@{((NumberUtil.parseFloat(viewModel.liveDataStateBean.targetPress,-1.0f)&lt;0)||(NumberUtil.parseFloat(viewModel.liveDataStateBean.targetPress,-1.0f)&gt;50))?@drawable/big_strocke_bg_red:@drawable/big_corner_bg}"
                     android:textColor="@color/c_384051"
                     android:layout_width="@dimen/dp150"
                     android:layout_height="@dimen/dp35" />

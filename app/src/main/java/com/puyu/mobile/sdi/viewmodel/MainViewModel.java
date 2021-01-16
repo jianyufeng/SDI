@@ -4,7 +4,6 @@ package com.puyu.mobile.sdi.viewmodel;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
 
 import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.R;
@@ -17,6 +16,7 @@ import com.puyu.mobile.sdi.mvvm.BaseViewModel;
 import com.puyu.mobile.sdi.mvvm.command.BindingAction;
 import com.puyu.mobile.sdi.mvvm.command.BindingCommand;
 import com.puyu.mobile.sdi.mvvm.command.BindingConsumer;
+import com.puyu.mobile.sdi.mvvm.livedata.SingleLiveEvent;
 import com.puyu.mobile.sdi.netty.SenDataUtil;
 import com.puyu.mobile.sdi.util.NumberUtil;
 import com.puyu.mobile.sdi.util.StringUtil;
@@ -35,7 +35,7 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
 
     public final LiveDataStateBean liveDataStateBean;
     //tab切换
-    public MutableLiveData<Integer> selectType = new MutableLiveData<>(0);
+    public SingleLiveEvent<Integer> selectType = new SingleLiveEvent<>(0);
 
 
     public MainViewModel(@NonNull Application application, MainRepository model) {
@@ -62,10 +62,10 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                 case R.id.standard_gas_config://配气启动
                     //1.获取标气名称
                     List<StandardGas> gasList = liveDataStateBean.standardGases.getValue();
-                    String name1 = gasList.get(1).gasName;
-                    String name2 = gasList.get(2).gasName;
-                    String name3 = gasList.get(3).gasName;
-                    String name4 = gasList.get(4).gasName;
+                    String name1 = gasList.get(1).gasName.get();
+                    String name2 = gasList.get(2).gasName.get();
+                    String name3 = gasList.get(3).gasName.get();
+                    String name4 = gasList.get(4).gasName.get();
                     System.out.println("标气1名称：" + name1);
                     System.out.println("标气2名称：" + name2);
                     System.out.println("标气3名称：" + name3);
@@ -123,40 +123,40 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                     boolean pass4 = gasList.get(4).passageBean.selected;
                     boolean pass5 = gasList.get(5).passageBean.selected;
                     //通道初始值
-                    String initV1 = gasList.get(1).initVal;
-                    String initV2 = gasList.get(2).initVal;
-                    String initV3 = gasList.get(3).initVal;
-                    String initV4 = gasList.get(4).initVal;
-                    String initV5 = gasList.get(5).initVal;
+                    float initV1 = NumberUtil.parseFloat(gasList.get(1).initVal);
+                    float initV2 = NumberUtil.parseFloat(gasList.get(2).initVal);
+                    float initV3 = NumberUtil.parseFloat(gasList.get(3).initVal);
+                    float initV4 = NumberUtil.parseFloat(gasList.get(4).initVal);
+                    float initV5 = NumberUtil.parseFloat(gasList.get(5).initVal);
                     //通道目标值
-                    String targetV1 = gasList.get(1).targetVal;
-                    String targetV2 = gasList.get(2).targetVal;
-                    String targetV3 = gasList.get(3).targetVal;
-                    String targetV4 = gasList.get(4).targetVal;
-                    String targetV5 = gasList.get(5).targetVal;
-                    if (pass1 && NumberUtil.parseFloat(initV1) < NumberUtil.parseFloat(targetV1)) {
-                        showToast(gasList.get(1).passageBean.name + "：初始值小于目标值");
+                    float targetV1 = NumberUtil.parseFloat(gasList.get(1).targetVal);
+                    float targetV2 = NumberUtil.parseFloat(gasList.get(2).targetVal);
+                    float targetV3 = NumberUtil.parseFloat(gasList.get(3).targetVal);
+                    float targetV4 = NumberUtil.parseFloat(gasList.get(4).targetVal);
+                    float targetV5 = NumberUtil.parseFloat(gasList.get(5).targetVal);
+                    if (pass1 && (initV1 <= 0 || targetV1 <= 0 || initV1 < targetV1)) {
+                        showToast(gasList.get(1).passageBean.name + "：初始值/目标值 有误");
                         return;
                     }
-                    if (pass2 && NumberUtil.parseFloat(initV2) < NumberUtil.parseFloat(targetV2)) {
-                        showToast(gasList.get(2).passageBean.name + "：初始值小于目标值");
+                    if (pass2 && (initV2 <= 0 || targetV2 <= 0 || initV2 < targetV2)) {
+                        showToast(gasList.get(2).passageBean.name + "：初始值/目标值 有误");
                         return;
                     }
-                    if (pass3 && NumberUtil.parseFloat(initV3) < NumberUtil.parseFloat(targetV3)) {
-                        showToast(gasList.get(3).passageBean.name + "：初始值小于目标值");
+                    if (pass3 && (initV3 <= 0 || targetV3 <= 0 || initV3 < targetV3)) {
+                        showToast(gasList.get(3).passageBean.name + "：初始值/目标值 有误");
                         return;
                     }
-                    if (pass4 && NumberUtil.parseFloat(initV4) < NumberUtil.parseFloat(targetV4)) {
-                        showToast(gasList.get(4).passageBean.name + "：初始值小于目标值");
+                    if (pass4 && (initV4 <= 0 || targetV4 <= 0 || initV4 < targetV4)) {
+                        showToast(gasList.get(4).passageBean.name + "：初始值/目标值 有误");
                         return;
                     }
-                    if (pass5 && NumberUtil.parseFloat(initV5) < NumberUtil.parseFloat(targetV5)) {
-                        showToast(gasList.get(5).passageBean.name + "：初始值小于目标值");
+                    if (pass5 && (initV5 <= 0 || targetV5 <= 0 || initV5 < targetV5)) {
+                        showToast(gasList.get(5).passageBean.name + "：初始值/目标值 有误");
                         return;
                     }
                     //目标压力
-                    String targetPress = liveDataStateBean.systemMonitor.getValue().targetPress;
-                    Float tp = NumberUtil.parseFloat(targetPress, -1.0f);
+                    Float tp = NumberUtil.parseFloat(liveDataStateBean.targetPress.getValue(),
+                            -1.0f);
                     if (tp < 0 || tp > 50) {
                         showToast("总压力值范围0-50psi");
                         return;
@@ -164,7 +164,7 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                     //配气方法设置
                     SenDataUtil.sendGasConfig(new StandConfigSend(start, pass1, pass2, pass3
                             , pass4, pass5, initV1, initV2, initV3, initV4, initV5, targetV1,
-                            targetV2, targetV3, targetV4, targetV5, targetPress));
+                            targetV2, targetV3, targetV4, targetV5, tp));
                     break;
                 case R.id.rinse: //冲洗启动
 

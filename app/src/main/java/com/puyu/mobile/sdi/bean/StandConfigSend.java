@@ -17,21 +17,21 @@ public class StandConfigSend {
     public boolean pass4;
     public boolean pass5;
     //通道初始值
-    public String initV1;
-    public String initV2;
-    public String initV3;
-    public String initV4;
-    public String initV5;
+    public float initV1;
+    public float initV2;
+    public float initV3;
+    public float initV4;
+    public float initV5;
     //通道目标值
-    public String targetV1;
-    public String targetV2;
-    public String targetV3;
-    public String targetV4;
-    public String targetV5;
+    public float targetV1;
+    public float targetV2;
+    public float targetV3;
+    public float targetV4;
+    public float targetV5;
     //目标压力
-    public String targetPress;
+    public float targetPress;
 
-    public StandConfigSend(boolean start, boolean pass1, boolean pass2, boolean pass3, boolean pass4, boolean pass5, String initV1, String initV2, String initV3, String initV4, String initV5, String targetV1, String targetV2, String targetV3, String targetV4, String targetV5, String targetPress) {
+    public StandConfigSend(boolean start, boolean pass1, boolean pass2, boolean pass3, boolean pass4, boolean pass5, float initV1, float initV2, float initV3, float initV4, float initV5, float targetV1, float targetV2, float targetV3, float targetV4, float targetV5, float targetPress) {
         this.start = start;
         this.pass1 = pass1;
         this.pass2 = pass2;
@@ -60,17 +60,17 @@ public class StandConfigSend {
                 ", pass3=" + pass3 +
                 ", pass4=" + pass4 +
                 ", pass5=" + pass5 +
-                ", initV1='" + initV1 + '\'' +
-                ", initV2='" + initV2 + '\'' +
-                ", initV3='" + initV3 + '\'' +
-                ", initV4='" + initV4 + '\'' +
-                ", initV5='" + initV5 + '\'' +
-                ", targetV1='" + targetV1 + '\'' +
-                ", targetV2='" + targetV2 + '\'' +
-                ", targetV3='" + targetV3 + '\'' +
-                ", targetV4='" + targetV4 + '\'' +
-                ", targetV5='" + targetV5 + '\'' +
-                ", targetPress='" + targetPress + '\'' +
+                ", initV1=" + initV1 +
+                ", initV2=" + initV2 +
+                ", initV3=" + initV3 +
+                ", initV4=" + initV4 +
+                ", initV5=" + initV5 +
+                ", targetV1=" + targetV1 +
+                ", targetV2=" + targetV2 +
+                ", targetV3=" + targetV3 +
+                ", targetV4=" + targetV4 +
+                ", targetV5=" + targetV5 +
+                ", targetPress=" + targetPress +
                 '}';
     }
 }

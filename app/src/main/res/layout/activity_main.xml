@@ -148,7 +148,7 @@
                     app:layout_constraintLeft_toRightOf="@id/tv_current_pressure_val_tip"
                     app:layout_constraintTop_toTopOf="parent"
                     android:textSize="@dimen/sp16"
-                    android:text="@{String.format(`%.2f`,viewModel.liveDataStateBean.systemMonitor.currentPress)}"
+                    app:textFloatExpand="@{viewModel.liveDataStateBean.systemMonitor.currentPress}"
                     android:minEms="3"
                     android:textColor="@color/c_384051"
                     android:layout_width="wrap_content"
@@ -172,8 +172,7 @@
                     app:layout_constraintLeft_toRightOf="@id/tv_target_pressure_val_tip"
                     app:layout_constraintTop_toTopOf="parent"
                     android:textSize="@dimen/sp16"
-                    android:text="@{viewModel.liveDataStateBean.systemMonitor.targetPress}"
-                    android:minEms="3"
+                    app:textFloatExpand="@{viewModel.liveDataStateBean.systemMonitor.targetPress}"
                     android:textColor="@color/c_384051"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

@@ -3,7 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="com.puyu.mobile.sdi.util.NumberUtil"/>
+
+        <import type="com.puyu.mobile.sdi.R" />
+
+        <import type="com.puyu.mobile.sdi.util.NumberUtil" />
+
+        <import type="com.puyu.mobile.sdi.util.StringUtil" />
+
         <variable
             name="viewModel"
             type="com.puyu.mobile.sdi.viewmodel.StandardGasConfigViewModel" />
@@ -28,8 +34,7 @@
 
 
         <com.google.android.material.textfield.TextInputEditText
-            android:inputType="numberDecimal"
-            android:background="@drawable/big_corner_bg"
+            android:inputType="textCapCharacters"
             android:id="@+id/et_gas_name"
             android:singleLine="true"
             app:layout_constraintLeft_toRightOf="@id/barrier1"
@@ -37,10 +42,12 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_name_tip"
             android:textSize="@dimen/sp16"
             android:text="@={viewModel.liveDataStateBean.standardGases[5].gasName}"
+            android:padding="0dp"
+            android:background="@{(StringUtil.isEmpty(viewModel.liveDataStateBean.standardGases[5].gasName)||viewModel.liveDataStateBean.standardGases[5].gasName.getBytes().length&gt;20)?@drawable/big_strocke_bg_red:@drawable/big_corner_bg}"
             android:gravity="center_vertical"
             android:layout_width="@dimen/dp150"
-            android:maxEms="10"
             android:textColor="@color/c_384051"
+
             android:layout_height="@dimen/dp35" />
 
 
@@ -64,7 +71,9 @@
             android:textSize="@dimen/sp16"
             android:singleLine="true"
             android:padding="0dp"
-            android:background="@{NumberUtil.parseFloat(viewModel.liveDataStateBean.standardGases[5].targetVal)&gt;NumberUtil.parseFloat(viewModel.liveDataStateBean.standardGases[5].initVal)?@drawable/big_strocke_bg_red:@drawable/big_corner_bg}"
+            app:bgInitV="@{viewModel.liveDataStateBean.standardGases[5].initVal}"
+            app:bgTargetV="@{viewModel.liveDataStateBean.standardGases[5].targetVal}"
+            app:check0="@{true}"
             android:afterTextChanged="@{(editable)->viewModel.liveDataStateBean.initValChange(editable,5,viewModel.liveDataStateBean.standardGases[5].initVal,viewModel.liveDataStateBean.standardGases[5].dilutionMul)}"
             android:text="@={viewModel.liveDataStateBean.standardGases[5].initVal}"
             android:inputType="numberDecimal"
@@ -153,10 +162,11 @@
             android:layout_width="@dimen/dp150"
             android:theme="@style/common_spinner"
             android:gravity="center"
+            app:itemDatasId="@{R.array.unitType}"
+            app:valueReply="@{viewModel.liveDataStateBean.standardGases[5].gasUnit}"
             style="@style/Widget.AppCompat.Spinner.Underlined"
             android:overlapAnchor="false"
             android:spinnerMode="dropdown"
-            android:entries="@array/unitType"
             android:layout_height="wrap_content" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -181,7 +191,9 @@
             android:singleLine="true"
             android:inputType="numberDecimal"
             android:layout_width="@dimen/dp150"
-            android:background="@{NumberUtil.parseFloat(viewModel.liveDataStateBean.standardGases[5].targetVal)&gt;NumberUtil.parseFloat(viewModel.liveDataStateBean.standardGases[5].initVal)?@drawable/big_strocke_bg_red:@drawable/big_corner_bg}"
+            app:bgInitV="@{viewModel.liveDataStateBean.standardGases[5].initVal}"
+            app:bgTargetV="@{viewModel.liveDataStateBean.standardGases[5].targetVal}"
+            app:check0="@{true}"
             android:onFocusChangeListener="@{(view,hasFocus)->viewModel.liveDataStateBean.viewFocus(view,hasFocus)}"
             android:afterTextChanged="@{(editable)->viewModel.liveDataStateBean.targetValChangecalMul(editable,5,viewModel.liveDataStateBean.standardGases[5].initVal,viewModel.liveDataStateBean.standardGases[5].targetVal)}"
             android:text="@={viewModel.liveDataStateBean.standardGases[5].targetVal}"
@@ -205,7 +217,7 @@
             app:layout_constraintTop_toTopOf="@id/tv_gas_deviation_tip"
             app:layout_constraintLeft_toRightOf="@id/barrier2"
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_deviation_tip"
-            android:text="@{viewModel.liveDataStateBean.standardGases[5].deviation}"
+            app:textFloatExpand="@{viewModel.liveDataStateBean.systemMonitor.mulDiluentDis}"
             android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -229,7 +241,7 @@
             app:layout_constraintTop_toTopOf="@id/tv_gas_consume_time_tip"
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_consume_time_tip"
             app:layout_constraintLeft_toRightOf="@id/barrier2"
-            android:text="@{viewModel.liveDataStateBean.standardGases[5].consumeTime}"
+            app:textFloatRunTime="@{viewModel.liveDataStateBean.systemMonitor.mulDiluentRunTime}"
             android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

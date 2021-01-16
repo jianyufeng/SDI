@@ -8,7 +8,6 @@ import com.puyu.mobile.sdi.bean.LinkStateEnum;
 import com.puyu.mobile.sdi.bean.PressureLimit;
 import com.puyu.mobile.sdi.bean.SysStateEnum;
 import com.puyu.mobile.sdi.bean.SystemMonitor;
-import com.puyu.mobile.sdi.util.NumberUtil;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
@@ -346,7 +345,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                         byte[] targetPress = new byte[]{date[7], date[8], date[9], date[10]};
                         float tp = ByteBuffer.wrap(targetPress).getFloat();
                         System.out.println("目标压力:" + tp);
-                        monitor.targetPress = String.valueOf(NumberUtil.keepPrecision(tp, 2));
+                        monitor.targetPress =tp;
 
                         //4字节(FP32)平均压力(psi)
                         byte[] averagePress = new byte[]{date[11], date[12], date[13], date[14]};

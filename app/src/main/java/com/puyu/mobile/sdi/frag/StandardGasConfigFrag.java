@@ -114,6 +114,8 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
                 passageAdapter.setShowIndex(position);
             }
         });
+
+
     }
 
 

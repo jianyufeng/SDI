@@ -3,7 +3,6 @@ package com.puyu.mobile.sdi.netty;
 import com.puyu.mobile.sdi.bean.GasNameConfig;
 import com.puyu.mobile.sdi.bean.StandConfigSend;
 import com.puyu.mobile.sdi.util.AppCRC;
-import com.puyu.mobile.sdi.util.NumberUtil;
 
 import java.nio.charset.StandardCharsets;
 
@@ -57,17 +56,17 @@ public class SenDataUtil {
         byteBuf.writeBoolean(configSend.pass3);
         byteBuf.writeBoolean(configSend.pass4);
         byteBuf.writeBoolean(configSend.pass5);
-        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.initV1));
-        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.initV2));
-        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.initV3));
-        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.initV4));
-        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.initV5));
-        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.targetV1));
-        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.targetV2));
-        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.targetV3));
-        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.targetV4));
-        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.targetV5));
-        byteBuf.writeFloat(NumberUtil.parseFloat(configSend.targetPress));
+        byteBuf.writeFloat(configSend.initV1);
+        byteBuf.writeFloat(configSend.initV2);
+        byteBuf.writeFloat(configSend.initV3);
+        byteBuf.writeFloat(configSend.initV4);
+        byteBuf.writeFloat(configSend.initV5);
+        byteBuf.writeFloat(configSend.targetV1);
+        byteBuf.writeFloat(configSend.targetV2);
+        byteBuf.writeFloat(configSend.targetV3);
+        byteBuf.writeFloat(configSend.targetV4);
+        byteBuf.writeFloat(configSend.targetV5);
+        byteBuf.writeFloat(configSend.targetPress);
         byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
         byteBuf.writeBytes(crcByte);
         byteBuf.writeBytes(ProtocolParams.frameEnd);
