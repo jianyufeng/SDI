@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -19,7 +20,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
-import com.puyu.mobile.sdi.bean.PassageBean;
+import com.puyu.mobile.sdi.bean.StandardGas;
 import com.puyu.mobile.sdi.bean.SystemMonitor;
 import com.puyu.mobile.sdi.databinding.FragRinseBinding;
 import com.puyu.mobile.sdi.model.RinseRepository;
@@ -27,7 +28,6 @@ import com.puyu.mobile.sdi.mvvm.BaseFragment;
 import com.puyu.mobile.sdi.mvvm.ViewModelParamsFactory;
 import com.puyu.mobile.sdi.viewmodel.RinseViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,23 +68,15 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
     protected void initData() {
         LinearLayoutManager manager = new GridLayoutManager(getContext(), 4);
         binding.rvPassage.setLayoutManager(manager);
-        ArrayList<PassageBean> passageBeans = new ArrayList<>();
-     /*   passageBeans.add(new PassageBean("稀释气", 0, true));
-        passageBeans.add(new PassageBean("标气1", 1, true));
-        passageBeans.add(new PassageBean("标气2", 2, true));
-        passageBeans.add(new PassageBean("标气3", 3, true));
-        passageBeans.add(new PassageBean("标气4", 4, true));
-        passageBeans.add(new PassageBean("二级稀释气", 6, true));
-        */
-        stationAdapter = new PassageAdapter(passageBeans);
+        stationAdapter = new PassageAdapter(viewModel.liveDataStateBean.standardGasesRinse);
         binding.rvPassage.setAdapter(stationAdapter);
         stationAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                PassageBean item = (PassageBean) adapter.getItem(position);
+                StandardGas item = (StandardGas) adapter.getItem(position);
                 if (item == null) return;
-                if (view.getId() == R.id.layout_content) {
-                   // item.selected = !item.selected;
+                if (view.getId() == R.id.layout_content || view.getId() == R.id.checkbox) {
+                    item.passageBean.selected = !item.passageBean.selected;
                     stationAdapter.notifyItemChanged(position);
                 }
             }
@@ -106,6 +98,9 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
     public void onResume() {
         super.onResume();
         Log.e(TAG, "onResume: ");
+        if (stationAdapter!=null){
+            stationAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -146,23 +141,25 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
         Log.e(TAG, "onDestroy: ");
     }
 
-    private class PassageAdapter extends BaseQuickAdapter<PassageBean, BaseViewHolder> {
+    private class PassageAdapter extends BaseQuickAdapter<StandardGas, BaseViewHolder> {
         private Drawable md;
         private byte mPassage = -1; //上次通道
 
-        public PassageAdapter(List<PassageBean> data) {
+        public PassageAdapter(List<StandardGas> data) {
             super(R.layout.item_passage_1, data);
             md = ContextCompat.getDrawable(getActivity(), android.R.drawable.ic_notification_overlay);
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, PassageBean item) {
-            /*holder.setText(R.id.checkbox, item.prassagegetName() + "(" + item.getPrassage() + ")")
-                    .setChecked(R.id.checkbox, item.isSelected())
-                    .addOnClickListener(R.id.layout_content);
+        protected void convert(BaseViewHolder holder, StandardGas item) {
+            holder.setText(R.id.tv_name, item.gasName.getValue())
+                    .setChecked(R.id.checkbox, item.passageBean.selected)
+                    .setVisible(R.id.checkbox, item.passageBean.prassage != 0)
+                    .setEnabled(R.id.layout_content,item.passageBean.prassage != 0)
+                    .addOnClickListener(R.id.layout_content, R.id.checkbox);
             ((TextView) holder.getView(R.id.checkbox)).setCompoundDrawables(
-                    item.getPrassage() == mPassage ? md : null, null,
-                    null, null);*/
+                    item.passageBean.prassage == mPassage ? md : null, null,
+                    null, null);
         }
 
         public void setRun(byte cRunProcess, byte cRunPassage) {

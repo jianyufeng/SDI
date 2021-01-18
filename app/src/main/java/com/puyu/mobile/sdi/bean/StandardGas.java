@@ -1,6 +1,6 @@
 package com.puyu.mobile.sdi.bean;
 
-import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
 
 /**
  * author : 简玉锋
@@ -10,7 +10,7 @@ import androidx.databinding.ObservableField;
  * version: 1.0
  */
 public class StandardGas {
-    public ObservableField<String> gasName;
+    public MutableLiveData<String> gasName;
     public String gasUnit;
     public String initVal;
     public String targetVal;
@@ -20,14 +20,19 @@ public class StandardGas {
 
     public PassageBean passageBean;
 
+    public StandardGas(MutableLiveData<String> gasName, PassageBean passageBean) {
+        this.gasName = gasName;
+        this.passageBean = passageBean;
+    }
 
     public StandardGas() {
     }
 
-    public StandardGas(String gasName, String gasUnit, String initVal, String targetVal,
+
+    public StandardGas(MutableLiveData<String> gasName, String gasUnit, String initVal, String targetVal,
                        String dilutionMul, String deviation,
                        String consumeTime, PassageBean passageBean) {
-        this.gasName = new ObservableField<>(gasName);
+        this.gasName = gasName;
         this.gasUnit = gasUnit;
         this.initVal = initVal;
         this.targetVal = targetVal;

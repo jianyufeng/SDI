@@ -115,7 +115,6 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
             }
         });
 
-
     }
 
 
@@ -134,6 +133,13 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
             public void onChanged(Integer pos) {
                 //实体数据应经修改，但是RecycleView不是bading的需要手动刷新
                 passageAdapter.notifyItemChanged(binding.vpPassageDetail.getCurrentItem());
+            }
+        });
+        //代码被动显示frag
+        viewModel.liveDataStateBean.showIndexFrag.observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer pos) {
+                binding.vpPassageDetail.setCurrentItem(pos,true);
             }
         });
     }

@@ -39,6 +39,8 @@
             app:layout_constraintTop_toTopOf="@id/tv_gas_name_tip"
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_name_tip"
             android:textSize="@dimen/sp16"
+            android:imeOptions="actionDone"
+
             android:inputType="textCapCharacters"
             android:padding="0dp"
             android:background="@{(StringUtil.isEmpty(viewModel.liveDataStateBean.standardGases[3].gasName)||viewModel.liveDataStateBean.standardGases[3].gasName.getBytes().length&gt;20)?@drawable/big_strocke_bg_red:@drawable/big_corner_bg}"
@@ -69,6 +71,8 @@
             app:layout_constraintLeft_toRightOf="@id/barrier1"
             android:textSize="@dimen/sp16"
             android:singleLine="true"
+            android:imeOptions="actionDone"
+
             app:bgInitV="@{viewModel.liveDataStateBean.standardGases[3].initVal}"
             app:bgTargetV="@{viewModel.liveDataStateBean.standardGases[3].targetVal}"
             android:padding="0dp"
@@ -101,6 +105,8 @@
             app:layout_constraintTop_toTopOf="@id/tv_gas_dilution_multiple_tip"
             app:layout_constraintLeft_toRightOf="@id/barrier1"
             android:textSize="@dimen/sp16"
+            android:imeOptions="actionDone"
+            app:bgMul="@{viewModel.liveDataStateBean.standardGases[3].dilutionMul}"
             android:layout_width="@dimen/dp150"
             android:onFocusChangeListener="@{(view,hasFocus)->viewModel.liveDataStateBean.viewFocus(view,hasFocus)}"
             android:afterTextChanged="@{(editable)->viewModel.liveDataStateBean.mulChangecalTarget(editable,3,viewModel.liveDataStateBean.standardGases[3].initVal,viewModel.liveDataStateBean.standardGases[3].dilutionMul)}"
@@ -164,6 +170,7 @@
             android:gravity="center"
             style="@style/Widget.AppCompat.Spinner.Underlined"
             android:overlapAnchor="false"
+            android:onItemSelected="@{(parent, view, position, id)->viewModel.liveDataStateBean.unitChange(3,parent, view, position, id)}"
             app:itemDatasId="@{R.array.unitType}"
             app:valueReply="@{viewModel.liveDataStateBean.standardGases[3].gasUnit}"
             android:layout_height="wrap_content" />
@@ -188,6 +195,8 @@
             android:textSize="@dimen/sp16"
             android:singleLine="true"
             android:padding="0dp"
+            android:imeOptions="actionDone"
+
             app:check0="@{true}"
             app:bgInitV="@{viewModel.liveDataStateBean.standardGases[3].initVal}"
             app:bgTargetV="@{viewModel.liveDataStateBean.standardGases[3].targetVal}"

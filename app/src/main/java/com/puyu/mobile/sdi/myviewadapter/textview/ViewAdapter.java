@@ -40,4 +40,26 @@ public class ViewAdapter {
             view.setBackgroundResource(R.drawable.big_corner_bg);
         }
     }
+
+    //设置稀释倍数 报警页面
+    @BindingAdapter(value = {"bgMul"}, requireAll = false)
+    public static void setMulBg(TextView view, final String mulVal) {
+        Float mulV = NumberUtil.parseFloat(mulVal);
+        if (mulV > 100 || mulV < 1) {
+            view.setBackgroundResource(R.drawable.big_strocke_bg_red);
+        } else {
+            view.setBackgroundResource(R.drawable.big_corner_bg);
+        }
+    }
+
+    //设置稀释冲洗时间 报警页面
+    @BindingAdapter(value = {"bgRinseTime"}, requireAll = false)
+    public static void setRinseBg(TextView view, final String time) {
+        Integer mulV = NumberUtil.parseInteger(time, -1);
+        if (mulV > 120 || mulV < 0) {
+            view.setBackgroundResource(R.drawable.big_strocke_bg_red);
+        } else {
+            view.setBackgroundResource(R.drawable.big_corner_bg);
+        }
+    }
 }

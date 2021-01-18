@@ -69,7 +69,6 @@ public class HeaderEnderDecoder extends ByteToMessageDecoder {
                 //有
                 int length = childBuf.readableBytes();
                 childBuf.writerIndex(index + 1);
-                int length2 = childBuf.readableBytes();
                 childBuf.writeBytes(childBuf, index + filter.capacity(), length - childBuf.writerIndex() - 1);
                 System.out.println("协议数据去掉7D82中的82----:" + ByteBufUtil.hexDump(childBuf));
             }

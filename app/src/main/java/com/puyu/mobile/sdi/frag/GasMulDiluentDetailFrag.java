@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
-import com.puyu.mobile.sdi.databinding.FragGasDetailBinding;
+import com.puyu.mobile.sdi.databinding.FragGasMuldiluentDetailBinding;
 import com.puyu.mobile.sdi.model.StandardGasConfigRepository;
 import com.puyu.mobile.sdi.mvvm.BaseFragment;
 import com.puyu.mobile.sdi.mvvm.ViewModelParamsFactory;
@@ -25,7 +25,7 @@ import com.puyu.mobile.sdi.viewmodel.StandardGasConfigViewModel;
  * desc   : 多级稀释气详情界面
  * version: 1.0
  */
-public class GasMulDiluentDetailFrag extends BaseFragment<FragGasDetailBinding, StandardGasConfigViewModel> {
+public class GasMulDiluentDetailFrag extends BaseFragment<FragGasMuldiluentDetailBinding, StandardGasConfigViewModel> {
     private static final String TAG = "11111111GasStateFrag";
 
     public static GasMulDiluentDetailFrag getInstance() {
@@ -50,6 +50,12 @@ public class GasMulDiluentDetailFrag extends BaseFragment<FragGasDetailBinding, 
                 .getApplication(), new StandardGasConfigRepository())).get(StandardGasConfigViewModel.class);
 
     }
+
+    @Override
+    protected void initData() {
+        super.initData();
+    }
+
 
     @Override
     public void onResume() {

@@ -9,7 +9,7 @@ import java.util.List;
  * desc   : 配气名称写入
  * version: 1.0
  */
-public class GasNameConfig {
+public class SendGasNameConfig {
     public String sGasName1;
     public String sGasName2;
     public String sGasName3;
@@ -18,10 +18,10 @@ public class GasNameConfig {
 
     private int wResult; //写入返回
 
-    public GasNameConfig(List<StandardGas> gasList) {
+    public SendGasNameConfig(List<StandardGas> gasList) {
     }
 
-    public GasNameConfig(String sGasName1, String sGasName2, String sGasName3, String sGasName4) {
+    public SendGasNameConfig(String sGasName1, String sGasName2, String sGasName3, String sGasName4) {
         this.sGasName1 = sGasName1;
         this.sGasName2 = sGasName2;
         this.sGasName3 = sGasName3;

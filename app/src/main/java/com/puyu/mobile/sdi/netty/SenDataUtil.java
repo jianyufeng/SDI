@@ -1,7 +1,8 @@
 package com.puyu.mobile.sdi.netty;
 
-import com.puyu.mobile.sdi.bean.GasNameConfig;
-import com.puyu.mobile.sdi.bean.StandConfigSend;
+import com.puyu.mobile.sdi.bean.SendGasNameConfig;
+import com.puyu.mobile.sdi.bean.SendRinseConfig;
+import com.puyu.mobile.sdi.bean.SendStandConfig;
 import com.puyu.mobile.sdi.util.AppCRC;
 
 import java.nio.charset.StandardCharsets;
@@ -24,7 +25,25 @@ public class SenDataUtil {
         }
     }
 
-    public static void sendGasName(GasNameConfig gasNameConfig) {
+    public static void add82(ByteBuf byteBuf) {
+        //验证7d
+        int index = 2;
+        while ((index = byteBuf.indexOf(index, byteBuf.writerIndex() - 2, (byte) 0x7d)) != -1) {
+            //有
+            int length = byteBuf.writerIndex();
+            byteBuf.writerIndex(index + 2);
+            byteBuf.writeBytes(byteBuf, index + 1, length - index - 1);
+            byteBuf.markWriterIndex();
+            byteBuf.writerIndex(index + 1);
+            byteBuf.writeByte(0x82);
+            byteBuf.resetWriterIndex();
+            index = index + 2;
+            System.out.println(ByteBufUtil.hexDump(byteBuf));
+        }
+
+    }
+
+    public static void sendGasName(SendGasNameConfig gasNameConfig) {
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
@@ -39,10 +58,12 @@ public class SenDataUtil {
         byteBuf.writeBytes(crcByte);
         byteBuf.writeBytes(ProtocolParams.frameEnd);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
+        add82(byteBuf);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
 
     }
 
-    public static void sendGasConfig(StandConfigSend configSend) {
+    public static void sendGasConfig(SendStandConfig configSend) {
         System.out.println(configSend);
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
@@ -71,6 +92,37 @@ public class SenDataUtil {
         byteBuf.writeBytes(crcByte);
         byteBuf.writeBytes(ProtocolParams.frameEnd);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
+        add82(byteBuf);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+
 
     }
+
+    public static void sendRinseConfig(SendRinseConfig configSend) {
+        System.out.println(configSend);
+        ByteBuf byteBuf = Unpooled.buffer();
+        byteBuf.writeBytes(ProtocolParams.frameHead);
+        byteBuf.writeBytes(ProtocolParams.sendAddr);
+        byteBuf.writeByte(0x31);
+        byteBuf.writeByte(0x66);
+        byteBuf.writeShort(17);
+        byteBuf.writeBoolean(configSend.start);
+        byteBuf.writeBoolean(configSend.pass1);
+        byteBuf.writeBoolean(configSend.pass2);
+        byteBuf.writeBoolean(configSend.pass3);
+        byteBuf.writeBoolean(configSend.pass4);
+        byteBuf.writeFloat(configSend.dRimsetime);
+        byteBuf.writeFloat(configSend.sRimsetime);
+        byteBuf.writeFloat(configSend.iimsetime);
+        byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
+        byteBuf.writeBytes(crcByte);
+        byteBuf.writeBytes(ProtocolParams.frameEnd);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+        add82(byteBuf);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+
+
+    }
+
+
 }

@@ -34,6 +34,8 @@
             android:id="@+id/et_gas_name"
             android:singleLine="true"
             android:padding="0dp"
+            android:imeOptions="actionDone"
+
             android:inputType="textCapCharacters"
             app:layout_constraintLeft_toRightOf="@id/barrier1"
             app:layout_constraintTop_toTopOf="@id/tv_gas_name_tip"
@@ -67,6 +69,8 @@
             app:layout_constraintLeft_toRightOf="@id/barrier1"
             android:textSize="@dimen/sp16"
             android:padding="0dp"
+            android:imeOptions="actionDone"
+
             android:singleLine="true"
             app:check0="@{true}"
             app:bgInitV="@{viewModel.liveDataStateBean.standardGases[1].initVal}"
@@ -99,6 +103,7 @@
             app:layout_constraintTop_toTopOf="@id/tv_gas_dilution_multiple_tip"
             app:layout_constraintLeft_toRightOf="@id/barrier1"
             android:textSize="@dimen/sp16"
+            android:imeOptions="actionDone"
             android:layout_width="@dimen/dp150"
             android:onFocusChangeListener="@{(view,hasFocus)->viewModel.liveDataStateBean.viewFocus(view,hasFocus)}"
             android:afterTextChanged="@{(editable)->viewModel.liveDataStateBean.mulChangecalTarget(editable,1,viewModel.liveDataStateBean.standardGases[1].initVal,viewModel.liveDataStateBean.standardGases[1].dilutionMul)}"
@@ -158,6 +163,7 @@
             app:layout_constraintTop_toTopOf="@id/tv_gas_unit_tip"
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_unit_tip"
             android:layout_width="@dimen/dp150"
+            android:onItemSelected="@{(parent, view, position, id)->viewModel.liveDataStateBean.unitChange(1,parent, view, position, id)}"
             android:theme="@style/common_spinner"
             android:gravity="center"
             style="@style/Widget.AppCompat.Spinner.Underlined"
@@ -186,6 +192,8 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_target_val_tip"
             android:textSize="@dimen/sp16"
             android:padding="0dp"
+            android:imeOptions="actionDone"
+
             android:inputType="numberDecimal"
             android:singleLine="true"
             android:layout_width="@dimen/dp150"

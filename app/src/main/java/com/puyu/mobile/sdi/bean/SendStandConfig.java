@@ -7,7 +7,7 @@ package com.puyu.mobile.sdi.bean;
  * desc   :
  * version: 1.0
  */
-public class StandConfigSend {
+public class SendStandConfig {
     //看是否是空闲可以启动
     public boolean start;
     //通道开关
@@ -31,7 +31,7 @@ public class StandConfigSend {
     //目标压力
     public float targetPress;
 
-    public StandConfigSend(boolean start, boolean pass1, boolean pass2, boolean pass3, boolean pass4, boolean pass5, float initV1, float initV2, float initV3, float initV4, float initV5, float targetV1, float targetV2, float targetV3, float targetV4, float targetV5, float targetPress) {
+    public SendStandConfig(boolean start, boolean pass1, boolean pass2, boolean pass3, boolean pass4, boolean pass5, float initV1, float initV2, float initV3, float initV4, float initV5, float targetV1, float targetV2, float targetV3, float targetV4, float targetV5, float targetPress) {
         this.start = start;
         this.pass1 = pass1;
         this.pass2 = pass2;

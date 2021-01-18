@@ -39,6 +39,8 @@
             app:layout_constraintTop_toTopOf="@id/tv_gas_name_tip"
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_name_tip"
             android:textSize="@dimen/sp16"
+            android:imeOptions="actionDone"
+
             android:padding="0dp"
             android:background="@{(StringUtil.isEmpty(viewModel.liveDataStateBean.standardGases[2].gasName)||viewModel.liveDataStateBean.standardGases[2].gasName.getBytes().length&gt;20)?@drawable/big_strocke_bg_red:@drawable/big_corner_bg}"
             android:inputType="textCapCharacters"
@@ -68,6 +70,8 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_initial_val_tip"
             app:layout_constraintLeft_toRightOf="@id/barrier1"
             android:textSize="@dimen/sp16"
+            android:imeOptions="actionDone"
+
             android:inputType="numberDecimal"
             android:padding="0dp"
             app:check0="@{true}"
@@ -102,6 +106,8 @@
             app:layout_constraintLeft_toRightOf="@id/barrier1"
             android:textSize="@dimen/sp16"
             android:layout_width="@dimen/dp150"
+            android:imeOptions="actionDone"
+            app:bgMul="@{viewModel.liveDataStateBean.standardGases[2].dilutionMul}"
             android:onFocusChangeListener="@{(view,hasFocus)->viewModel.liveDataStateBean.viewFocus(view,hasFocus)}"
             android:afterTextChanged="@{(editable)->viewModel.liveDataStateBean.mulChangecalTarget(editable,2,viewModel.liveDataStateBean.standardGases[2].initVal,viewModel.liveDataStateBean.standardGases[2].dilutionMul)}"
             android:text="@={viewModel.liveDataStateBean.standardGases[2].dilutionMul}"
@@ -162,6 +168,7 @@
             android:layout_width="@dimen/dp150"
             android:theme="@style/common_spinner"
             android:gravity="center"
+            android:onItemSelected="@{(parent, view, position, id)->viewModel.liveDataStateBean.unitChange(2,parent, view, position, id)}"
             style="@style/Widget.AppCompat.Spinner.Underlined"
             android:overlapAnchor="false"
             android:spinnerMode="dropdown"
@@ -188,6 +195,8 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_target_val_tip"
             android:textSize="@dimen/sp16"
             android:padding="0dp"
+            android:imeOptions="actionDone"
+
             android:singleLine="true"
             android:inputType="numberDecimal"
             android:layout_width="@dimen/dp150"
