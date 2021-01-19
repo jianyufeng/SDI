@@ -61,6 +61,9 @@
                     app:layout_constraintTop_toBottomOf="@id/line"
                     app:layout_constraintLeft_toLeftOf="parent"
                     android:textSize="@dimen/sp16"
+                    app:onClickCommand="@{viewModel.checkPress}"
+                    app:isThrottleFirst="@{true}"
+                    app:params="@{`0`}"
                     android:text="零点校准"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginTop="@dimen/dp10"
@@ -112,8 +115,10 @@
                         android:padding="@dimen/dp10"
                         android:textSize="@dimen/sp16"
                         android:textColor="@color/c_384051"
-                        android:inputType="numberDecimal"
                         android:background="@null"
+                        android:imeOptions="actionDone"
+                        android:inputType="numberDecimal"
+                        android:text="@={viewModel.norPressVal}"
                         android:layout_weight="1"
                         android:layout_height="wrap_content" />
 
@@ -124,7 +129,7 @@
                         android:layout_marginBottom="@dimen/dp5"
                         android:layout_height="match_parent" />
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:textSize="@dimen/sp16"
                         android:textColor="@color/c_16a5ff"
@@ -132,10 +137,14 @@
                         android:paddingLeft="@dimen/dp10"
                         android:paddingRight="@dimen/dp10"
                         android:gravity="center"
+                        app:onClickCommand="@{viewModel.checkPress}"
+                        app:isThrottleFirst="@{true}"
+                        app:params="@{viewModel.norPressVal}"
                         android:layout_height="match_parent" />
                 </LinearLayout>
 
                 <ImageView
+
                     android:id="@+id/ig_normal_help"
                     app:layout_constraintLeft_toRightOf="@id/tv_normal_calibration"
                     android:src="@drawable/ic_baseline_help_outline_24"
@@ -182,11 +191,13 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_pressure_up_val"
                     android:singleLine="true"
+                    android:imeOptions="actionDone"
+                    android:inputType="numberDecimal"
                     app:layout_constraintLeft_toRightOf="@id/tv_pressure_up_val_tip"
                     app:layout_constraintTop_toTopOf="@id/tv_pressure_up_val_tip"
                     app:layout_constraintBottom_toBottomOf="@id/tv_pressure_up_val_tip"
                     android:textSize="@dimen/sp16"
-                    android:text="@{String.valueOf(NumberUtil.keepPrecision(viewModel.liveDataStateBean.pressureLimit.upLimit,2))}"
+                    android:text="@={viewModel.pressUp}"
                     android:gravity="center_vertical"
                     android:layout_width="@dimen/dp150"
                     android:textColor="@color/c_384051"
@@ -214,17 +225,34 @@
                     app:layout_constraintBottom_toBottomOf="@id/tv_pressure_down_val_tip"
                     android:textSize="@dimen/sp16"
                     android:singleLine="true"
-                    android:text="@{String.valueOf(NumberUtil.keepPrecision(viewModel.liveDataStateBean.pressureLimit.lowLimit,2))}"
+                    android:imeOptions="actionDone"
+                    android:inputType="numberDecimal"
+                    android:text="@={viewModel.pressLow}"
                     android:layout_width="@dimen/dp150"
                     android:background="@drawable/big_corner_bg"
                     android:textColor="@color/c_384051"
+                    android:layout_height="@dimen/dp35" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    app:layout_constraintLeft_toLeftOf="@id/et_pressure_up_val"
+                    app:layout_constraintTop_toBottomOf="@id/tv_pressure_up_val_tip"
+                    android:paddingLeft="@dimen/dp10"
+                    android:paddingRight="@dimen/dp10"
+                    android:id="@+id/btn_change_limit"
+                    android:textColor="@color/c_ffffff"
+                    android:layout_width="wrap_content"
+                    android:text="确定修改上下限"
+                    app:isThrottleFirst="@{true}"
+                    app:onClickCommand="@{viewModel.changePressLimit}"
+                    android:textSize="@dimen/sp16"
+                    android:background="@drawable/big_corner_bg_blue"
                     android:layout_height="@dimen/dp35" />
 
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_version_tip"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_pressure_up_val_tip"
+                    app:layout_constraintTop_toBottomOf="@id/btn_change_limit"
                     android:padding="@dimen/dp10"
                     android:textSize="@dimen/sp16"
                     android:text="版本信息"

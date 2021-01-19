@@ -4,7 +4,9 @@ import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
 
+import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.R;
+import com.puyu.mobile.sdi.bean.PressureLimit;
 import com.puyu.mobile.sdi.util.NumberUtil;
 import com.puyu.mobile.sdi.util.TimeUtil;
 
@@ -57,6 +59,18 @@ public class ViewAdapter {
     public static void setRinseBg(TextView view, final String time) {
         Integer mulV = NumberUtil.parseInteger(time, -1);
         if (mulV > 120 || mulV < 0) {
+            view.setBackgroundResource(R.drawable.big_strocke_bg_red);
+        } else {
+            view.setBackgroundResource(R.drawable.big_corner_bg);
+        }
+    }
+
+    //设置稀释冲洗时间 报警页面
+    @BindingAdapter(value = {"bgPresVal"}, requireAll = false)
+    public static void setPreBg(TextView view, final String val) {
+        Float mulV = NumberUtil.parseFloat(val);
+        PressureLimit limit = LiveDataStateBean.getInstant().pressureLimit.getValue();
+        if (mulV > 50 || mulV > limit.upLimit || mulV < limit.lowLimit) {
             view.setBackgroundResource(R.drawable.big_strocke_bg_red);
         } else {
             view.setBackgroundResource(R.drawable.big_corner_bg);

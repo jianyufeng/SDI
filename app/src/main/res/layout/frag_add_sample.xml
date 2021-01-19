@@ -52,6 +52,7 @@
 
                 <RadioGroup
                     android:padding="@dimen/dp5"
+                    android:onCheckedChanged="@{(group, checkedId)->viewModel.addWhicSamp(checkedId)}"
                     android:id="@+id/rg_add_sample"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/line"
@@ -61,49 +62,57 @@
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
-                        android:text="标气1"
-                        android:drawableLeft="@{viewModel.runPassage==0x1?@android:drawable/ic_notification_overlay:null}"
+                        android:id="@+id/pas_stand1"
+                        android:text="@{viewModel.liveDataStateBean.stand1NameLiveData}"
+                        android:drawableLeft="@{viewModel.runPassage==viewModel.liveDataStateBean.stand1PassNumber?@android:drawable/ic_notification_overlay:null}"
                         android:layout_weight="1"
                         android:textColor="@color/mul_add_select"
                         android:textSize="@dimen/sp16"
                         android:layout_height="wrap_content" />
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:drawableLeft="@{viewModel.runPassage==0x2?@android:drawable/ic_notification_overlay:null}"
+                        android:drawableLeft="@{viewModel.runPassage==viewModel.liveDataStateBean.stand2PassNumber?@android:drawable/ic_notification_overlay:null}"
+
                         android:layout_width="0dp"
-                        android:text="标气2"
+                        android:text="@{viewModel.liveDataStateBean.stand2NameLiveData}"
                         android:layout_weight="1"
                         android:textColor="@color/mul_add_select"
+                        android:id="@+id/pas_stand2"
 
                         android:textSize="@dimen/sp16"
                         android:layout_height="wrap_content" />
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
-                        android:drawableLeft="@{viewModel.runPassage==0x3?@android:drawable/ic_notification_overlay:null}"
-                        android:text="标气3"
+                        android:drawableLeft="@{viewModel.runPassage==viewModel.liveDataStateBean.stand3PassNumber?@android:drawable/ic_notification_overlay:null}"
+
+                        android:text="@{viewModel.liveDataStateBean.stand3NameLiveData}"
                         android:layout_weight="1"
                         android:textColor="@color/mul_add_select"
+                        android:id="@+id/pas_stand3"
 
                         android:textSize="@dimen/sp16"
                         android:layout_height="wrap_content" />
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
-                        android:text="标气4"
+                        android:text="@{viewModel.liveDataStateBean.stand4NameLiveData}"
                         android:layout_weight="1"
-                        android:drawableLeft="@{viewModel.runPassage==0x4?@android:drawable/ic_notification_overlay:null}"
+                        android:drawableLeft="@{viewModel.runPassage==viewModel.liveDataStateBean.stand4PassNumber?@android:drawable/ic_notification_overlay:null}"
+
                         android:textColor="@color/mul_add_select"
                         android:textSize="@dimen/sp16"
+                        android:id="@+id/pas_stand4"
                         android:layout_height="wrap_content" />
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
-                        android:text="二级稀释气"
-                        android:drawableLeft="@{viewModel.runPassage==0x6?@android:drawable/ic_notification_overlay:null}"
+                        android:text="@{viewModel.liveDataStateBean.mulDiluentNameLiveData}"
+                        android:drawableLeft="@{viewModel.runPassage==viewModel.liveDataStateBean.mulDiluentPassNumber?@android:drawable/ic_notification_overlay:null}"
                         android:layout_weight="1"
                         android:textColor="@color/mul_add_select"
                         android:textSize="@dimen/sp16"
+                        android:id="@+id/pas_diluent2"
                         android:layout_height="wrap_content" />
                 </RadioGroup>
 
@@ -143,6 +152,8 @@
                     android:layout_height="1dp" />
 
                 <RadioGroup
+                    android:onCheckedChanged="@{(group, checkedId)->viewModel.multipleClick(checkedId)}"
+
                     android:padding="@dimen/dp5"
                     android:id="@+id/multiple_rg"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -154,6 +165,7 @@
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
                         android:text="1.5倍"
+                        android:id="@+id/mul_1p5"
                         android:layout_weight="1"
                         android:textColor="@color/mul_add_select"
                         android:textSize="@dimen/sp16"
@@ -162,6 +174,8 @@
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
                         android:text="2倍"
+                        android:id="@+id/mul_2"
+
                         android:layout_weight="1"
                         android:textColor="@color/mul_add_select"
                         android:textSize="@dimen/sp16"
@@ -172,6 +186,7 @@
                         android:text="3倍"
                         android:layout_weight="1"
                         android:textColor="@color/mul_add_select"
+                        android:id="@+id/mul_3"
 
                         android:textSize="@dimen/sp16"
                         android:layout_height="wrap_content" />
@@ -180,6 +195,7 @@
                         android:layout_width="0dp"
                         android:text="4倍"
                         android:layout_weight="1"
+                        android:id="@+id/mul_4"
                         android:textColor="@color/mul_add_select"
                         android:textSize="@dimen/sp16"
                         android:layout_height="wrap_content" />
@@ -204,6 +220,11 @@
                     app:layout_constraintBottom_toBottomOf="@id/tv_absolute_pressure_val_tip"
                     android:textSize="@dimen/sp16"
                     android:singleLine="true"
+                    android:inputType="numberDecimal"
+                    android:imeOptions="actionDone"
+                    app:bgPresVal="@{viewModel.liveDataStateBean.addSampTargetPress}"
+                    android:padding="0dp"
+                    android:text="@={viewModel.liveDataStateBean.addSampTargetPress}"
                     android:layout_width="@dimen/dp150"
                     android:background="@drawable/big_corner_bg"
                     android:textColor="@color/c_384051"
@@ -265,7 +286,7 @@
                     app:layout_constraintTop_toTopOf="@id/tv_current_pressure_val_tip"
                     app:layout_constraintBottom_toBottomOf="@id/tv_current_pressure_val_tip"
                     android:textSize="@dimen/sp16"
-                    android:text="自动"
+                    app:textFloatExpand="@{viewModel.liveDataStateBean.systemMonitor.currentPress}"
                     android:gravity="center_vertical"
                     android:layout_width="@dimen/dp150"
                     android:textColor="@color/c_384051"
@@ -293,6 +314,12 @@
                     android:textSize="@dimen/sp16"
                     android:singleLine="true"
                     android:layout_width="@dimen/dp150"
+                    android:inputType="numberDecimal"
+                    android:imeOptions="actionDone"
+
+                    app:bgPresVal="@{viewModel.liveDataStateBean.addSampTargetPress}"
+                    android:padding="0dp"
+                    android:text="@={viewModel.liveDataStateBean.addSampTargetPress}"
                     android:background="@drawable/big_corner_bg"
                     android:textColor="@color/c_384051"
                     android:layout_height="@dimen/dp35" />

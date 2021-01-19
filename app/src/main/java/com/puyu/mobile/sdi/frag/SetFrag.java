@@ -8,10 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
+import com.puyu.mobile.sdi.bean.PressureLimit;
 import com.puyu.mobile.sdi.databinding.FragSetBinding;
 import com.puyu.mobile.sdi.model.SetRepository;
 import com.puyu.mobile.sdi.mvvm.BaseFragment;
@@ -27,6 +29,7 @@ import com.puyu.mobile.sdi.viewmodel.SetViewModel;
  */
 public class SetFrag extends BaseFragment<FragSetBinding, SetViewModel> {
     private static final String TAG = "11111111SetFrag";
+
     public static SetFrag getInstance() {
         // Required empty public constructor
         return new SetFrag();
@@ -49,6 +52,20 @@ public class SetFrag extends BaseFragment<FragSetBinding, SetViewModel> {
                 .getApplication(), new SetRepository())).get(SetViewModel.class);
 
     }
+
+    @Override
+    protected void initViewObservable() {
+        //更新上下限 主要是获取到的
+        viewModel.liveDataStateBean.pressureLimit.observe(this, new Observer<PressureLimit>() {
+            @Override
+            public void onChanged(PressureLimit limit) {
+                viewModel.pressUp.setValue(String.valueOf(limit.upLimit));
+                viewModel.pressLow.setValue(String.valueOf(limit.lowLimit));
+            }
+        });
+        viewModel.liveDataStateBean.pressureLimit.setValue(viewModel.liveDataStateBean.pressureLimit.getValue());
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -72,13 +89,13 @@ public class SetFrag extends BaseFragment<FragSetBinding, SetViewModel> {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.e(TAG, "onDestroyView: " );
+        Log.e(TAG, "onDestroyView: ");
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.e(TAG, "onViewCreated: " );
+        Log.e(TAG, "onViewCreated: ");
     }
 
     @Override

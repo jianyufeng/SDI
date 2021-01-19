@@ -98,7 +98,7 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
     public void onResume() {
         super.onResume();
         Log.e(TAG, "onResume: ");
-        if (stationAdapter!=null){
+        if (stationAdapter != null) {
             stationAdapter.notifyDataSetChanged();
         }
     }
@@ -155,7 +155,7 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
             holder.setText(R.id.tv_name, item.gasName.getValue())
                     .setChecked(R.id.checkbox, item.passageBean.selected)
                     .setVisible(R.id.checkbox, item.passageBean.prassage != 0)
-                    .setEnabled(R.id.layout_content,item.passageBean.prassage != 0)
+                    .setEnabled(R.id.layout_content, item.passageBean.prassage != 0)
                     .addOnClickListener(R.id.layout_content, R.id.checkbox);
             ((TextView) holder.getView(R.id.checkbox)).setCompoundDrawables(
                     item.passageBean.prassage == mPassage ? md : null, null,

@@ -50,6 +50,13 @@ public class LiveDataStateBean {
     public static final String stand4Name = "标气4";
     public static final String mulDiluentName = "多级稀释气";
     public static final String diluent2Name = "二级稀释气";
+    public static final int diluentPassNumber = 0;
+    public static final int stand1PassNumber = 1;
+    public static final int stand2PassNumber = 2;
+    public static final int stand3PassNumber = 3;
+    public static final int stand4PassNumber = 4;
+    public static final int mulDiluentPassNumber = 5;
+    public static final int diluent2PassNumber = 6;
     public MutableLiveData<String> diluentNameLiveData = new MutableLiveData<>(diluentName);
     public MutableLiveData<String> stand1NameLiveData = new MutableLiveData<>(stand1Name);
     public MutableLiveData<String> stand2NameLiveData = new MutableLiveData<>(stand2Name);
@@ -73,14 +80,14 @@ public class LiveDataStateBean {
     //仪器类型
     public SingleLiveEvent<DeviceType> deviceType = new SingleLiveEvent<>();
     //压力上下限
-    public SingleLiveEvent<PressureLimit> pressureLimit = new SingleLiveEvent<>();
+    public SingleLiveEvent<PressureLimit> pressureLimit = new SingleLiveEvent<>(new PressureLimit(50f, 0.1f));
     //系统监控
     public SingleLiveEvent<SystemMonitor> systemMonitor = new SingleLiveEvent<>(new SystemMonitor());
     /*********************配气页面的设置*************************************/
     //通道 - 配气页面的设置
     public MutableLiveData<List<StandardGas>> standardGases = new MutableLiveData<>();
     //目标压力值
-    public MutableLiveData<String> targetPress = new MutableLiveData<>();
+    public MutableLiveData<String> gasConfigTargetPress = new MutableLiveData<>();
 
 
     //标气配置时显示那个页面
@@ -171,8 +178,12 @@ public class LiveDataStateBean {
 
 
     /*********************加压界面*************************************/
+    public SingleLiveEvent<String> pressTargetPress = new SingleLiveEvent<>();
 
     /*********************加样界面*************************************/
+    public SingleLiveEvent<Integer> addSampPressOpen = new SingleLiveEvent<>(-1);
+    public SingleLiveEvent<String> addSampTargetPress = new SingleLiveEvent<>();
+
 
     /*********************设置界面*************************************/
 

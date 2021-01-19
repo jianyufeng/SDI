@@ -101,12 +101,14 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/line2"
                     android:orientation="horizontal"
+                    android:onCheckedChanged="@{(group, checkedId)->viewModel.multipleClick(checkedId)}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
                         android:text="1.5倍"
+                        android:id="@+id/mul_1p5"
                         android:layout_marginLeft="@dimen/dp40"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -118,6 +120,7 @@
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
                         android:text="2倍"
+                        android:id="@+id/mul_2"
                         android:gravity="center"
                         android:padding="@dimen/dp10"
                         android:layout_marginLeft="@dimen/dp40"
@@ -129,6 +132,7 @@
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
                         android:text="3倍"
+                        android:id="@+id/mul_3"
                         android:gravity="center"
                         android:padding="@dimen/dp10"
                         android:layout_marginLeft="@dimen/dp40"
@@ -140,6 +144,7 @@
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
                         android:text="4倍"
+                        android:id="@+id/mul_4"
                         android:gravity="center"
                         android:padding="@dimen/dp10"
                         android:layout_marginLeft="@dimen/dp40"
@@ -168,9 +173,13 @@
                     app:layout_constraintLeft_toRightOf="@id/tv_absolute_pressure_val_tip"
                     app:layout_constraintBottom_toBottomOf="@id/tv_absolute_pressure_val_tip"
                     android:textSize="@dimen/sp16"
+                    android:inputType="numberDecimal"
+                    android:imeOptions="actionDone"
+                    android:text="@={viewModel.liveDataStateBean.pressTargetPress}"
+                    android:padding="0dp"
+                    app:bgPresVal="@{viewModel.liveDataStateBean.pressTargetPress}"
                     android:singleLine="true"
                     android:layout_width="@dimen/dp150"
-                    android:background="@drawable/big_corner_bg"
                     android:textColor="@color/c_384051"
                     android:layout_height="@dimen/dp35" />
 
@@ -186,8 +195,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:barrierDirection="bottom"
-                    app:constraint_referenced_ids="et_absolute_pressure_val,
-            multiple_rg" />
+                    app:constraint_referenced_ids="et_absolute_pressure_val,multiple_rg" />
 
 
                 <com.google.android.material.textview.MaterialTextView
@@ -230,7 +238,7 @@
                     app:layout_constraintTop_toTopOf="@id/tv_current_pressure_val_tip"
                     app:layout_constraintBottom_toBottomOf="@id/tv_current_pressure_val_tip"
                     android:textSize="@dimen/sp16"
-                    android:text="自动"
+                    app:textFloatExpand="@{viewModel.liveDataStateBean.systemMonitor.currentPress}"
                     android:gravity="center_vertical"
                     android:layout_width="@dimen/dp150"
                     android:textColor="@color/c_384051"
@@ -256,9 +264,13 @@
                     app:layout_constraintLeft_toRightOf="@id/tv_target_pressure_val_tip"
                     app:layout_constraintBottom_toBottomOf="@id/tv_target_pressure_val_tip"
                     android:textSize="@dimen/sp16"
+                    android:padding="0dp"
                     android:singleLine="true"
+                    android:inputType="numberDecimal"
+                    android:imeOptions="actionDone"
+                    android:text="@={viewModel.liveDataStateBean.pressTargetPress}"
                     android:layout_width="@dimen/dp150"
-                    android:background="@drawable/big_corner_bg"
+                    app:bgPresVal="@{viewModel.liveDataStateBean.pressTargetPress}"
                     android:textColor="@color/c_384051"
                     android:layout_height="@dimen/dp35" />
             </androidx.constraintlayout.widget.ConstraintLayout>

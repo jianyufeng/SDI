@@ -7,11 +7,11 @@ package com.puyu.mobile.sdi.bean;
  * desc   : 冲洗设置
  * version: 1.0
  */
-public class Rinse {
+public class RinseRec {
 
     private int setResult; //设置返回
 
-    public Rinse() {
+    public RinseRec() {
     }
 
     public int getSetResult() {

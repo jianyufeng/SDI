@@ -29,25 +29,25 @@ public class StandardGasConfigViewModel extends BaseViewModel<StandardGasConfigR
         standardGasesData.add(new StandardGas(liveDataStateBean.diluentNameLiveData, "percent",
                 String.valueOf(100), String.valueOf(100),
                 String.valueOf(1), String.valueOf(0), String.valueOf(0),
-                new PassageBean(liveDataStateBean.diluentName, 0, true, 0)));
+                new PassageBean(LiveDataStateBean.diluentName, LiveDataStateBean.diluentPassNumber, true, 0)));
         standardGasesData.add(new StandardGas(liveDataStateBean.stand1NameLiveData, "ppb", String.valueOf(1000),
                 String.valueOf(20), String.valueOf(50), String.valueOf(0), String.valueOf(0),
-                new PassageBean(liveDataStateBean.stand1Name, 1, true, 1)));
+                new PassageBean(LiveDataStateBean.stand1Name, LiveDataStateBean.stand1PassNumber, true, 1)));
         standardGasesData.add(new StandardGas(liveDataStateBean.stand2NameLiveData, "ppb", String.valueOf(1000),
                 String.valueOf(20), String.valueOf(50), String.valueOf(0), String.valueOf(0),
-                new PassageBean(liveDataStateBean.stand2Name, 2, true, 2)));
+                new PassageBean(LiveDataStateBean.stand2Name, LiveDataStateBean.stand2PassNumber, true, 2)));
         standardGasesData.add(new StandardGas(liveDataStateBean.stand3NameLiveData, "ppb", String.valueOf(1000),
                 String.valueOf(20), String.valueOf(50), String.valueOf(0), String.valueOf(0),
-                new PassageBean(liveDataStateBean.stand3Name, 3, true, 3)));
+                new PassageBean(LiveDataStateBean.stand3Name, LiveDataStateBean.stand3PassNumber, true, 3)));
         standardGasesData.add(new StandardGas(liveDataStateBean.stand4NameLiveData, "ppb", String.valueOf(1000), String.valueOf(20),
                 String.valueOf(50), String.valueOf(0), String.valueOf(0),
-                new PassageBean(liveDataStateBean.stand4Name, 4, true, 4)));
+                new PassageBean(LiveDataStateBean.stand4Name, LiveDataStateBean.stand4PassNumber, true, 4)));
         standardGasesData.add(new StandardGas(liveDataStateBean.mulDiluentNameLiveData, "ppb", String.valueOf(0), String.valueOf(0),
                 String.valueOf(0), String.valueOf(0), String.valueOf(0),
-                new PassageBean(liveDataStateBean.mulDiluentName, 6, true, 5)));
+                new PassageBean(LiveDataStateBean.mulDiluentName, LiveDataStateBean.mulDiluentPassNumber, true, 5)));
         standardGasesData.add(new StandardGas(liveDataStateBean.diluent2NameLiveData, "percent", String.valueOf(100),
                 String.valueOf(100), String.valueOf(1), String.valueOf(0), String.valueOf(0),
-                new PassageBean(liveDataStateBean.diluent2Name, 0, true, 6)));
+                new PassageBean(LiveDataStateBean.diluent2Name, LiveDataStateBean.diluent2PassNumber, true, 6)));
         liveDataStateBean.standardGases.setValue(standardGasesData);
     }
 

@@ -22,14 +22,14 @@ public class RinseViewModel extends BaseViewModel<RinseRepository> {
     public RinseViewModel(@NonNull Application application, RinseRepository model) {
         super(application, model);
         liveDataStateBean = LiveDataStateBean.getInstant();
-        if (CollectionUtil.isEmpty(liveDataStateBean.standardGasesRinse)){
+        if (CollectionUtil.isEmpty(liveDataStateBean.standardGasesRinse)) {
             liveDataStateBean.standardGasesRinse = new ArrayList<>();
-            liveDataStateBean.standardGasesRinse.add(new StandardGas(liveDataStateBean.diluentNameLiveData, new PassageBean(liveDataStateBean.diluentName, 0, true, 0)));
-            liveDataStateBean.standardGasesRinse.add(new StandardGas(liveDataStateBean.stand1NameLiveData, new PassageBean(liveDataStateBean.stand1Name, 1, true, 1)));
-            liveDataStateBean.standardGasesRinse.add(new StandardGas(liveDataStateBean.stand2NameLiveData, new PassageBean(liveDataStateBean.stand2Name, 2, true, 2)));
-            liveDataStateBean.standardGasesRinse.add(new StandardGas(liveDataStateBean.stand3NameLiveData, new PassageBean(liveDataStateBean.stand3Name, 3, true, 3)));
-            liveDataStateBean.standardGasesRinse.add(new StandardGas(liveDataStateBean.stand4NameLiveData, new PassageBean(liveDataStateBean.stand4Name, 4, true, 4)));
-            liveDataStateBean.standardGasesRinse.add(new StandardGas(liveDataStateBean.diluent2NameLiveData, new PassageBean(liveDataStateBean.diluent2Name, 0, true, 5)));
+            liveDataStateBean.standardGasesRinse.add(new StandardGas(liveDataStateBean.diluentNameLiveData, new PassageBean(LiveDataStateBean.diluentName, LiveDataStateBean.diluentPassNumber, true, 0)));
+            liveDataStateBean.standardGasesRinse.add(new StandardGas(liveDataStateBean.stand1NameLiveData, new PassageBean(LiveDataStateBean.stand1Name, LiveDataStateBean.stand1PassNumber, true, 1)));
+            liveDataStateBean.standardGasesRinse.add(new StandardGas(liveDataStateBean.stand2NameLiveData, new PassageBean(LiveDataStateBean.stand2Name, LiveDataStateBean.stand2PassNumber, true, 2)));
+            liveDataStateBean.standardGasesRinse.add(new StandardGas(liveDataStateBean.stand3NameLiveData, new PassageBean(LiveDataStateBean.stand3Name, LiveDataStateBean.stand3PassNumber, true, 3)));
+            liveDataStateBean.standardGasesRinse.add(new StandardGas(liveDataStateBean.stand4NameLiveData, new PassageBean(LiveDataStateBean.stand4Name, LiveDataStateBean.stand4PassNumber, true, 4)));
+            liveDataStateBean.standardGasesRinse.add(new StandardGas(liveDataStateBean.diluent2NameLiveData, new PassageBean(LiveDataStateBean.diluent2Name, LiveDataStateBean.diluent2PassNumber, true, 5)));
         }
     }
 }

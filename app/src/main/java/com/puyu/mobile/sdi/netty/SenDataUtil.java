@@ -1,5 +1,6 @@
 package com.puyu.mobile.sdi.netty;
 
+import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.bean.SendGasNameConfig;
 import com.puyu.mobile.sdi.bean.SendRinseConfig;
 import com.puyu.mobile.sdi.bean.SendStandConfig;
@@ -122,6 +123,70 @@ public class SenDataUtil {
         System.out.println(ByteBufUtil.hexDump(byteBuf));
 
 
+    }
+
+    public static void sendPressureConfig(boolean start, float targetVal) {
+        System.out.println("start:" + start + " targetVal:" + targetVal);
+        ByteBuf byteBuf = Unpooled.buffer();
+        byteBuf.writeBytes(ProtocolParams.frameHead);
+        byteBuf.writeBytes(ProtocolParams.sendAddr);
+        byteBuf.writeByte(0x30);
+        byteBuf.writeByte(0x66);
+        byteBuf.writeShort(5);
+        byteBuf.writeBoolean(start);
+        byteBuf.writeFloat(targetVal);
+        byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
+        byteBuf.writeBytes(crcByte);
+        byteBuf.writeBytes(ProtocolParams.frameEnd);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+        add82(byteBuf);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+
+
+    }
+
+
+    public static void sendAddSampConfig(boolean start, int passWitch, Float addSampvalue) {
+        System.out.println("start:" + start + " addSampvalue:" + addSampvalue + " passWitch:" + passWitch);
+        ByteBuf byteBuf = Unpooled.buffer();
+        byteBuf.writeBytes(ProtocolParams.frameHead);
+        byteBuf.writeBytes(ProtocolParams.sendAddr);
+        byteBuf.writeByte(0x32);
+        byteBuf.writeByte(0x66);
+        byteBuf.writeShort(10);
+        byteBuf.writeBoolean(start);
+        byteBuf.writeBoolean(passWitch == LiveDataStateBean.stand1PassNumber);
+        byteBuf.writeBoolean(passWitch == LiveDataStateBean.stand2PassNumber);
+        byteBuf.writeBoolean(passWitch == LiveDataStateBean.stand3PassNumber);
+        byteBuf.writeBoolean(passWitch == LiveDataStateBean.stand4PassNumber);
+        byteBuf.writeBoolean(passWitch == LiveDataStateBean.mulDiluentPassNumber);//多级稀释气
+        byteBuf.writeFloat(addSampvalue);
+        byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
+        byteBuf.writeBytes(crcByte);
+        byteBuf.writeBytes(ProtocolParams.frameEnd);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+        add82(byteBuf);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+
+
+    }
+
+
+    public static void sendCheckPress0(float currentPress) {
+        System.out.println("currentPress:" + currentPress);
+        ByteBuf byteBuf = Unpooled.buffer();
+        byteBuf.writeBytes(ProtocolParams.frameHead);
+        byteBuf.writeBytes(ProtocolParams.sendAddr);
+        byteBuf.writeByte(0x35);
+        byteBuf.writeByte(0x66);
+        byteBuf.writeShort(4);
+        byteBuf.writeFloat(currentPress);//大气压力 Kpa
+        byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
+        byteBuf.writeBytes(crcByte);
+        byteBuf.writeBytes(ProtocolParams.frameEnd);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+        add82(byteBuf);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
     }
 
 

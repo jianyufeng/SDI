@@ -25,8 +25,8 @@ public class ViewAdapter {
      * onClickCommand 绑定的命令,
      * isThrottleFirst 是否开启防止过快点击
      */
-    @BindingAdapter(value = {"onClickCommand", "isThrottleFirst"}, requireAll = false)
-    public static void onClickCommand(View view, final BindingCommand clickCommand, final boolean isThrottleFirst) {
+    @BindingAdapter(value = {"onClickCommand", "isThrottleFirst", "params"}, requireAll = false)
+    public static void onClickCommand(View view, final BindingCommand clickCommand, final boolean isThrottleFirst, String params) {
         if (isThrottleFirst) {
             RxView.clicks(view)
                     .throttleFirst(CLICK_INTERVAL, TimeUnit.SECONDS)//1秒钟内只允许点击1次
@@ -34,7 +34,7 @@ public class ViewAdapter {
                         @Override
                         public void accept(Object object) throws Exception {
                             if (clickCommand != null) {
-                                clickCommand.execute();
+                                clickCommand.execute(params);
                             }
                         }
                     });
@@ -44,7 +44,7 @@ public class ViewAdapter {
                         @Override
                         public void accept(Object object) throws Exception {
                             if (clickCommand != null) {
-                                clickCommand.execute();
+                                clickCommand.execute(params);
                             }
                         }
                     });

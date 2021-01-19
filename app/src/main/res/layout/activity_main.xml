@@ -78,7 +78,7 @@
                 android:showDividers="beginning|middle|end"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:onCheckedChangedCommandById="@{viewModel.statusCheckListener}"
+                android:onCheckedChanged="@{(group, checkedId)->viewModel.statusCheckListener(checkedId)}"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp45">
 

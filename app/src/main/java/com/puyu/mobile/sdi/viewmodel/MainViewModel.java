@@ -1,12 +1,14 @@
 package com.puyu.mobile.sdi.viewmodel;
 
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
 
 import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.R;
+import com.puyu.mobile.sdi.bean.PressureLimit;
 import com.puyu.mobile.sdi.bean.SendGasNameConfig;
 import com.puyu.mobile.sdi.bean.SendRinseConfig;
 import com.puyu.mobile.sdi.bean.SendStandConfig;
@@ -16,7 +18,6 @@ import com.puyu.mobile.sdi.model.MainRepository;
 import com.puyu.mobile.sdi.mvvm.BaseViewModel;
 import com.puyu.mobile.sdi.mvvm.command.BindingAction;
 import com.puyu.mobile.sdi.mvvm.command.BindingCommand;
-import com.puyu.mobile.sdi.mvvm.command.BindingConsumer;
 import com.puyu.mobile.sdi.mvvm.livedata.SingleLiveEvent;
 import com.puyu.mobile.sdi.mvvm.view.DialogOption;
 import com.puyu.mobile.sdi.mvvm.view.QMUITipDialog;
@@ -60,6 +61,7 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
 
     //启动按钮的点击事件
     public BindingCommand startRun = new BindingCommand(new BindingAction() {
+        @SuppressLint("NonConstantResourceId")
         @Override
         public void call() {
             //如果离线 不能启动
@@ -70,11 +72,11 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
             }*/
             //看是否是空闲可以启动
             SystemMonitor monitor = liveDataStateBean.systemMonitor.getValue();
-            boolean start = monitor.runProcess == 0x00;
             if (monitor == null) {
                 showToast("请先获取仪器状态");
                 return;
             }
+            boolean start = monitor.runProcess == 0x00;
             Integer checkedId = selectType.getValue();
 
             switch (checkedId) {
@@ -147,6 +149,10 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                     boolean pass3 = gasList.get(3).passageBean.selected;
                     boolean pass4 = gasList.get(4).passageBean.selected;
                     boolean pass5 = gasList.get(5).passageBean.selected;
+                    if (!(pass1 || pass2 || pass3 || pass4 || pass5)) {
+                        showToast("至少打开一路标气开关");
+                        return;
+                    }
                     //通道初始值
                     float initV1 = NumberUtil.parseFloat(gasList.get(1).initVal);
                     float initV2 = NumberUtil.parseFloat(gasList.get(2).initVal);
@@ -185,7 +191,7 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                         return;
                     }
                     //目标压力
-                    Float tp = NumberUtil.parseFloat(liveDataStateBean.targetPress.getValue(),
+                    Float tp = NumberUtil.parseFloat(liveDataStateBean.gasConfigTargetPress.getValue(),
                             -1.0f);
                     if (tp < 0 || tp > 50) {
                         showToast("总压力值范围0-50psi");
@@ -225,14 +231,33 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                     //配气方法设置
                     SenDataUtil.sendRinseConfig(new SendRinseConfig(start, standard1Gas.passageBean.selected,
                             standard2Gas.passageBean.selected, standard3Gas.passageBean.selected,
-                            standard4Gas.passageBean.selected,diluentRinseTime,
-                            standRinseTime,10));
+                            standard4Gas.passageBean.selected, diluentRinseTime,
+                            standRinseTime, 10));
                     break;
                 case R.id.pressurize: //加压启动
-
+                    //加压方法设置
+                    Float value = NumberUtil.parseFloat(liveDataStateBean.pressTargetPress.getValue());
+                    PressureLimit limit = LiveDataStateBean.getInstant().pressureLimit.getValue();
+                    if (value > 50 || value > limit.upLimit || value < limit.lowLimit) {
+                        showToast("目标压力值范围：" + limit.lowLimit + "~" + (limit.upLimit > 50 ? limit.upLimit : 50));
+                        return;
+                    }
+                    SenDataUtil.sendPressureConfig(start, value);
                     break;
                 case R.id.add_sample://加样启动
-
+                    //加压方法设置
+                    Integer pw = liveDataStateBean.addSampPressOpen.getValue();
+                    if (pw < 0) {
+                        showToast("请选择加样种类");
+                        return;
+                    }
+                    Float addSampvalue = NumberUtil.parseFloat(liveDataStateBean.addSampTargetPress.getValue());
+                    PressureLimit limitS = LiveDataStateBean.getInstant().pressureLimit.getValue();
+                    if (addSampvalue > 50 || addSampvalue > limitS.upLimit || addSampvalue < limitS.lowLimit) {
+                        showToast("目标压力值范围：" + limitS.lowLimit + "~" + (limitS.upLimit > 50 ? limitS.upLimit : 50));
+                        return;
+                    }
+                    SenDataUtil.sendAddSampConfig(start, pw, addSampvalue);
                     break;
             }
 
@@ -240,28 +265,8 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
     });
 
 
-    private void getUserMsg() {
-       /* model.getUserMsg()
-                .subscribe(new HttpObserver<UserData>() {
-                    @Override
-                    public void onNext(UserData userData) {
-                        super.onNext(userData);
-                        model.setUserData(userData);
-                        startActivity(MainActivity.class);
-                        finish();
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-                        super.onError(t);
-                    }
-                });*/
+    //设置Tab选中事件 切换页面要用
+    public void statusCheckListener(int checkId) {
+        selectType.setValue(checkId);
     }
-
-    public BindingCommand<Integer> statusCheckListener = new BindingCommand<Integer>(new BindingConsumer<Integer>() {
-        @Override
-        public void call(Integer integer) {
-            selectType.setValue(integer);
-        }
-    });
 }
