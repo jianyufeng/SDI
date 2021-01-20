@@ -19,5 +19,14 @@ public class PressureLimit {
         this.upLimit = upLimit;
         this.lowLimit = lowLimit;
     }
+
+    @Override
+    public String toString() {
+        return "PressureLimit{" +
+                "wResult=" + wResult +
+                ", upLimit=" + upLimit +
+                ", lowLimit=" + lowLimit +
+                '}';
+    }
 }
 

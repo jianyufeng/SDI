@@ -74,7 +74,7 @@ public class LiveDataStateBean {
     //wifi连接状态
     public SingleLiveEvent<LinkStateEnum> wifiState = new SingleLiveEvent<>(LinkStateEnum.LinkStart);
     //仪器ID
-    public SingleLiveEvent<DeviceId> deviceIdLiveData = new SingleLiveEvent<>();
+    public MutableLiveData<DeviceId> deviceIdLiveData = new MutableLiveData<>(new DeviceId("abcdef123"));
     //仪器MCU版本
     public SingleLiveEvent<DeviceMCUVersion> deviceVersion = new SingleLiveEvent<>();
     //仪器类型

@@ -139,7 +139,7 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
         viewModel.liveDataStateBean.showIndexFrag.observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer pos) {
-                binding.vpPassageDetail.setCurrentItem(pos,true);
+                binding.vpPassageDetail.setCurrentItem(pos, true);
             }
         });
     }

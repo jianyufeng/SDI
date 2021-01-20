@@ -19,9 +19,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/dp10"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <androidx.cardview.widget.CardView
+            android:paddingBottom="@dimen/dp10"
             app:cardBackgroundColor="@color/c_f3f3f3f"
             app:cardCornerRadius="@dimen/dp5"
             app:cardElevation="@dimen/dp5"
@@ -112,7 +116,7 @@
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:layout_width="0dp"
-                        android:padding="@dimen/dp10"
+                        android:padding="0dp"
                         android:textSize="@dimen/sp16"
                         android:textColor="@color/c_384051"
                         android:background="@null"
@@ -122,12 +126,13 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content" />
 
-                    <View
+                    <!--<View
                         android:layout_width="1px"
                         android:background="@color/c_16a5ff"
                         android:layout_marginTop="@dimen/dp5"
                         android:layout_marginBottom="@dimen/dp5"
-                        android:layout_height="match_parent" />
+                        android:layout_marginRight="@dimen/dp5"
+                        android:layout_height="match_parent" />-->
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
@@ -136,6 +141,7 @@
                         android:text="校准"
                         android:paddingLeft="@dimen/dp10"
                         android:paddingRight="@dimen/dp10"
+                        android:background="@drawable/big_corner_bg"
                         android:gravity="center"
                         app:onClickCommand="@{viewModel.checkPress}"
                         app:isThrottleFirst="@{true}"
@@ -198,6 +204,10 @@
                     app:layout_constraintBottom_toBottomOf="@id/tv_pressure_up_val_tip"
                     android:textSize="@dimen/sp16"
                     android:text="@={viewModel.pressUp}"
+                    app:bgPresLimitUp="@{viewModel.pressUp}"
+                    app:bgPresLimitLow="@{viewModel.pressLow}"
+                    app:checkUp="@{true}"
+
                     android:gravity="center_vertical"
                     android:layout_width="@dimen/dp150"
                     android:textColor="@color/c_384051"
@@ -231,22 +241,45 @@
                     android:layout_width="@dimen/dp150"
                     android:background="@drawable/big_corner_bg"
                     android:textColor="@color/c_384051"
-                    android:layout_height="@dimen/dp35" />
+                    android:layout_height="@dimen/dp35"
+                    app:bgPresLimitUp="@{viewModel.pressUp}"
+                    app:bgPresLimitLow="@{viewModel.pressLow}"
+                    app:checkUp="@{false}" />
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:layout_marginTop="@dimen/dp5"
                     app:layout_constraintLeft_toLeftOf="@id/et_pressure_up_val"
                     app:layout_constraintTop_toBottomOf="@id/tv_pressure_up_val_tip"
                     android:paddingLeft="@dimen/dp10"
                     android:paddingRight="@dimen/dp10"
+                    android:id="@+id/btn_get_limit"
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:text="获取上下限"
+                    app:isThrottleFirst="@{true}"
+                    app:onClickCommand="@{viewModel.getPressLimit}"
+                    android:textSize="@dimen/sp16"
+                    android:background="@drawable/big_corner_bg"
+                    android:layout_height="@dimen/dp35" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_marginLeft="@dimen/dp80"
+                    app:layout_constraintLeft_toRightOf="@id/btn_get_limit"
+                    app:layout_constraintTop_toTopOf="@id/btn_get_limit"
+                    android:paddingLeft="@dimen/dp10"
+                    android:paddingRight="@dimen/dp10"
                     android:id="@+id/btn_change_limit"
-                    android:textColor="@color/c_ffffff"
+                    android:textColor="@color/c_384051"
+                    android:background="@drawable/big_corner_bg"
                     android:layout_width="wrap_content"
                     android:text="确定修改上下限"
                     app:isThrottleFirst="@{true}"
                     app:onClickCommand="@{viewModel.changePressLimit}"
                     android:textSize="@dimen/sp16"
-                    android:background="@drawable/big_corner_bg_blue"
-                    android:layout_height="@dimen/dp35" />
+                    android:layout_height="@dimen/dp35"
+                    app:bgPresLimitUp="@{viewModel.pressUp}"
+                    app:bgPresLimitLow="@{viewModel.pressLow}"
+                    app:checkChange="@{true}" />
 
 
                 <com.google.android.material.textview.MaterialTextView
@@ -323,6 +356,23 @@
                     android:textColor="@color/c_384051"
                     android:layout_height="@dimen/dp35" />
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_marginTop="@dimen/dp5"
+                    app:layout_constraintLeft_toRightOf="@id/tv_version_tip_mcu"
+                    app:layout_constraintTop_toTopOf="@id/tv_version_tip_mcu"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_version_tip_mcu"
+                    android:paddingLeft="@dimen/dp10"
+                    android:paddingRight="@dimen/dp10"
+                    android:id="@+id/btn_get_version"
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:text="获取版本"
+                    app:isThrottleFirst="@{true}"
+                    app:onClickCommand="@{viewModel.getVersion}"
+                    android:textSize="@dimen/sp16"
+                    android:background="@drawable/big_corner_bg"
+                    android:layout_height="0dp" />
+
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_tep_tip"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -344,6 +394,69 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_tep_tip"
                     android:layout_height="1dp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_margin="@dimen/dp5"
+                    android:id="@+id/tv_device_id_tip"
+                    app:layout_constraintTop_toBottomOf="@id/line3"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    android:padding="@dimen/dp10"
+                    android:textSize="@dimen/sp16"
+                    android:text=" 仪器ID："
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tv_device_id"
+                    app:layout_constraintTop_toTopOf="@id/tv_device_id_tip"
+                    app:layout_constraintLeft_toRightOf="@id/tv_device_id_tip"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_device_id_tip"
+                    android:textSize="@dimen/sp16"
+                    android:singleLine="true"
+                    android:padding="0dp"
+                    android:imeOptions="actionDone"
+                    app:bgDeviceId="@{viewModel.changeDeviceID}"
+                    android:text="@={viewModel.changeDeviceID}"
+                    android:gravity="center_vertical"
+                    android:layout_width="@dimen/dp150"
+                    android:textColor="@color/c_384051"
+                    android:layout_height="@dimen/dp35" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_margin="@dimen/dp5"
+                    app:layout_constraintLeft_toRightOf="@id/tv_device_id"
+                    app:layout_constraintTop_toTopOf="@id/tv_device_id_tip"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_device_id_tip"
+                    android:paddingLeft="@dimen/dp10"
+                    android:paddingRight="@dimen/dp10"
+                    android:id="@+id/btn_get_deviceId"
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:text="获取仪器ID"
+                    app:isThrottleFirst="@{true}"
+                    app:onClickCommand="@{viewModel.getDeviceId}"
+                    android:textSize="@dimen/sp16"
+                    android:background="@drawable/big_corner_bg"
+                    android:layout_height="0dp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_margin="@dimen/dp5"
+                    app:layout_constraintLeft_toRightOf="@id/btn_get_deviceId"
+                    app:layout_constraintTop_toTopOf="@id/tv_device_id_tip"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_device_id_tip"
+                    android:paddingLeft="@dimen/dp10"
+                    android:paddingRight="@dimen/dp10"
+                    android:id="@+id/btn_set_deviceId"
+                    android:textColor="@color/c_384051"
+                    android:layout_width="wrap_content"
+                    android:text="设置仪器ID"
+                    app:isThrottleFirst="@{true}"
+                    app:onClickCommand="@{viewModel.setDeviceId}"
+                    app:params="@{viewModel.changeDeviceID}"
+                    android:textSize="@dimen/sp16"
+                    android:background="@drawable/big_corner_bg"
+                    android:layout_height="0dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

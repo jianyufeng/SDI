@@ -2,12 +2,14 @@ package com.puyu.mobile.sdi.myviewadapter.textview;
 
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.databinding.BindingAdapter;
 
 import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.R;
 import com.puyu.mobile.sdi.bean.PressureLimit;
 import com.puyu.mobile.sdi.util.NumberUtil;
+import com.puyu.mobile.sdi.util.StringUtil;
 import com.puyu.mobile.sdi.util.TimeUtil;
 
 /**
@@ -65,12 +67,65 @@ public class ViewAdapter {
         }
     }
 
-    //设置稀释冲洗时间 报警页面
-    @BindingAdapter(value = {"bgPresVal"}, requireAll = false)
+    //设置目标压力 报警页面
+    @BindingAdapter(value = {"bgPresVal"}, requireAll = true)
     public static void setPreBg(TextView view, final String val) {
         Float mulV = NumberUtil.parseFloat(val);
         PressureLimit limit = LiveDataStateBean.getInstant().pressureLimit.getValue();
         if (mulV > 50 || mulV > limit.upLimit || mulV < limit.lowLimit) {
+            view.setBackgroundResource(R.drawable.big_strocke_bg_red);
+        } else {
+            view.setBackgroundResource(R.drawable.big_corner_bg);
+        }
+    }
+
+    //设置压力下限 报警页面
+    @BindingAdapter(value = {"bgPresLimitUp", "bgPresLimitLow", "checkUp"}, requireAll = true)
+    public static void setPreBgLimit(TextView view, final String upLimit, final String lowLimit, final boolean checkUp) {
+        //获取限值
+        Float upV = NumberUtil.parseFloat(upLimit, -1.0f);
+        Float lowV = NumberUtil.parseFloat(lowLimit, -1.0f);
+        if (checkUp) {
+            if (upV < 0 || upV > 50) {
+                view.setBackgroundResource(R.drawable.big_strocke_bg_red);
+                return;
+            }
+
+        } else {
+            if (lowV < 0 || lowV > 1) {
+                view.setBackgroundResource(R.drawable.big_strocke_bg_red);
+                return;
+            }
+        }
+        if (upV < lowV) {
+            view.setBackgroundResource(R.drawable.big_strocke_bg_red);
+            return;
+        }
+        view.setBackgroundResource(R.drawable.big_corner_bg);
+    }
+
+    //设置压力下限 报警页面
+    @BindingAdapter(value = {"bgPresLimitUp", "bgPresLimitLow", "checkChange"}, requireAll = true)
+    public static void setChangeLimitBg(TextView view, final String upLimit, final String lowLimit, final boolean chenkChange) {
+        Float upV = NumberUtil.parseFloat(upLimit, -1.0f);
+        Float lowV = NumberUtil.parseFloat(lowLimit, -1.0f);
+        if (chenkChange) {
+            PressureLimit limit = LiveDataStateBean.getInstant().pressureLimit.getValue();
+            if (upV == limit.upLimit && lowV == limit.lowLimit) {
+                view.setBackgroundResource(R.drawable.big_corner_bg);
+                view.setTextColor(ContextCompat.getColor(view.getContext(), R.color.c_384051));
+            } else {
+                view.setBackgroundResource(R.drawable.big_corner_bg_blue);
+                view.setTextColor(ContextCompat.getColor(view.getContext(), R.color.c_ffffff));
+
+            }
+        }
+    }
+
+    //设置仪器ID 报警页面
+    @BindingAdapter(value = {"bgDeviceId"}, requireAll = true)
+    public static void setBgDeviceId(TextView view, final String deviceId) {
+        if (StringUtil.isEmpty(deviceId) || deviceId.getBytes().length > 12) {
             view.setBackgroundResource(R.drawable.big_strocke_bg_red);
         } else {
             view.setBackgroundResource(R.drawable.big_corner_bg);

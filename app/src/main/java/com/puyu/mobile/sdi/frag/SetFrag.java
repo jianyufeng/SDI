@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
+import com.puyu.mobile.sdi.bean.DeviceId;
 import com.puyu.mobile.sdi.bean.PressureLimit;
 import com.puyu.mobile.sdi.databinding.FragSetBinding;
 import com.puyu.mobile.sdi.model.SetRepository;
@@ -63,7 +64,13 @@ public class SetFrag extends BaseFragment<FragSetBinding, SetViewModel> {
                 viewModel.pressLow.setValue(String.valueOf(limit.lowLimit));
             }
         });
-        viewModel.liveDataStateBean.pressureLimit.setValue(viewModel.liveDataStateBean.pressureLimit.getValue());
+        viewModel.liveDataStateBean.deviceIdLiveData.observe(this, new Observer<DeviceId>() {
+            @Override
+            public void onChanged(DeviceId deviceId) {
+                viewModel.changeDeviceID.setValue(deviceId.deviceId);
+            }
+        });
+
     }
 
     @Override

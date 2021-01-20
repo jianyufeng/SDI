@@ -26,7 +26,7 @@ public class ViewAdapter {
      * isThrottleFirst 是否开启防止过快点击
      */
     @BindingAdapter(value = {"onClickCommand", "isThrottleFirst", "params"}, requireAll = false)
-    public static void onClickCommand(View view, final BindingCommand clickCommand, final boolean isThrottleFirst, String params) {
+    public static void onClickCommand(View view, final BindingCommand<String> clickCommand, final boolean isThrottleFirst, String params) {
         if (isThrottleFirst) {
             RxView.clicks(view)
                     .throttleFirst(CLICK_INTERVAL, TimeUnit.SECONDS)//1秒钟内只允许点击1次
@@ -67,74 +67,4 @@ public class ViewAdapter {
                 });
     }
 
-    /**
-     * 回调控件本身
-     *
-     * @param currentView
-     * @param bindingCommand
-     */
-    @BindingAdapter(value = {"currentView"}, requireAll = false)
-    public static void replyCurrentView(View currentView, BindingCommand bindingCommand) {
-        if (bindingCommand != null) {
-            bindingCommand.execute(currentView);
-        }
-    }
-
-    /**
-     * view是否需要获取焦点
-     */
-    @BindingAdapter({"requestFocus"})
-    public static void requestFocusCommand(View view, final Boolean needRequestFocus) {
-        if (needRequestFocus) {
-            view.setFocusableInTouchMode(true);
-            view.requestFocus();
-        } else {
-            view.clearFocus();
-        }
-    }
-
-    /**
-     * view的焦点发生变化的事件绑定
-     */
-    @BindingAdapter({"onFocusChangeCommand"})
-    public static void onFocusChangeCommand(View view, final BindingCommand<Boolean> onFocusChangeCommand) {
-        view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (onFocusChangeCommand != null) {
-                    onFocusChangeCommand.execute(hasFocus);
-                }
-            }
-        });
-    }
-
-    /**
-     * view的显示隐藏
-     */
-    @BindingAdapter(value = {"isVisible"}, requireAll = false)
-    public static void isVisible(View view, final Boolean visibility) {
-        if (visibility == null) {
-            view.setVisibility(View.GONE);
-        } else {
-            if (visibility) {
-                view.setVisibility(View.VISIBLE);
-            } else {
-                view.setVisibility(View.GONE);
-            }
-        }
-
-    }
-
-    //    @BindingAdapter({"onTouchCommand"})
-//    public static void onTouchCommand(View view, final ResponseCommand<MotionEvent, Boolean> onTouchCommand) {
-//        view.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (onTouchCommand != null) {
-//                    return onTouchCommand.execute(event);
-//                }
-//                return false;
-//            }
-//        });
-//    }
 }

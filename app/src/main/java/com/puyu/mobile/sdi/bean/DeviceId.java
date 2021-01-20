@@ -8,13 +8,21 @@ package com.puyu.mobile.sdi.bean;
  * version: 1.0
  */
 public class DeviceId {
-    public String deviceId; //仪器ID
+    public String deviceId ; //仪器ID
     public int wResult; //写入返回
 
     public DeviceId() {
     }
 
     public DeviceId(String deviceId) {
-        this.deviceId = deviceId;
+        this.deviceId=deviceId;
+    }
+
+    @Override
+    public String toString() {
+        return "DeviceId{" +
+                "deviceId='" + deviceId + '\'' +
+                ", wResult=" + wResult +
+                '}';
     }
 }

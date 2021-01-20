@@ -130,6 +130,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
                     break;
             }
+            binding.layoutRealState.setVisibility(checkedId==R.id.set?View.GONE:View.VISIBLE);
         });
     }
 

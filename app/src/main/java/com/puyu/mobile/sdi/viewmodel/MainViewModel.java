@@ -16,8 +16,8 @@ import com.puyu.mobile.sdi.bean.StandardGas;
 import com.puyu.mobile.sdi.bean.SystemMonitor;
 import com.puyu.mobile.sdi.model.MainRepository;
 import com.puyu.mobile.sdi.mvvm.BaseViewModel;
-import com.puyu.mobile.sdi.mvvm.command.BindingAction;
 import com.puyu.mobile.sdi.mvvm.command.BindingCommand;
+import com.puyu.mobile.sdi.mvvm.command.BindingConsumer;
 import com.puyu.mobile.sdi.mvvm.livedata.SingleLiveEvent;
 import com.puyu.mobile.sdi.mvvm.view.DialogOption;
 import com.puyu.mobile.sdi.mvvm.view.QMUITipDialog;
@@ -60,10 +60,10 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
     }
 
     //启动按钮的点击事件
-    public BindingCommand startRun = new BindingCommand(new BindingAction() {
+    public BindingCommand<String> startRun = new BindingCommand<String>(new BindingConsumer<String>() {
         @SuppressLint("NonConstantResourceId")
         @Override
-        public void call() {
+        public void call(String s) {
             //如果离线 不能启动
           /*  if (liveDataStateBean.wifiState.getValue() != LinkStateEnum.LinkSuccess) {
                 showWaitingDialog(new DialogOption("未连接仪器", QMUITipDialog.Builder.ICON_TYPE_FAIL));
