@@ -12,14 +12,12 @@
             type="com.puyu.mobile.sdi.viewmodel.StandardGasConfigViewModel" />
     </data>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
 
         <androidx.cardview.widget.CardView
+            app:cardUseCompatPadding="true"
             app:cardElevation="5dp"
-            android:layout_margin="5dp"
+            android:clickable="true"
             android:layout_width="match_parent"
             app:cardBackgroundColor="@color/c_f3f3f3f"
             app:cardCornerRadius="@dimen/dp5"
@@ -122,6 +120,5 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
-    </FrameLayout>
 
 </layout>

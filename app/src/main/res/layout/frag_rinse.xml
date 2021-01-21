@@ -11,16 +11,14 @@
     </data>
 
     <ScrollView
-        android:paddingBottom="@dimen/dp10"
-        android:clipChildren="false"
-        android:clipToPadding="false"
+        android:fillViewport="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
             app:cardElevation="@dimen/dp5"
             app:cardCornerRadius="@dimen/dp5"
-            android:layout_margin="@dimen/dp5"
+            app:cardUseCompatPadding="true"
             app:cardBackgroundColor="@color/c_f3f3f3f"
             android:layout_width="match_parent"
             android:layout_height="match_parent">

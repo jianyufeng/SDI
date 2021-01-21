@@ -1,7 +1,12 @@
 package com.puyu.mobile.sdi.mvvm;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -95,6 +100,39 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
         }
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (isShouldHideInput(v, ev)) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+            return super.dispatchTouchEvent(ev);
+        }
+        if (getWindow().superDispatchTouchEvent(ev)) {
+            return true;
+        }
+        return onTouchEvent(ev);
+    }
+
+    private boolean isShouldHideInput(View v, MotionEvent event) {
+        if (v != null && (v instanceof EditText)) {
+            int[] location = {0, 0};
+            v.getLocationOnScreen(location);
+            int left = location[0];
+            int top = location[1];
+            if (event.getX() < left || (event.getX() > left + v.getWidth())
+                    || event.getY() < top || (event.getY() > top + v.getHeight())) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
 
     /**
      * =====================================================================
