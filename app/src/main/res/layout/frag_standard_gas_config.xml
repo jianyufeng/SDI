@@ -48,6 +48,8 @@
                     android:textColor="@color/c_384051"
                     android:layout_width="wrap_content"
                     android:text="保存方法"
+                    app:isThrottleFirst="@{true}"
+                    app:onClickCommand="@{viewModel.saveMethod}"
                     android:textSize="@dimen/sp16"
                     android:background="@drawable/big_corner_bg"
                     android:layout_height="@dimen/dp35" />

@@ -7,7 +7,7 @@ package com.puyu.mobile.sdi.bean;
  * desc   : wifi通讯状态
  * version: 1.0
  */
-public enum LinkStateEnum {
+public enum WifiLinkStateEnum {
     LinkStart("开始连接..."),
     LinkFail("连接失败 重新连接..."),
     LinkSuccess("连接成功"),
@@ -15,7 +15,7 @@ public enum LinkStateEnum {
 
     public String value;
 
-    LinkStateEnum(String value) {
+    WifiLinkStateEnum(String value) {
         this.value = value;
     }
 }

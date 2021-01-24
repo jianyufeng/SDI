@@ -1,13 +1,13 @@
 package com.puyu.mobile.sdi.netty;
 
 import com.puyu.mobile.sdi.LiveDataStateBean;
-import com.puyu.mobile.sdi.bean.DeviceId;
-import com.puyu.mobile.sdi.bean.DeviceMCUVersion;
-import com.puyu.mobile.sdi.bean.DeviceType;
-import com.puyu.mobile.sdi.bean.LinkStateEnum;
-import com.puyu.mobile.sdi.bean.PressureLimit;
+import com.puyu.mobile.sdi.bean.RecDeviceId;
+import com.puyu.mobile.sdi.bean.RecDeviceMCUVersion;
+import com.puyu.mobile.sdi.bean.RecDeviceType;
+import com.puyu.mobile.sdi.bean.RecSystemMonitor;
+import com.puyu.mobile.sdi.bean.WifiLinkStateEnum;
+import com.puyu.mobile.sdi.bean.RecPressureLimit;
 import com.puyu.mobile.sdi.bean.SysStateEnum;
-import com.puyu.mobile.sdi.bean.SystemMonitor;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
@@ -89,7 +89,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                 if (rw == ProtocolParams.CMD_Ex_R_R) { //读取仪器ID 返回 12个字节
                     //获取数据
                     System.out.println("仪器ID:" + ByteBufUtil.hexDump(date));
-                    LiveDataStateBean.getInstant().deviceIdLiveData.postValue(new DeviceId(new String(date).trim()));
+                    LiveDataStateBean.getInstant().deviceIdLiveData.postValue(new RecDeviceId(new String(date).trim()));
                 } else if (rw == ProtocolParams.CMD_Ex_W_R) { //写入仪器ID 返回 1个字节
                     if (date.length == 1) {
                         if (date[0] == ProtocolParams.CMD_Ex_W_R_s) {
@@ -111,7 +111,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                 if (rw == ProtocolParams.CMD_Ex_R_R) { //读取仪器ID 返回 32个字节
                     //获取数据
                     System.out.println("软件版本号读取:" + ByteBufUtil.hexDump(date));
-                    LiveDataStateBean.getInstant().deviceVersion.postValue(new DeviceMCUVersion(new String(date).trim()));
+                    LiveDataStateBean.getInstant().deviceVersion.postValue(new RecDeviceMCUVersion(new String(date).trim()));
                 }
 
             } else if (cmd == ProtocolParams.CMD_DEVICE_Type) { //仪器类型
@@ -120,7 +120,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                     //获取数据
                     if (date.length == 1 && date[0] == 0x00) {//静态稀释仪
                         System.out.println("仪器类型 读取:" + ByteBufUtil.hexDump(date));
-                        LiveDataStateBean.getInstant().deviceType.postValue(new DeviceType("静态稀释仪"));
+                        LiveDataStateBean.getInstant().deviceType.postValue(new RecDeviceType("静态稀释仪"));
                     }
                 } else if (rw == ProtocolParams.CMD_Ex_W_R) { //写入仪器类型 返回 1个字节
                     if (date.length == 1) {
@@ -256,7 +256,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                         float ll = byteBuf.readFloat();
                         System.out.println("压力下限:" + ll);
                         byteBuf.release();
-                        LiveDataStateBean.getInstant().pressureLimit.postValue(new PressureLimit(ul, ll));
+                        LiveDataStateBean.getInstant().pressureLimit.postValue(new RecPressureLimit(ul, ll));
                     }
 
                 } else if (rw == ProtocolParams.CMD_Ex_W_R) { //校准设置 返回 1个字节
@@ -275,7 +275,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                 }
             } else if (cmd == ProtocolParams.CMD_system_monitoring) { //系统监控
                 if (rw == ProtocolParams.CMD_Ex_R_R) {
-                    SystemMonitor monitor = new SystemMonitor();
+                    RecSystemMonitor monitor = new RecSystemMonitor();
                     //系统监控 返回 76+N个字节  //获取数据
                     if (date.length >= 76) {
                         //1字节(INT8U)系统状态 系统状态0x00:Normal  0x01:Alarm  0x02:Err
@@ -491,7 +491,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
         super.channelInactive(ctx);
         Channel channel = ctx.channel();
         System.out.println("-------channelInactive" + "  离线\n");
-        LiveDataStateBean.getInstant().wifiState.postValue(LinkStateEnum.LinkDisConnect);
+        LiveDataStateBean.getInstant().wifiState.postValue(WifiLinkStateEnum.LinkDisConnect);
 
         //启动重连
         reConnect(ctx);

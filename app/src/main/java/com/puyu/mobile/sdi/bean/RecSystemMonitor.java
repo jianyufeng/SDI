@@ -7,7 +7,7 @@ package com.puyu.mobile.sdi.bean;
  * desc   :
  * version: 1.0
  */
-public class SystemMonitor {
+public class RecSystemMonitor {
     public SysStateEnum sysState;//系统状态
     public byte runProcess;//当前运行流程
     public byte runPassage;//当前运行通道数
@@ -36,6 +36,6 @@ public class SystemMonitor {
     public byte alarmNumber;//报警码个数N
     public byte[] alarmCode;//报警码
 
-    public SystemMonitor() {
+    public RecSystemMonitor() {
     }
 }

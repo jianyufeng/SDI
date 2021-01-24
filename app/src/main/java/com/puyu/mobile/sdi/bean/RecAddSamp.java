@@ -7,11 +7,11 @@ package com.puyu.mobile.sdi.bean;
  * desc   : 加样设置
  * version: 1.0
  */
-public class AddSamp {
+public class RecAddSamp {
 
     private int setResult; //设置返回
 
-    public AddSamp() {
+    public RecAddSamp() {
     }
 
     public int getSetResult() {

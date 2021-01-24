@@ -2,6 +2,7 @@ package com.puyu.mobile.sdi.viewmodel;
 
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -10,7 +11,11 @@ import com.puyu.mobile.sdi.bean.PassageBean;
 import com.puyu.mobile.sdi.bean.StandardGas;
 import com.puyu.mobile.sdi.model.StandardGasConfigRepository;
 import com.puyu.mobile.sdi.mvvm.BaseViewModel;
+import com.puyu.mobile.sdi.mvvm.command.BindingCommand;
+import com.puyu.mobile.sdi.mvvm.command.BindingConsumer;
 import com.puyu.mobile.sdi.mvvm.livedata.SingleLiveEvent;
+import com.puyu.mobile.sdi.util.NumberUtil;
+import com.puyu.mobile.sdi.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,5 +61,70 @@ public class StandardGasConfigViewModel extends BaseViewModel<StandardGasConfigR
         changePassage.setValue(pos);
     }
 
+    //保存方法 点击事件
+    public BindingCommand<String> saveMethod = new BindingCommand<>(new BindingConsumer<String>() {
+        @Override
+        public void call(String s) {
+            //1.获取标气名称
+            List<StandardGas> gasList = liveDataStateBean.standardGases.getValue();
+            //通道开关
+            boolean pass1 = gasList.get(1).passageBean.selected;
+            boolean pass2 = gasList.get(2).passageBean.selected;
+            boolean pass3 = gasList.get(3).passageBean.selected;
+            boolean pass4 = gasList.get(4).passageBean.selected;
+            boolean pass5 = gasList.get(5).passageBean.selected;
+            if (!(pass1 || pass2 || pass3 || pass4 || pass5)) {
+                showToast("至少打开一路标气开关");
+                return;
+            }
+            String name1 = gasList.get(1).gasName.getValue();
+            String name2 = gasList.get(2).gasName.getValue();
+            String name3 = gasList.get(3).gasName.getValue();
+            String name4 = gasList.get(4).gasName.getValue();
+            System.out.println("标气1名称：" + name1);
+            System.out.println("标气2名称：" + name2);
+            System.out.println("标气3名称：" + name3);
+            System.out.println("标气4名称：" + name4);
+            for (int i = 1; i < 6; i++) {
+                String name = gasList.get(i).gasName.getValue();
+                //2、校验标气名称
+                if (StringUtil.isEmpty(name)) {
+                    showToast(gasList.get(i).passageBean.name + "：气体名称为空");
+                    liveDataStateBean.showIndexFrag.setValue(gasList.get(i).passageBean.index);
+                    return;
+                }
+                //3、校验标气名称长度最长20个字节
+                if (name.getBytes().length > 20) {
+                    showToast(gasList.get(i).passageBean.name + "：气体名称过长");
+                    liveDataStateBean.showIndexFrag.setValue(gasList.get(i).passageBean.index);
+                    return;
+                }
+
+                //通道初始值
+                float initV = NumberUtil.parseFloat(gasList.get(i).initVal);
+                //通道目标值
+                float targetV = NumberUtil.parseFloat(gasList.get(i).targetVal);
+                if ((initV <= 0 || targetV <= 0 || initV < targetV)) {
+                    showToast(gasList.get(i).passageBean.name + "：初始值/目标值 有误");
+                    liveDataStateBean.showIndexFrag.setValue(gasList.get(i).passageBean.index);
+                    return;
+                }
+                //稀释倍数超过100 无法启动配气
+                float dtm = NumberUtil.parseFloat(gasList.get(i).dilutionMul);
+                if ((dtm <= 0 || dtm > 100)) {
+                    showToast(gasList.get(i).passageBean.name + "：稀释倍数 1~100");
+                    liveDataStateBean.showIndexFrag.setValue(gasList.get(i).passageBean.index);
+                    return;
+                }
+
+            }
+            List<StandardGas> value = liveDataStateBean.standardGases.getValue();
+            for (int i = 0; i < value.size(); i++) {
+                StandardGas standardGas = value.get(i);
+                Log.e("TTTT", "call: " + standardGas.toString());
+            }
+
+        }
+    });
 
 }

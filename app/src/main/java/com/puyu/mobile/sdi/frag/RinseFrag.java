@@ -20,8 +20,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
+import com.puyu.mobile.sdi.bean.RecSystemMonitor;
 import com.puyu.mobile.sdi.bean.StandardGas;
-import com.puyu.mobile.sdi.bean.SystemMonitor;
 import com.puyu.mobile.sdi.databinding.FragRinseBinding;
 import com.puyu.mobile.sdi.model.RinseRepository;
 import com.puyu.mobile.sdi.mvvm.BaseFragment;
@@ -86,9 +86,9 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
 
     @Override
     protected void initViewObservable() {
-        viewModel.liveDataStateBean.systemMonitor.observe(this, new Observer<SystemMonitor>() {
+        viewModel.liveDataStateBean.systemMonitor.observe(this, new Observer<RecSystemMonitor>() {
             @Override
-            public void onChanged(SystemMonitor systemMonitor) {
+            public void onChanged(RecSystemMonitor systemMonitor) {
                 stationAdapter.setRun(systemMonitor.runProcess, systemMonitor.runPassage);
             }
         });

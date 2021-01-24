@@ -7,14 +7,14 @@ package com.puyu.mobile.sdi.bean;
  * desc   : 仪器ID
  * version: 1.0
  */
-public class DeviceId {
+public class RecDeviceId {
     public String deviceId ; //仪器ID
     public int wResult; //写入返回
 
-    public DeviceId() {
+    public RecDeviceId() {
     }
 
-    public DeviceId(String deviceId) {
+    public RecDeviceId(String deviceId) {
         this.deviceId=deviceId;
     }
 

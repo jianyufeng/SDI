@@ -58,7 +58,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                        | View.SYSTEM_U/I_FLAG_FULLSCREEN // hide status bar
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);*/
         ScreenStateUtil.fullScreen(this,true);
     }
@@ -70,6 +70,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
 
     }
 
+    int indw = 0;
     @Override
     protected void initViewObservable() {
         viewModel.selectType.observe(this, checkedId -> {
@@ -148,7 +149,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         });
     }
 
-    int indw = 0;
 
     @Override
     protected void initData() {

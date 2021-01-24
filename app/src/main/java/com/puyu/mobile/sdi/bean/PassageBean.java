@@ -1,9 +1,5 @@
 package com.puyu.mobile.sdi.bean;
 
-import android.util.MutableBoolean;
-
-import com.puyu.mobile.sdi.mvvm.livedata.SingleLiveEvent;
-
 /**
  * author : 简玉锋
  * e-mail : yufeng_jian@fpi-inc.com
@@ -23,5 +19,15 @@ public class PassageBean {
         this.prassage = prassage;
         this.selected = selected;
         this.index = index;
+    }
+
+    @Override
+    public String toString() {
+        return "PassageBean{" +
+                "name='" + name + '\'' +
+                ", prassage=" + prassage +
+                ", selected=" + selected +
+                ", index=" + index +
+                '}';
     }
 }

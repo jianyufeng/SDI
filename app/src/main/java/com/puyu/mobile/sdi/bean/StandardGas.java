@@ -41,4 +41,18 @@ public class StandardGas {
         this.consumeTime = consumeTime;
         this.passageBean = passageBean;
     }
+
+    @Override
+    public String toString() {
+        return "StandardGas{" +
+                "gasName=" + gasName.getValue() +
+                ", gasUnit='" + gasUnit + '\'' +
+                ", initVal='" + initVal + '\'' +
+                ", targetVal='" + targetVal + '\'' +
+                ", dilutionMul='" + dilutionMul + '\'' +
+                ", deviation='" + deviation + '\'' +
+                ", consumeTime='" + consumeTime + '\'' +
+                ", passageBean=" + passageBean +
+                '}';
+    }
 }

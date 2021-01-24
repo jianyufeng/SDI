@@ -6,9 +6,9 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 
 import com.puyu.mobile.sdi.LiveDataStateBean;
-import com.puyu.mobile.sdi.bean.DeviceId;
-import com.puyu.mobile.sdi.bean.DeviceMCUVersion;
-import com.puyu.mobile.sdi.bean.SystemMonitor;
+import com.puyu.mobile.sdi.bean.RecDeviceId;
+import com.puyu.mobile.sdi.bean.RecDeviceMCUVersion;
+import com.puyu.mobile.sdi.bean.RecSystemMonitor;
 import com.puyu.mobile.sdi.model.SetRepository;
 import com.puyu.mobile.sdi.mvvm.BaseViewModel;
 import com.puyu.mobile.sdi.mvvm.command.BindingCommand;
@@ -48,7 +48,7 @@ public class SetViewModel extends BaseViewModel<SetRepository> {
                 return;
             }
             //看是否是空闲可以启动
-            SystemMonitor monitor = liveDataStateBean.systemMonitor.getValue();
+            RecSystemMonitor monitor = liveDataStateBean.systemMonitor.getValue();
             if (monitor == null) {
                 showToast("请先获取仪器状态");
                 return;
@@ -101,7 +101,7 @@ public class SetViewModel extends BaseViewModel<SetRepository> {
         public void call(String s) {
             //获取版本
             SenDataUtil.sendGetVersion();
-            liveDataStateBean.deviceVersion.setValue(new DeviceMCUVersion("2.560"));
+            liveDataStateBean.deviceVersion.setValue(new RecDeviceMCUVersion("2.560"));
         }
     });
     //获取仪器ID的点击事件
@@ -110,7 +110,7 @@ public class SetViewModel extends BaseViewModel<SetRepository> {
         public void call(String s) {
             //获取ID
             SenDataUtil.sendGetDeviceID();
-            liveDataStateBean.deviceIdLiveData.setValue(new DeviceId("fsdfdsfds5"));
+            liveDataStateBean.deviceIdLiveData.setValue(new RecDeviceId("fsdfdsfds5"));
 
         }
     });

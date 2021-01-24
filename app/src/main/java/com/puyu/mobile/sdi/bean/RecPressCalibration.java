@@ -7,10 +7,10 @@ package com.puyu.mobile.sdi.bean;
  * desc   : 压力校准
  * version: 1.0
  */
-public class PressCalibration {
+public class RecPressCalibration {
     private int wResult; //写入返回
 
-    public PressCalibration() {
+    public RecPressCalibration() {
     }
 
     public int getwResult() {

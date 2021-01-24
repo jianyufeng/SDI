@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
-import com.puyu.mobile.sdi.bean.DeviceId;
-import com.puyu.mobile.sdi.bean.PressureLimit;
+import com.puyu.mobile.sdi.bean.RecDeviceId;
+import com.puyu.mobile.sdi.bean.RecPressureLimit;
 import com.puyu.mobile.sdi.databinding.FragSetBinding;
 import com.puyu.mobile.sdi.model.SetRepository;
 import com.puyu.mobile.sdi.mvvm.BaseFragment;
@@ -57,16 +57,16 @@ public class SetFrag extends BaseFragment<FragSetBinding, SetViewModel> {
     @Override
     protected void initViewObservable() {
         //更新上下限 主要是获取到的
-        viewModel.liveDataStateBean.pressureLimit.observe(this, new Observer<PressureLimit>() {
+        viewModel.liveDataStateBean.pressureLimit.observe(this, new Observer<RecPressureLimit>() {
             @Override
-            public void onChanged(PressureLimit limit) {
+            public void onChanged(RecPressureLimit limit) {
                 viewModel.pressUp.setValue(String.valueOf(limit.upLimit));
                 viewModel.pressLow.setValue(String.valueOf(limit.lowLimit));
             }
         });
-        viewModel.liveDataStateBean.deviceIdLiveData.observe(this, new Observer<DeviceId>() {
+        viewModel.liveDataStateBean.deviceIdLiveData.observe(this, new Observer<RecDeviceId>() {
             @Override
-            public void onChanged(DeviceId deviceId) {
+            public void onChanged(RecDeviceId deviceId) {
                 viewModel.changeDeviceID.setValue(deviceId.deviceId);
             }
         });

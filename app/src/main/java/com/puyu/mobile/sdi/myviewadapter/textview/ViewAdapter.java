@@ -7,7 +7,7 @@ import androidx.databinding.BindingAdapter;
 
 import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.R;
-import com.puyu.mobile.sdi.bean.PressureLimit;
+import com.puyu.mobile.sdi.bean.RecPressureLimit;
 import com.puyu.mobile.sdi.util.NumberUtil;
 import com.puyu.mobile.sdi.util.StringUtil;
 import com.puyu.mobile.sdi.util.TimeUtil;
@@ -71,7 +71,7 @@ public class ViewAdapter {
     @BindingAdapter(value = {"bgPresVal"}, requireAll = true)
     public static void setPreBg(TextView view, final String val) {
         Float mulV = NumberUtil.parseFloat(val);
-        PressureLimit limit = LiveDataStateBean.getInstant().pressureLimit.getValue();
+        RecPressureLimit limit = LiveDataStateBean.getInstant().pressureLimit.getValue();
         if (mulV > 50 || mulV > limit.upLimit || mulV < limit.lowLimit) {
             view.setBackgroundResource(R.drawable.big_strocke_bg_red);
         } else {
@@ -110,7 +110,7 @@ public class ViewAdapter {
         Float upV = NumberUtil.parseFloat(upLimit, -1.0f);
         Float lowV = NumberUtil.parseFloat(lowLimit, -1.0f);
         if (chenkChange) {
-            PressureLimit limit = LiveDataStateBean.getInstant().pressureLimit.getValue();
+            RecPressureLimit limit = LiveDataStateBean.getInstant().pressureLimit.getValue();
             if (upV == limit.upLimit && lowV == limit.lowLimit) {
                 view.setBackgroundResource(R.drawable.big_corner_bg);
                 view.setTextColor(ContextCompat.getColor(view.getContext(), R.color.c_384051));

@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.puyu.mobile.sdi.adapter.MyFragmentStateAdapter;
-import com.puyu.mobile.sdi.adapter.StandGasPassageAdapter;
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
+import com.puyu.mobile.sdi.adapter.MyFragmentStateAdapter;
+import com.puyu.mobile.sdi.adapter.StandGasPassageAdapter;
+import com.puyu.mobile.sdi.bean.RecSystemMonitor;
 import com.puyu.mobile.sdi.bean.StandardGas;
-import com.puyu.mobile.sdi.bean.SystemMonitor;
 import com.puyu.mobile.sdi.databinding.FragStandardGasConfigBinding;
 import com.puyu.mobile.sdi.model.StandardGasConfigRepository;
 import com.puyu.mobile.sdi.mvvm.BaseFragment;
@@ -121,9 +121,9 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
     @Override
     protected void initViewObservable() {
         viewModel.liveDataStateBean.systemMonitor.observe(this,
-                new Observer<SystemMonitor>() {
+                new Observer<RecSystemMonitor>() {
                     @Override
-                    public void onChanged(SystemMonitor systemMonitor) {
+                    public void onChanged(RecSystemMonitor systemMonitor) {
                         passageAdapter.setRun(systemMonitor.runProcess, systemMonitor.runPassage);
                     }
                 });

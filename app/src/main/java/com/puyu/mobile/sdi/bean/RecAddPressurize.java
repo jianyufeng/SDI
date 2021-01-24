@@ -7,11 +7,11 @@ package com.puyu.mobile.sdi.bean;
  * desc   : 加压设置
  * version: 1.0
  */
-public class AddPressurize {
+public class RecAddPressurize {
 
     private int setResult; //设置返回
 
-    public AddPressurize() {
+    public RecAddPressurize() {
     }
 
     public int getSetResult() {

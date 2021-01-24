@@ -7,15 +7,15 @@ package com.puyu.mobile.sdi.bean;
  * desc   : 压力上下限
  * version: 1.0
  */
-public class PressureLimit {
+public class RecPressureLimit {
     public int wResult; //写入返回
 
     public float upLimit; //压力上限
     public float lowLimit; //压力下限
-    public PressureLimit() {
+    public RecPressureLimit() {
     }
 
-    public PressureLimit(float upLimit, float lowLimit) {
+    public RecPressureLimit(float upLimit, float lowLimit) {
         this.upLimit = upLimit;
         this.lowLimit = lowLimit;
     }

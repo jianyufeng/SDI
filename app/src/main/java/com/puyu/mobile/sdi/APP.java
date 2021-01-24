@@ -2,6 +2,7 @@ package com.puyu.mobile.sdi;
 
 import android.app.Application;
 
+import com.puyu.mobile.sdi.db.ObjectBox;
 import com.puyu.mobile.sdi.mvvm.view.ToastInstance;
 
 /**
@@ -22,7 +23,7 @@ public class APP extends Application {
         app =this;
         init(this);
         //初始化数据库操作
-        //ObjectBox.init(this);
+        ObjectBox.init(this);
         ToastInstance.CreateInstance(this);
 
     }

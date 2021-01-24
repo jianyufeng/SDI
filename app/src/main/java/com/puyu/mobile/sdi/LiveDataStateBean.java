@@ -7,13 +7,13 @@ import android.widget.EditText;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.puyu.mobile.sdi.bean.DeviceId;
-import com.puyu.mobile.sdi.bean.DeviceMCUVersion;
-import com.puyu.mobile.sdi.bean.DeviceType;
-import com.puyu.mobile.sdi.bean.LinkStateEnum;
-import com.puyu.mobile.sdi.bean.PressureLimit;
+import com.puyu.mobile.sdi.bean.RecDeviceId;
+import com.puyu.mobile.sdi.bean.RecDeviceMCUVersion;
+import com.puyu.mobile.sdi.bean.RecDeviceType;
+import com.puyu.mobile.sdi.bean.WifiLinkStateEnum;
+import com.puyu.mobile.sdi.bean.RecPressureLimit;
 import com.puyu.mobile.sdi.bean.StandardGas;
-import com.puyu.mobile.sdi.bean.SystemMonitor;
+import com.puyu.mobile.sdi.bean.RecSystemMonitor;
 import com.puyu.mobile.sdi.mvvm.livedata.SingleLiveEvent;
 import com.puyu.mobile.sdi.util.NumberUtil;
 import com.puyu.mobile.sdi.util.StringUtil;
@@ -72,17 +72,17 @@ public class LiveDataStateBean {
 
 
     //wifi连接状态
-    public SingleLiveEvent<LinkStateEnum> wifiState = new SingleLiveEvent<>(LinkStateEnum.LinkStart);
+    public SingleLiveEvent<WifiLinkStateEnum> wifiState = new SingleLiveEvent<>(WifiLinkStateEnum.LinkStart);
     //仪器ID
-    public MutableLiveData<DeviceId> deviceIdLiveData = new MutableLiveData<>(new DeviceId("abcdef123"));
+    public MutableLiveData<RecDeviceId> deviceIdLiveData = new MutableLiveData<>(new RecDeviceId("abcdef123"));
     //仪器MCU版本
-    public SingleLiveEvent<DeviceMCUVersion> deviceVersion = new SingleLiveEvent<>();
+    public SingleLiveEvent<RecDeviceMCUVersion> deviceVersion = new SingleLiveEvent<>();
     //仪器类型
-    public SingleLiveEvent<DeviceType> deviceType = new SingleLiveEvent<>();
+    public SingleLiveEvent<RecDeviceType> deviceType = new SingleLiveEvent<>();
     //压力上下限
-    public SingleLiveEvent<PressureLimit> pressureLimit = new SingleLiveEvent<>(new PressureLimit(50f, 0.1f));
+    public SingleLiveEvent<RecPressureLimit> pressureLimit = new SingleLiveEvent<>(new RecPressureLimit(50f, 0.1f));
     //系统监控
-    public SingleLiveEvent<SystemMonitor> systemMonitor = new SingleLiveEvent<>(new SystemMonitor());
+    public SingleLiveEvent<RecSystemMonitor> systemMonitor = new SingleLiveEvent<>(new RecSystemMonitor());
     /*********************配气页面的设置*************************************/
     //通道 - 配气页面的设置
     public MutableLiveData<List<StandardGas>> standardGases = new MutableLiveData<>();

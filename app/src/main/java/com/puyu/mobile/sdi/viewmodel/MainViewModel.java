@@ -8,12 +8,12 @@ import androidx.annotation.NonNull;
 
 import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.R;
-import com.puyu.mobile.sdi.bean.PressureLimit;
+import com.puyu.mobile.sdi.bean.RecPressureLimit;
+import com.puyu.mobile.sdi.bean.RecSystemMonitor;
 import com.puyu.mobile.sdi.bean.SendGasNameConfig;
 import com.puyu.mobile.sdi.bean.SendRinseConfig;
 import com.puyu.mobile.sdi.bean.SendStandConfig;
 import com.puyu.mobile.sdi.bean.StandardGas;
-import com.puyu.mobile.sdi.bean.SystemMonitor;
 import com.puyu.mobile.sdi.model.MainRepository;
 import com.puyu.mobile.sdi.mvvm.BaseViewModel;
 import com.puyu.mobile.sdi.mvvm.command.BindingCommand;
@@ -71,7 +71,7 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                 return;
             }*/
             //看是否是空闲可以启动
-            SystemMonitor monitor = liveDataStateBean.systemMonitor.getValue();
+            RecSystemMonitor monitor = liveDataStateBean.systemMonitor.getValue();
             if (monitor == null) {
                 showToast("请先获取仪器状态");
                 return;
@@ -86,63 +86,9 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                         delayDisDialog();
                         return;
                     }
+
                     //1.获取标气名称
                     List<StandardGas> gasList = liveDataStateBean.standardGases.getValue();
-                    String name1 = gasList.get(1).gasName.getValue();
-                    String name2 = gasList.get(2).gasName.getValue();
-                    String name3 = gasList.get(3).gasName.getValue();
-                    String name4 = gasList.get(4).gasName.getValue();
-                    System.out.println("标气1名称：" + name1);
-                    System.out.println("标气2名称：" + name2);
-                    System.out.println("标气3名称：" + name3);
-                    System.out.println("标气4名称：" + name4);
-                    //2、校验标气名称
-                    if (StringUtil.isEmpty(name1)) {
-                        showToast(gasList.get(1).passageBean.name + "：气体名称为空");
-                        liveDataStateBean.showIndexFrag.setValue(gasList.get(1).passageBean.index);
-                        return;
-                    }
-                    if (StringUtil.isEmpty(name2)) {
-                        showToast(gasList.get(2).passageBean.name + "：气体名称为空");
-                        liveDataStateBean.showIndexFrag.setValue(gasList.get(2).passageBean.index);
-                        return;
-                    }
-                    if (StringUtil.isEmpty(name3)) {
-                        showToast(gasList.get(3).passageBean.name + "：气体名称为空");
-                        liveDataStateBean.showIndexFrag.setValue(gasList.get(3).passageBean.index);
-                        return;
-                    }
-                    if (StringUtil.isEmpty(name4)) {
-                        showToast(gasList.get(4).passageBean.name + "：气体名称为空");
-                        liveDataStateBean.showIndexFrag.setValue(gasList.get(4).passageBean.index);
-                        return;
-                    }
-                    byte[] bytes = name1.getBytes();
-                    if (bytes.length > 20) {
-                        showToast("标气1名称过长");
-                        showToast(gasList.get(1).passageBean.name + "：气体名称过长");
-                        liveDataStateBean.showIndexFrag.setValue(gasList.get(1).passageBean.index);
-                        return;
-                    }
-                    if (name2.getBytes().length > 20) {
-                        showToast(gasList.get(2).passageBean.name + "：气体名称过长");
-                        liveDataStateBean.showIndexFrag.setValue(gasList.get(2).passageBean.index);
-                        return;
-                    }
-                    if (name3.getBytes().length > 20) {
-                        showToast(gasList.get(3).passageBean.name + "：气体名称过长");
-                        liveDataStateBean.showIndexFrag.setValue(gasList.get(3).passageBean.index);
-                        return;
-                    }
-                    if (name4.getBytes().length > 20) {
-                        showToast(gasList.get(4).passageBean.name + "：气体名称过长");
-                        liveDataStateBean.showIndexFrag.setValue(gasList.get(4).passageBean.index);
-                        return;
-                    }
-                    SendGasNameConfig gasNameConfig = new SendGasNameConfig(name1, name2, name3, name4);
-                    //发送配气方法名称设置
-                    SenDataUtil.sendGasName(gasNameConfig);
-
                     //通道开关
                     boolean pass1 = gasList.get(1).passageBean.selected;
                     boolean pass2 = gasList.get(2).passageBean.selected;
@@ -153,43 +99,50 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                         showToast("至少打开一路标气开关");
                         return;
                     }
-                    //通道初始值
-                    float initV1 = NumberUtil.parseFloat(gasList.get(1).initVal);
-                    float initV2 = NumberUtil.parseFloat(gasList.get(2).initVal);
-                    float initV3 = NumberUtil.parseFloat(gasList.get(3).initVal);
-                    float initV4 = NumberUtil.parseFloat(gasList.get(4).initVal);
-                    float initV5 = NumberUtil.parseFloat(gasList.get(5).initVal);
-                    //通道目标值
-                    float targetV1 = NumberUtil.parseFloat(gasList.get(1).targetVal);
-                    float targetV2 = NumberUtil.parseFloat(gasList.get(2).targetVal);
-                    float targetV3 = NumberUtil.parseFloat(gasList.get(3).targetVal);
-                    float targetV4 = NumberUtil.parseFloat(gasList.get(4).targetVal);
-                    float targetV5 = NumberUtil.parseFloat(gasList.get(5).targetVal);
-                    if (pass1 && (initV1 <= 0 || targetV1 <= 0 || initV1 < targetV1)) {
-                        showToast(gasList.get(1).passageBean.name + "：初始值/目标值 有误");
-                        liveDataStateBean.showIndexFrag.setValue(gasList.get(1).passageBean.index);
-                        return;
+                    String name1 = gasList.get(1).gasName.getValue();
+                    String name2 = gasList.get(2).gasName.getValue();
+                    String name3 = gasList.get(3).gasName.getValue();
+                    String name4 = gasList.get(4).gasName.getValue();
+                    System.out.println("标气1名称：" + name1);
+                    System.out.println("标气2名称：" + name2);
+                    System.out.println("标气3名称：" + name3);
+                    System.out.println("标气4名称：" + name4);
+                    for (int i = 1; i < 6; i++) {
+                        String name = gasList.get(i).gasName.getValue();
+                        //2、校验标气名称
+                        if (StringUtil.isEmpty(name)) {
+                            showToast(gasList.get(i).passageBean.name + "：气体名称为空");
+                            liveDataStateBean.showIndexFrag.setValue(gasList.get(i).passageBean.index);
+                            return;
+                        }
+                        //3、校验标气名称长度最长20个字节
+                        if (name.getBytes().length > 20) {
+                            showToast(gasList.get(i).passageBean.name + "：气体名称过长");
+                            liveDataStateBean.showIndexFrag.setValue(gasList.get(i).passageBean.index);
+                            return;
+                        }
+
+                        //通道初始值
+                        float initV = NumberUtil.parseFloat(gasList.get(i).initVal);
+                        //通道目标值
+                        float targetV = NumberUtil.parseFloat(gasList.get(i).targetVal);
+                        if ((initV <= 0 || targetV <= 0 || initV < targetV)) {
+                            showToast(gasList.get(i).passageBean.name + "：初始值/目标值 有误");
+                            liveDataStateBean.showIndexFrag.setValue(gasList.get(i).passageBean.index);
+                            return;
+                        }
+                        //稀释倍数超过100 无法启动配气
+                        float dtm = NumberUtil.parseFloat(gasList.get(i).dilutionMul);
+                        if ((dtm <= 0 || dtm > 100)) {
+                            showToast(gasList.get(i).passageBean.name + "：稀释倍数 1~100");
+                            liveDataStateBean.showIndexFrag.setValue(gasList.get(i).passageBean.index);
+                            return;
+                        }
+
                     }
-                    if (pass2 && (initV2 <= 0 || targetV2 <= 0 || initV2 < targetV2)) {
-                        showToast(gasList.get(2).passageBean.name + "：初始值/目标值 有误");
-                        liveDataStateBean.showIndexFrag.setValue(gasList.get(2).passageBean.index);
-                        return;
-                    }
-                    if (pass3 && (initV3 <= 0 || targetV3 <= 0 || initV3 < targetV3)) {
-                        showToast(gasList.get(3).passageBean.name + "：初始值/目标值 有误");
-                        liveDataStateBean.showIndexFrag.setValue(gasList.get(3).passageBean.index);
-                        return;
-                    }
-                    if (pass4 && (initV4 <= 0 || targetV4 <= 0 || initV4 < targetV4)) {
-                        showToast(gasList.get(4).passageBean.name + "：初始值/目标值 有误");
-                        liveDataStateBean.showIndexFrag.setValue(gasList.get(4).passageBean.index);
-                        return;
-                    }
-                    if (pass5 && (initV5 <= 0 || targetV5 <= 0 || initV5 < targetV5)) {
-                        showToast(gasList.get(5).passageBean.name + "：初始值/目标值 有误");
-                        liveDataStateBean.showIndexFrag.setValue(gasList.get(5).passageBean.index);
-                        return;
-                    }
+                    SendGasNameConfig gasNameConfig = new SendGasNameConfig(name1, name2, name3, name4);
+                    //发送配气方法名称设置
+                    SenDataUtil.sendGasName(gasNameConfig);
                     //目标压力
                     Float tp = NumberUtil.parseFloat(liveDataStateBean.gasConfigTargetPress.getValue(),
                             -1.0f);
@@ -199,8 +152,17 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                     }
                     //配气方法设置
                     SenDataUtil.sendGasConfig(new SendStandConfig(start, pass1, pass2, pass3
-                            , pass4, pass5, initV1, initV2, initV3, initV4, initV5, targetV1,
-                            targetV2, targetV3, targetV4, targetV5, tp));
+                            , pass4, pass5,
+                            NumberUtil.parseFloat(gasList.get(1).initVal),
+                            NumberUtil.parseFloat(gasList.get(2).initVal),
+                            NumberUtil.parseFloat(gasList.get(3).initVal),
+                            NumberUtil.parseFloat(gasList.get(4).initVal),
+                            NumberUtil.parseFloat(gasList.get(5).initVal),
+                            NumberUtil.parseFloat(gasList.get(1).targetVal),
+                            NumberUtil.parseFloat(gasList.get(2).targetVal),
+                            NumberUtil.parseFloat(gasList.get(3).targetVal),
+                            NumberUtil.parseFloat(gasList.get(4).targetVal),
+                            NumberUtil.parseFloat(gasList.get(5).targetVal), tp));
                     break;
                 case R.id.rinse: //冲洗启动
                     if (CollectionUtil.isEmpty(liveDataStateBean.standardGasesRinse)) {
@@ -237,7 +199,7 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                 case R.id.pressurize: //加压启动
                     //加压方法设置
                     Float value = NumberUtil.parseFloat(liveDataStateBean.pressTargetPress.getValue());
-                    PressureLimit limit = LiveDataStateBean.getInstant().pressureLimit.getValue();
+                    RecPressureLimit limit = LiveDataStateBean.getInstant().pressureLimit.getValue();
                     if (value > 50 || value > limit.upLimit || value < limit.lowLimit) {
                         showToast("目标压力值范围：" + limit.lowLimit + "~" + (limit.upLimit > 50 ? limit.upLimit : 50));
                         return;
@@ -252,7 +214,7 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                         return;
                     }
                     Float addSampvalue = NumberUtil.parseFloat(liveDataStateBean.addSampTargetPress.getValue());
-                    PressureLimit limitS = LiveDataStateBean.getInstant().pressureLimit.getValue();
+                    RecPressureLimit limitS = LiveDataStateBean.getInstant().pressureLimit.getValue();
                     if (addSampvalue > 50 || addSampvalue > limitS.upLimit || addSampvalue < limitS.lowLimit) {
                         showToast("目标压力值范围：" + limitS.lowLimit + "~" + (limitS.upLimit > 50 ? limitS.upLimit : 50));
                         return;

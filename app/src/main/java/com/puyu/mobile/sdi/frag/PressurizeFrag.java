@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
-import com.puyu.mobile.sdi.bean.SystemMonitor;
+import com.puyu.mobile.sdi.bean.RecSystemMonitor;
 import com.puyu.mobile.sdi.databinding.FragPressurizeBinding;
 import com.puyu.mobile.sdi.model.PressurizeRepository;
 import com.puyu.mobile.sdi.mvvm.BaseFragment;
@@ -77,9 +77,9 @@ public class PressurizeFrag extends BaseFragment<FragPressurizeBinding, Pressuri
 
     @Override
     protected void initViewObservable() {
-        viewModel.liveDataStateBean.systemMonitor.observe(this, new Observer<SystemMonitor>() {
+        viewModel.liveDataStateBean.systemMonitor.observe(this, new Observer<RecSystemMonitor>() {
             @Override
-            public void onChanged(SystemMonitor systemMonitor) {
+            public void onChanged(RecSystemMonitor systemMonitor) {
                 byte cRunProcess = systemMonitor.runProcess;
                 byte cRunPassage = systemMonitor.runPassage;
                 if (cRunProcess == (byte) 0x02) { //加压

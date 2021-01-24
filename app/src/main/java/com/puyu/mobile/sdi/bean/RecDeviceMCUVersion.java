@@ -7,13 +7,13 @@ package com.puyu.mobile.sdi.bean;
  * desc   : MCU 版本
  * version: 1.0
  */
-public class DeviceMCUVersion {
+public class RecDeviceMCUVersion {
     public String deviceVersion; //仪器版本
 
-    public DeviceMCUVersion() {
+    public RecDeviceMCUVersion() {
     }
 
-    public DeviceMCUVersion(String deviceVersion) {
+    public RecDeviceMCUVersion(String deviceVersion) {
         this.deviceVersion = deviceVersion;
     }
 }
