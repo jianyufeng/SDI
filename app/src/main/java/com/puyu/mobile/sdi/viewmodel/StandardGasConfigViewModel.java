@@ -7,8 +7,11 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.puyu.mobile.sdi.LiveDataStateBean;
+import com.puyu.mobile.sdi.bean.MethodGasConfig;
+import com.puyu.mobile.sdi.bean.MethodSave;
 import com.puyu.mobile.sdi.bean.PassageBean;
 import com.puyu.mobile.sdi.bean.StandardGas;
+import com.puyu.mobile.sdi.db.DBManager;
 import com.puyu.mobile.sdi.model.StandardGasConfigRepository;
 import com.puyu.mobile.sdi.mvvm.BaseViewModel;
 import com.puyu.mobile.sdi.mvvm.command.BindingCommand;
@@ -25,6 +28,8 @@ public class StandardGasConfigViewModel extends BaseViewModel<StandardGasConfigR
 
 
     public SingleLiveEvent<Integer> changePassage = new SingleLiveEvent<>();
+    public SingleLiveEvent<MethodSave> saveStandConfig = new SingleLiveEvent<>();
+    public SingleLiveEvent<List<MethodSave>> methods = new SingleLiveEvent<>();
 
 
     public StandardGasConfigViewModel(@NonNull Application application, StandardGasConfigRepository model) {
@@ -123,8 +128,28 @@ public class StandardGasConfigViewModel extends BaseViewModel<StandardGasConfigR
                 StandardGas standardGas = value.get(i);
                 Log.e("TTTT", "call: " + standardGas.toString());
             }
+            //保存标气配置
+            MethodSave methodSave = new MethodSave();
+            //ArrayList<MethodGasConfig> datas = new ArrayList<>();
+            for (int i = 1; i < 6; i++) {
+                StandardGas standardGas = gasList.get(i);
+                methodSave.methodGasConfigs.add(new MethodGasConfig(standardGas.gasName.getValue(), NumberUtil.parseFloat(standardGas.initVal),
+                        NumberUtil.parseFloat(standardGas.targetVal), standardGas.gasUnit, standardGas.passageBean.name,
+                        standardGas.passageBean.prassage, standardGas.passageBean.selected));
+            }
+            //methodSave.methodGasConfigs.addAll(datas);
+            saveStandConfig.setValue(methodSave);
 
         }
     });
 
+    //导入方法 点击事件
+    public BindingCommand<String> importMethod = new BindingCommand<>(new BindingConsumer<String>() {
+
+        @Override
+        public void call(String s) {
+            List<MethodSave> allMethod = DBManager.getInstance().getAllMethod();
+            methods.setValue(allMethod);
+        }
+    });
 }

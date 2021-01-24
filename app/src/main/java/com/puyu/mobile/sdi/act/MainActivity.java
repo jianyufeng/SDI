@@ -4,12 +4,14 @@ package com.puyu.mobile.sdi.act;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.pgyersdk.update.PgyUpdateManager;
+
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
 import com.puyu.mobile.sdi.databinding.ActivityMainBinding;

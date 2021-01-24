@@ -13,9 +13,13 @@ import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
 import com.puyu.mobile.sdi.adapter.MyFragmentStateAdapter;
 import com.puyu.mobile.sdi.adapter.StandGasPassageAdapter;
+import com.puyu.mobile.sdi.bean.MethodSave;
 import com.puyu.mobile.sdi.bean.RecSystemMonitor;
 import com.puyu.mobile.sdi.bean.StandardGas;
 import com.puyu.mobile.sdi.databinding.FragStandardGasConfigBinding;
+import com.puyu.mobile.sdi.db.DBManager;
+import com.puyu.mobile.sdi.dialog.DialogChoseMethod;
+import com.puyu.mobile.sdi.dialog.DialogSaveMethodName;
 import com.puyu.mobile.sdi.model.StandardGasConfigRepository;
 import com.puyu.mobile.sdi.mvvm.BaseFragment;
 import com.puyu.mobile.sdi.mvvm.ViewModelParamsFactory;
@@ -140,6 +144,25 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
             @Override
             public void onChanged(Integer pos) {
                 binding.vpPassageDetail.setCurrentItem(pos, true);
+            }
+        });
+        viewModel.saveStandConfig.observe(this, new Observer<MethodSave>() {
+            @Override
+            public void onChanged(MethodSave methodSave) {
+                new DialogSaveMethodName(new DialogSaveMethodName.ConfirmMsg() {
+                    @Override
+                    public void changePsw(String msg) {
+                        methodSave.gasName = msg.trim();
+                        DBManager.getInstance().putMethod(methodSave);
+                        showToast("保存成功");
+                    }
+                }, "").showNow(getChildFragmentManager(), "dialog");
+            }
+        });
+        viewModel.methods.observe(this, new Observer<List<MethodSave>>() {
+            @Override
+            public void onChanged(List<MethodSave> methodSaves) {
+                new DialogChoseMethod(getActivity(),methodSaves).showNow(getChildFragmentManager(), "choseDialog");
             }
         });
     }

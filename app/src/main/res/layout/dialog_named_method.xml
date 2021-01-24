@@ -21,10 +21,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp15"
+        android:singleLine="true"
         android:background="@drawable/big_corner_bg"
         android:ellipsize="end"
         android:padding="@dimen/dp10"
-        android:maxLines="3"
         android:textSize="@dimen/sp16" />
 
     <View

@@ -48,7 +48,7 @@ public class DialogSaveMethodName extends DialogFragment {
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             //dialog.getWindow().getAttributes().windowAnimations = R.style.DialogStyle;
         }
-        return inflater.inflate(R.layout.dialog_change_remark, container, false);
+        return inflater.inflate(R.layout.dialog_named_method, container, false);
 
     }
 
@@ -96,7 +96,7 @@ public class DialogSaveMethodName extends DialogFragment {
     }
 
     public interface ConfirmMsg {
-        void changePsw(String newPsw);
+        void changePsw(String msg);
     }
 
 }

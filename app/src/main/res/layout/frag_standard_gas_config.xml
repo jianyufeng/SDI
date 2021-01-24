@@ -37,6 +37,8 @@
                     android:textSize="@dimen/sp16"
                     android:layout_margin="@dimen/dp5"
                     android:background="@drawable/big_corner_bg"
+                    app:isThrottleFirst="@{true}"
+                    app:onClickCommand="@{viewModel.importMethod}"
                     android:layout_height="@dimen/dp35" />
 
                 <androidx.appcompat.widget.AppCompatButton
