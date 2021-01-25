@@ -83,10 +83,10 @@ public class ScreenStateUtil {
      * 获取宽度
      */
     public static int getWidth() {
-        if (screenWidth == 0) {
+        //if (screenWidth == 0) {
             WindowManager wm = (WindowManager) APP.getInstance().getSystemService(Context.WINDOW_SERVICE);
             screenWidth = wm.getDefaultDisplay().getWidth();
-        }
+        //}
         return screenWidth;
     }
 

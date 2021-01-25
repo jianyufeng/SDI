@@ -1,10 +1,13 @@
 package com.puyu.mobile.sdi.db;
 
+import com.puyu.mobile.sdi.bean.MethodGasConfig;
 import com.puyu.mobile.sdi.bean.MethodSave;
+import com.puyu.mobile.sdi.bean.MethodSave_;
 
 import java.util.List;
 
 import io.objectbox.Box;
+import io.objectbox.relation.ToMany;
 
 /**
  * author : 简玉锋
@@ -35,12 +38,23 @@ public class DBManager {
         return ObjectBox.get().boxFor(calss).getAll();
     }
 
+
     public long putMethod(MethodSave bean) {
         return put(MethodSave.class, bean);
     }
 
     public List<MethodSave> getAllMethod() {
-        return getAll(MethodSave.class);
+        return getBox(MethodSave.class).query().orderDesc(MethodSave_.dbId).build().find();
+    }
+
+    public long getAllMethodCount() {
+       return getBox(MethodSave.class).count();
+    }
+
+    public boolean removeMethod(MethodSave methodSave) {
+        ToMany<MethodGasConfig> methodGasConfigs = methodSave.methodGasConfigs;
+        getBox(MethodGasConfig.class).remove(methodGasConfigs);
+        return getBox(MethodSave.class).remove(methodSave);
     }
 
 }

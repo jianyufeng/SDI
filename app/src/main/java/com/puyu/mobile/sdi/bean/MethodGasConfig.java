@@ -1,9 +1,7 @@
 package com.puyu.mobile.sdi.bean;
 
-import io.objectbox.annotation.Backlink;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
-import io.objectbox.relation.ToMany;
 import io.objectbox.relation.ToOne;
 
 /**
@@ -20,6 +18,7 @@ public class MethodGasConfig {
     public String gasName;
     public float initVal;
     public float targetVal;
+    public float dilutionMul;
     public String unit;
 
     public String passName;
@@ -31,7 +30,7 @@ public class MethodGasConfig {
     public MethodGasConfig() {
     }
 
-    public MethodGasConfig(String gasName, float initVal, float targetVal, String unit,
+    public MethodGasConfig(String gasName, float initVal, float targetVal,float dilutionMul, String unit,
                            String passName, int passNumber, boolean passSwitch) {
         this.gasName = gasName;
         this.initVal = initVal;
@@ -40,5 +39,6 @@ public class MethodGasConfig {
         this.passName = passName;
         this.passNumber = passNumber;
         this.passSwitch = passSwitch;
+        this.dilutionMul = dilutionMul;
     }
 }

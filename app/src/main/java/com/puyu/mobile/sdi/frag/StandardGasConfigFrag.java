@@ -162,7 +162,14 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
         viewModel.methods.observe(this, new Observer<List<MethodSave>>() {
             @Override
             public void onChanged(List<MethodSave> methodSaves) {
-                new DialogChoseMethod(getActivity(),methodSaves).showNow(getChildFragmentManager(), "choseDialog");
+                new DialogChoseMethod(getActivity(), new DialogChoseMethod.ImportMethodCall() {
+                    @Override
+                    public void callMethod(MethodSave methodSave) {
+                        if (methodSave == null) return;
+                        viewModel.setChoseMethod(methodSave);
+                        passageAdapter.notifyDataSetChanged();
+                    }
+                }, methodSaves).showNow(getChildFragmentManager(), "choseDialog");
             }
         });
     }

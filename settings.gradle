@@ -1,2 +1,3 @@
+include ':smart_table_libiary'
 include ':app'
 rootProject.name = "SDI"

@@ -23,6 +23,8 @@ import com.puyu.mobile.sdi.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.objectbox.relation.ToMany;
+
 public class StandardGasConfigViewModel extends BaseViewModel<StandardGasConfigRepository> {
     public final LiveDataStateBean liveDataStateBean;
 
@@ -70,6 +72,11 @@ public class StandardGasConfigViewModel extends BaseViewModel<StandardGasConfigR
     public BindingCommand<String> saveMethod = new BindingCommand<>(new BindingConsumer<String>() {
         @Override
         public void call(String s) {
+            long count = DBManager.getInstance().getAllMethodCount();
+            if (count > 20) {
+                showToast("最多保存20个方法");
+                return;
+            }
             //1.获取标气名称
             List<StandardGas> gasList = liveDataStateBean.standardGases.getValue();
             //通道开关
@@ -134,7 +141,9 @@ public class StandardGasConfigViewModel extends BaseViewModel<StandardGasConfigR
             for (int i = 1; i < 6; i++) {
                 StandardGas standardGas = gasList.get(i);
                 methodSave.methodGasConfigs.add(new MethodGasConfig(standardGas.gasName.getValue(), NumberUtil.parseFloat(standardGas.initVal),
-                        NumberUtil.parseFloat(standardGas.targetVal), standardGas.gasUnit, standardGas.passageBean.name,
+                        NumberUtil.parseFloat(standardGas.targetVal),
+                        NumberUtil.parseFloat(standardGas.dilutionMul),
+                        standardGas.gasUnit, standardGas.passageBean.name,
                         standardGas.passageBean.prassage, standardGas.passageBean.selected));
             }
             //methodSave.methodGasConfigs.addAll(datas);
@@ -152,4 +161,25 @@ public class StandardGasConfigViewModel extends BaseViewModel<StandardGasConfigR
             methods.setValue(allMethod);
         }
     });
+
+    //导入放发
+    public void setChoseMethod(MethodSave method) {
+        if (method == null) return;
+        ToMany<MethodGasConfig> methodGasConfigs = method.methodGasConfigs;
+        liveDataStateBean.stand1NameLiveData.setValue(methodGasConfigs.get(0).gasName);
+        liveDataStateBean.stand2NameLiveData.setValue(methodGasConfigs.get(1).gasName);
+        liveDataStateBean.stand3NameLiveData.setValue(methodGasConfigs.get(2).gasName);
+        liveDataStateBean.stand4NameLiveData.setValue(methodGasConfigs.get(3).gasName);
+        liveDataStateBean.mulDiluentNameLiveData.setValue(methodGasConfigs.get(4).gasName);
+        List<StandardGas> value = liveDataStateBean.standardGases.getValue();
+        for (int i = 1; i < 6; i++) {
+            value.get(i).initVal = String.valueOf(methodGasConfigs.get(i - 1).initVal);
+            value.get(i).targetVal = String.valueOf(methodGasConfigs.get(i - 1).targetVal);
+            value.get(i).dilutionMul = String.valueOf(methodGasConfigs.get(i - 1).dilutionMul);
+            value.get(i).gasUnit = methodGasConfigs.get(i - 1).unit;
+            value.get(i).passageBean.selected = methodGasConfigs.get(i - 1).passSwitch;
+        }
+        liveDataStateBean.standardGases.setValue(value);
+
+    }
 }

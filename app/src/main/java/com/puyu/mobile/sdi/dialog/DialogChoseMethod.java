@@ -13,34 +13,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.databinding.DataBindingUtil;
-
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-
+import com.bin.david.form.core.SmartTable;
+import com.bin.david.form.data.CellInfo;
 import com.bin.david.form.data.column.Column;
 import com.bin.david.form.data.format.bg.IBackgroundFormat;
+import com.bin.david.form.data.format.grid.BaseGridFormat;
 import com.bin.david.form.data.style.FontStyle;
-import com.bin.david.form.data.style.LineStyle;
 import com.bin.david.form.data.table.TableData;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.puyu.mobile.sdi.APP;
 import com.puyu.mobile.sdi.R;
 import com.puyu.mobile.sdi.bean.MethodGasConfig;
 import com.puyu.mobile.sdi.bean.MethodSave;
-import com.puyu.mobile.sdi.databinding.DialogChoseMethodBinding;
+import com.puyu.mobile.sdi.db.DBManager;
 import com.puyu.mobile.sdi.mvvm.view.ToastInstance;
 import com.puyu.mobile.sdi.util.CollectionUtil;
 import com.puyu.mobile.sdi.util.ScreenStateUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -51,21 +50,19 @@ import java.util.List;
  * desc   :
  * version: 1.0
  */
-public class DialogChoseMethod extends DialogFragment {
-
-
-
-    DialogChoseMethodBinding binding;
+public class DialogChoseMethod extends DialogFragment implements View.OnClickListener {
     List<MethodSave> data;
-    int showIndex = 1;
+    int showIndex = 0;
     private BaseQuickAdapter<MethodSave, BaseViewHolder> adapter;
     TableData<MethodGasConfig> tableData;
-
+    SmartTable<MethodGasConfig> detailTable;
     Context context;
-    public DialogChoseMethod(Context context,List<MethodSave> data) {
-        this.data = data;
+    ImportMethodCall methodCall;
 
-        this.context =context;
+    public DialogChoseMethod(Context context, ImportMethodCall methodCall, List<MethodSave> data) {
+        this.data = data;
+        this.context = context;
+        this.methodCall = methodCall;
     }
 
 
@@ -78,26 +75,29 @@ public class DialogChoseMethod extends DialogFragment {
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             //dialog.getWindow().getAttributes().windowAnimations = R.style.DialogStyle;
         }
-        binding = DataBindingUtil.inflate(inflater, R.layout.dialog_chose_method, container, false);
-        return binding.getRoot();
+        return inflater.inflate(R.layout.dialog_chose_method, container, false);
 
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.igDismiss.setOnClickListener(this::onViewClicked);
-        binding.btnImport.setOnClickListener(this::onViewClicked);
-        if (CollectionUtil.isEmpty(data))return;
+        view.findViewById(R.id.ig_dismiss).setOnClickListener(this);
+        view.findViewById(R.id.btn_import).setOnClickListener(this);
+        view.findViewById(R.id.btn_delete).setOnClickListener(this);
+        if (CollectionUtil.isEmpty(data)) return;
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
-        binding.nameRecycle.setLayoutManager(manager);
+        RecyclerView nameRecycle = view.findViewById(R.id.name_recycle);
+        nameRecycle.setLayoutManager(manager);
         DividerItemDecoration divider = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
         divider.setDrawable(ContextCompat.getDrawable(context, R.drawable.line_h));
-        binding.nameRecycle.addItemDecoration(divider);
+        nameRecycle.addItemDecoration(divider);
         adapter = new BaseQuickAdapter<MethodSave, BaseViewHolder>(R.layout.item_method_name, data) {
             @Override
             protected void convert(@NonNull BaseViewHolder holder, MethodSave methodSave) {
                 holder.setText(R.id.tv_name, methodSave.gasName)
+                        .setTextColor(R.id.tv_name, ContextCompat.getColor(APP.getInstance(), holder.getLayoutPosition() == showIndex ?
+                                R.color.c_16a5ff : R.color.c_384051))
                         .setVisible(R.id.show_flag, holder.getLayoutPosition() == showIndex);
             }
         };
@@ -110,30 +110,38 @@ public class DialogChoseMethod extends DialogFragment {
                 setTableData(adapter.getItem(i).methodGasConfigs);
             }
         });
-        binding.nameRecycle.setAdapter(adapter);
-        //binding.detailTable.getConfig().setMinTableWidth(ScreenUtil.getWidth() - ScreenUtil.dip2px(10));
-        binding.detailTable.getConfig().setContentStyle(new FontStyle(context, 15,
-                ContextCompat.getColor(context, R.color.c_384051)));
-        binding.detailTable.getConfig().setColumnTitleStyle(new FontStyle(context, 16,
-                ContextCompat.getColor(context, R.color.c_384051)));
-        int dp5 = ScreenStateUtil.dip2px(5);
-        binding.detailTable.getConfig().setColumnTitleBackground(new IBackgroundFormat() {
-            @Override
-            public void drawBackground(Canvas canvas, Rect rect, Paint paint) {
-                paint.setColor(ContextCompat.getColor(context, R.color.c_D5EFFF));
-                canvas.drawRoundRect(new RectF(0, 0,
-                        rect.right - rect.left, rect.bottom - rect.top), dp5, dp5, paint);
-            }
-        });
-        binding.detailTable.getConfig().setShowTableTitle(false);
-        binding.detailTable.getConfig().setShowXSequence(false);
-        binding.detailTable.getConfig().setShowYSequence(false);
-        LineStyle contentGridStyle = new LineStyle();
-        contentGridStyle.setColor(Color.TRANSPARENT);
-        binding.detailTable.getConfig().setContentGridStyle(contentGridStyle);
-        binding.detailTable.getConfig().setColumnTitleGridStyle(contentGridStyle);
-        binding.detailTable.setZoom(false);
+        nameRecycle.setAdapter(adapter);
+        detailTable = view.findViewById(R.id.detail_table);
+
+
+        //int dp5 = ScreenStateUtil.dip2px(5);
+        detailTable.getConfig()
+                .setMinTableWidth((int) ((ScreenStateUtil.getWidth() - ScreenStateUtil.dip2px(50)) * 0.8))
+                .setColumnTitleStyle(new FontStyle(context, 16,
+                        ContextCompat.getColor(context, R.color.c_384051)))
+                .setContentStyle(new FontStyle(context, 15,
+                        ContextCompat.getColor(context, R.color.c_384051)))
+                .setColumnTitleBackground(new IBackgroundFormat() {
+                    @Override
+                    public void drawBackground(Canvas canvas, Rect rect, Paint paint) {
+                        paint.setColor(ContextCompat.getColor(context, R.color.c_D5EFFF));
+                        paint.setStyle(Paint.Style.FILL);
+                        canvas.drawRoundRect(new RectF(0, 0,
+                                rect.right - rect.left, rect.bottom - rect.top), 0, 0, paint);
+                    }
+                })
+                .setShowTableTitle(false)
+                .setShowXSequence(false)
+                .setShowYSequence(false)
+                .setTableGridFormat(new BaseGridFormat() {
+                    @Override
+                    protected boolean isShowVerticalLine(int col, int row, CellInfo cellInfo) {
+                        return false;
+                    }
+                });
+        detailTable.setZoom(false);
         Column<String> passNameCol = new Column<>("通道", "passName");
+        Column<Boolean> passSwitch = new Column<>("开启", "passSwitch");
         int minHeight = ScreenStateUtil.dip2px(40);
         passNameCol.setFixed(true);
         passNameCol.setMinHeight(minHeight);
@@ -142,14 +150,14 @@ public class DialogChoseMethod extends DialogFragment {
         Column<Float> gasTargetValCol = new Column<>("目标值", "targetVal");
         Column<String> gasUnitCol = new Column<>("单位", "unit");
         tableData = new TableData<>("标气配置",
-                data.get(0).methodGasConfigs, passNameCol, gasNameCol, gasInitValCol, gasTargetValCol, gasUnitCol);
-        binding.detailTable.setTableData(tableData);
+                data.get(0).methodGasConfigs, passNameCol, passSwitch, gasNameCol, gasInitValCol, gasTargetValCol, gasUnitCol);
+        detailTable.setTableData(tableData);
     }
 
     public void setTableData(List<MethodGasConfig> data) {
         if (tableData != null) {
             tableData.setT(data);
-            binding.detailTable.notifyDataChanged();
+            detailTable.notifyDataChanged();
         }
 
     }
@@ -158,8 +166,8 @@ public class DialogChoseMethod extends DialogFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        getDialog().getWindow().setLayout(ScreenStateUtil.getWidth()
-                ,ScreenStateUtil.getHeight());
+        getDialog().getWindow().setLayout(ScreenStateUtil.getWidth() - ScreenStateUtil.dip2px(50)
+                , ScreenStateUtil.getHeight() - ScreenStateUtil.dip2px(50));
     }
 
     @Override
@@ -170,26 +178,42 @@ public class DialogChoseMethod extends DialogFragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (binding != null) {
-            binding.unbind();
-        }
-    }
-
-
-    public void onViewClicked(View view) {
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ig_dismiss:
-               // dismiss();
+                dismiss();
+                break;
+            case R.id.btn_delete:
+                if (CollectionUtil.isEmpty(data)) {
+                    ToastInstance.ShowText("暂无方法");
+                    return;
+                }
+                DBManager.getInstance().removeMethod(data.get(showIndex));
+                data.remove(showIndex);
+                adapter.notifyDataSetChanged();
+                if (CollectionUtil.isEmpty(data)) {
+                    tableData = null;
+                    detailTable.setTableData(null);
+                } else {
+                    showIndex = 0;
+                    setTableData(data.get(0).methodGasConfigs);
+                }
+                ToastInstance.ShowText("删除成功");
                 break;
             case R.id.btn_import:
-                ToastInstance.ShowText(adapter.getItem(showIndex).gasName);
+                if (CollectionUtil.isEmpty(data)) {
+                    ToastInstance.ShowText("暂无方法");
+                    return;
+                }
+                if (methodCall != null) {
+                    methodCall.callMethod(adapter.getItem(showIndex));
+                }
+                dismiss();
                 break;
         }
     }
 
-
-
-
+    public interface ImportMethodCall {
+        void callMethod(MethodSave methodSave);
+    }
 }
