@@ -30,7 +30,7 @@ public class ScreenStateUtil {
             WindowManager.LayoutParams layoutParams = ((Activity)context).getWindow().getAttributes();
             layoutParams.flags |=  WindowManager.LayoutParams.FLAG_FULLSCREEN;
             ((Activity)context).getWindow().setAttributes(layoutParams);
-            ((Activity)context).getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+           // ((Activity)context).getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }else{
             //退出全屏
             WindowManager.LayoutParams layoutParams = ((Activity)context).getWindow().getAttributes();
