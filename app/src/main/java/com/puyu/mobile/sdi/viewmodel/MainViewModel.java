@@ -14,6 +14,7 @@ import com.puyu.mobile.sdi.bean.SendGasNameConfig;
 import com.puyu.mobile.sdi.bean.SendRinseConfig;
 import com.puyu.mobile.sdi.bean.SendStandConfig;
 import com.puyu.mobile.sdi.bean.StandardGas;
+import com.puyu.mobile.sdi.bean.WifiLinkStateEnum;
 import com.puyu.mobile.sdi.model.MainRepository;
 import com.puyu.mobile.sdi.mvvm.BaseViewModel;
 import com.puyu.mobile.sdi.mvvm.command.BindingCommand;
@@ -65,11 +66,11 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
         @Override
         public void call(String s) {
             //如果离线 不能启动
-          /*  if (liveDataStateBean.wifiState.getValue() != LinkStateEnum.LinkSuccess) {
+            if (liveDataStateBean.wifiState.getValue() != WifiLinkStateEnum.LinkSuccess) {
                 showWaitingDialog(new DialogOption("未连接仪器", QMUITipDialog.Builder.ICON_TYPE_FAIL));
                delayDisDialog();
                 return;
-            }*/
+            }
             //看是否是空闲可以启动
             RecSystemMonitor monitor = liveDataStateBean.systemMonitor.getValue();
             if (monitor == null) {

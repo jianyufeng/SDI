@@ -142,7 +142,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                     break;
                 case R.id.set:
                     binding.vp2.setCurrentItem(4, false);
-
                     break;
             }
             binding.layoutRealState.setVisibility(checkedId==R.id.set?View.GONE:View.VISIBLE);
@@ -180,13 +179,14 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         });
         client = new NettyConnected();
         client.start();
+        viewModel.liveDataStateBean.setNettyConnected(client);
 //        ChatController.getInstance().waitingForFriends();
     }
-
     NettyConnected client;
 
     @Override
     protected void onDestroy() {
+        viewModel.liveDataStateBean.release();
         super.onDestroy();
         if (client != null) {
             client.close();

@@ -16,6 +16,7 @@ import io.netty.channel.EventLoop;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.bytes.ByteArrayEncoder;
+import io.netty.handler.timeout.IdleStateHandler;
 
 /**
  * author : 简玉锋
@@ -46,7 +47,7 @@ public class NettyConnected extends Thread {
                     protected void initChannel(Channel ch) {
                         ChannelPipeline pipeline = ch.pipeline();
                         //添加心跳处理Handler
-                        //pipeline.addLast("timeOut", new IdleStateHandler(10, 5, 0));
+                        pipeline.addLast("timeOut", new IdleStateHandler(0, 0, 1));
                         pipeline.addLast("frame", new HeaderEnderDecoder());
                         pipeline.addLast("encoder", new ByteArrayEncoder());
                         //  pipeline.addLast("frame1", new GT06MsgDecoder());
@@ -139,7 +140,15 @@ public class NettyConnected extends Thread {
                     }
                 }, 5, TimeUnit.SECONDS);
             } else {
+                //连接成功
+                LiveDataStateBean.getInstant().systemMonitor.postValue(null);
                 LiveDataStateBean.getInstant().wifiState.postValue(WifiLinkStateEnum.LinkSuccess);
+                LiveDataStateBean.getInstant().initSendData();
+                //开始发送指令
+                if (!LiveDataStateBean.getInstant().sendData.isEmpty()) {
+                    byte[] peek = LiveDataStateBean.getInstant().sendData.peek();
+                    sendMsg(peek);
+                }
             }
         }
     }

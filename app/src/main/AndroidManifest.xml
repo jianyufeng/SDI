@@ -4,7 +4,7 @@
     package="com.puyu.mobile.sdi">
     <!-- ObjectBox电脑浏览数据库必备权限，其实就是网络权限 -->
     <!-- ObjectBox电脑浏览数据库必备权限，保持持久连接的权限 -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <!-- 必选-->
@@ -16,7 +16,6 @@
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 网络通信-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />  <!-- 获取设备信息 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 获取网络信息权限-->
-
 
 
     <!-- 用户手机设置中允许未知来源安装包安装状态为关；-->
@@ -36,28 +35,29 @@
         <meta-data
             android:name="PGYER_APPID"
             android:value="96f06449e956118bfc5f7565d48b7144" />
-        <meta-data
-            android:name="PGYER_API_KEY"
-            android:value="c20553a69f7fa992a579e163cdb9717b" />
-        <meta-data
-            android:name="PGYER_FRONTJS_KEY"
-            android:value="ad9afa4aa21fc32ad2cfee55c402838b" />
-        <!--添加新版本检测-->
-        <meta-data
-            android:name="PGYER_FEATURE_CHECK_UNPDATE"
-            android:value="true" />
-<!--
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.puyu.mobile.sdi.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
--->
-        <activity android:name=".act.MainActivity"
+        <!-- <meta-data
+             android:name="PGYER_API_KEY"
+             android:value="c20553a69f7fa992a579e163cdb9717b" />
+         <meta-data
+             android:name="PGYER_FRONTJS_KEY"
+             android:value="ad9afa4aa21fc32ad2cfee55c402838b" />
+         &lt;!&ndash;添加新版本检测&ndash;&gt;
+         <meta-data
+             android:name="PGYER_FEATURE_CHECK_UNPDATE"
+             android:value="true" />-->
+        <!--
+                <provider
+                    android:name="androidx.core.content.FileProvider"
+                    android:authorities="com.puyu.mobile.sdi.fileprovider"
+                    android:exported="false"
+                    android:grantUriPermissions="true">
+                    <meta-data
+                        android:name="android.support.FILE_PROVIDER_PATHS"
+                        android:resource="@xml/file_paths" />
+                </provider>
+        -->
+        <activity
+            android:name=".act.MainActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="landscape">
             <intent-filter>

@@ -14,6 +14,7 @@ import io.netty.buffer.Unpooled;
 
 public class SenDataUtil {
 
+
     //字符串 要添加空格
     public static void add20(ByteBuf byteBuf, String val, int fixedLen, boolean addLen) {
         byte[] name = val.getBytes(StandardCharsets.UTF_8);
@@ -195,7 +196,7 @@ public class SenDataUtil {
     }
 
     //发送获取压力上下限
-    public static void sendGetPressLimit() {
+    public static byte[] sendGetPressLimit() {
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
@@ -208,6 +209,10 @@ public class SenDataUtil {
         System.out.println(ByteBufUtil.hexDump(byteBuf));
         add82(byteBuf);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.getBytes(0, bytes);
+        byteBuf.release();
+        return bytes;
 
     }
 
@@ -231,7 +236,7 @@ public class SenDataUtil {
     }
 
     //发送获取软件版本
-    public static void sendGetVersion() {
+    public static byte[] sendGetVersion() {
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
@@ -244,11 +249,15 @@ public class SenDataUtil {
         System.out.println(ByteBufUtil.hexDump(byteBuf));
         add82(byteBuf);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.getBytes(0, bytes);
+        byteBuf.release();
+        return bytes;
 
     }
 
     //发送获取仪器ID
-    public static void sendGetDeviceID() {
+    public static byte[] sendGetDeviceID() {
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
@@ -261,7 +270,10 @@ public class SenDataUtil {
         System.out.println(ByteBufUtil.hexDump(byteBuf));
         add82(byteBuf);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
-
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.getBytes(0, bytes);
+        byteBuf.release();
+        return bytes;
     }
 
     //发送设置仪器ID
@@ -280,5 +292,26 @@ public class SenDataUtil {
         System.out.println(ByteBufUtil.hexDump(byteBuf));
 
     }
+
+    //获取系统监控
+    public static byte[] sendGetMonitorState() {
+        ByteBuf byteBuf = Unpooled.buffer();
+        byteBuf.writeBytes(ProtocolParams.frameHead);
+        byteBuf.writeBytes(ProtocolParams.sendAddr);
+        byteBuf.writeByte(0x45);
+        byteBuf.writeByte(0x55);
+        byteBuf.writeShort(0);
+        byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
+        byteBuf.writeBytes(crcByte);
+        byteBuf.writeBytes(ProtocolParams.frameEnd);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+        add82(byteBuf);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.getBytes(0, bytes);
+        byteBuf.release();
+        return bytes;
+    }
+
 
 }

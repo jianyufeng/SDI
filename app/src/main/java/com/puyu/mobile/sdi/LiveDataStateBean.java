@@ -10,11 +10,13 @@ import androidx.lifecycle.MutableLiveData;
 import com.puyu.mobile.sdi.bean.RecDeviceId;
 import com.puyu.mobile.sdi.bean.RecDeviceMCUVersion;
 import com.puyu.mobile.sdi.bean.RecDeviceType;
-import com.puyu.mobile.sdi.bean.WifiLinkStateEnum;
 import com.puyu.mobile.sdi.bean.RecPressureLimit;
-import com.puyu.mobile.sdi.bean.StandardGas;
 import com.puyu.mobile.sdi.bean.RecSystemMonitor;
+import com.puyu.mobile.sdi.bean.StandardGas;
+import com.puyu.mobile.sdi.bean.WifiLinkStateEnum;
 import com.puyu.mobile.sdi.mvvm.livedata.SingleLiveEvent;
+import com.puyu.mobile.sdi.netty.NettyConnected;
+import com.puyu.mobile.sdi.netty.SenDataUtil;
 import com.puyu.mobile.sdi.util.NumberUtil;
 import com.puyu.mobile.sdi.util.StringUtil;
 
@@ -68,13 +70,12 @@ public class LiveDataStateBean {
     public LiveDataStateBean() {
     }
 
-    public LinkedBlockingQueue<String> sendData = new LinkedBlockingQueue<String>();
 
 
     //wifi连接状态
     public SingleLiveEvent<WifiLinkStateEnum> wifiState = new SingleLiveEvent<>(WifiLinkStateEnum.LinkStart);
     //仪器ID
-    public MutableLiveData<RecDeviceId> deviceIdLiveData = new MutableLiveData<>(new RecDeviceId("abcdef123"));
+    public MutableLiveData<RecDeviceId> deviceIdLiveData = new MutableLiveData<>(new RecDeviceId(""));
     //仪器MCU版本
     public SingleLiveEvent<RecDeviceMCUVersion> deviceVersion = new SingleLiveEvent<>();
     //仪器类型
@@ -82,7 +83,7 @@ public class LiveDataStateBean {
     //压力上下限
     public SingleLiveEvent<RecPressureLimit> pressureLimit = new SingleLiveEvent<>(new RecPressureLimit(50f, 0.1f));
     //系统监控
-    public SingleLiveEvent<RecSystemMonitor> systemMonitor = new SingleLiveEvent<>(new RecSystemMonitor());
+    public SingleLiveEvent<RecSystemMonitor> systemMonitor = new SingleLiveEvent<>();
     /*********************配气页面的设置*************************************/
     //通道 - 配气页面的设置
     public MutableLiveData<List<StandardGas>> standardGases = new MutableLiveData<>();
@@ -188,4 +189,36 @@ public class LiveDataStateBean {
     /*********************设置界面*************************************/
 
 
+    /********************发送数据使用队列*****************************/
+    public LinkedBlockingQueue<byte[]> sendData = new LinkedBlockingQueue<byte[]>();
+
+    //连接成功 初始化发送的消息
+    public void initSendData() {
+        sendData.clear();
+        sendData.offer(SenDataUtil.sendGetDeviceID());
+        sendData.offer(SenDataUtil.sendGetVersion());
+        sendData.offer(SenDataUtil.sendGetPressLimit());
+    }
+
+    //收到回复发送下个消息
+    public void receiceData() {
+        //弹出
+        sendData.poll();
+        //发送下个指令
+        if (!LiveDataStateBean.getInstant().sendData.isEmpty()) {
+            byte[] peek = LiveDataStateBean.getInstant().sendData.peek();
+            connected.sendMsg(peek);
+        }
+    }
+
+    NettyConnected connected;
+
+    public void setNettyConnected(NettyConnected client) {
+        connected = client;
+    }
+
+    public void release() {
+        connected = null;
+        dataStateBean = null;
+    }
 }
