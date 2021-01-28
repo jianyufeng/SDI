@@ -72,8 +72,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                     byte[] peek = LiveDataStateBean.getInstant().sendData.peek();
                     ctx.channel().writeAndFlush(peek);
                 } else {
-                    //发送监测状态
-                    ctx.channel().writeAndFlush(SenDataUtil.sendGetMonitorState());
+                    //发送监测状态 空闲到的时候都是读取仪器状态
+                    ctx.channel().writeAndFlush(SenDataUtil.getDeviceMonitor);
                 }
             }
         }
@@ -95,7 +95,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
             cmdData.getBytes(4, date);
             if (cmd == ProtocolParams.CMD_DEVICE_ID) { //仪器ID
                 if (rw == ProtocolParams.CMD_Ex_R_R) { //读取仪器ID 返回 12个字节
-                    LiveDataStateBean.getInstant().receiceData();//读取仪器ID
+                    LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_DEVICE_ID);//读取仪器ID
                     //获取数据
                     System.out.println("仪器ID:" + ByteBufUtil.hexDump(date));
                     LiveDataStateBean.getInstant().deviceIdLiveData.postValue(new RecDeviceId(new String(date).trim()));
@@ -118,7 +118,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                 }
             } else if (cmd == ProtocolParams.CMD_DEVICE_Version) { //软件版本号读取
                 if (rw == ProtocolParams.CMD_Ex_R_R) { //软件版本号读取 返回 32个字节
-                    LiveDataStateBean.getInstant().receiceData();//软件版本号读取
+                    LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_DEVICE_Version);//软件版本号读取
                     //获取数据
                     System.out.println("软件版本号读取:" + ByteBufUtil.hexDump(date));
                     LiveDataStateBean.getInstant().deviceVersion.postValue(new RecDeviceMCUVersion(new String(date).trim()));
@@ -127,7 +127,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
             } else if (cmd == ProtocolParams.CMD_DEVICE_Type) { //仪器类型
 
                 if (rw == ProtocolParams.CMD_Ex_R_R) { //仪器类型 返回 1个字节 0x00:静态稀释仪
-                    LiveDataStateBean.getInstant().receiceData();//仪器类型
+                    LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_DEVICE_Type);//仪器类型
                     //获取数据
                     if (date.length == 1 && date[0] == 0x00) {//静态稀释仪
                         System.out.println("仪器类型 读取:" + ByteBufUtil.hexDump(date));
@@ -260,7 +260,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                 if (rw == ProtocolParams.CMD_Ex_R_R) {
                     //读取压力上下限 返回 8 个字节 4字节(FP32)上限压力(0-50psia)4字节(FP32)下限压力(0-1psia)
                     //获取数据
-                    LiveDataStateBean.getInstant().receiceData();//压力上下限
+                    LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_pressure_up_low);//压力上下限
                     if (date.length == 8) {
                         ByteBuf byteBuf = Unpooled.copiedBuffer(date);
                         float ul = byteBuf.readFloat();

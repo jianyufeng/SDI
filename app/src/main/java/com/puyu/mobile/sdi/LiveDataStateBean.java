@@ -190,24 +190,37 @@ public class LiveDataStateBean {
 
 
     /********************发送数据使用队列*****************************/
-    public LinkedBlockingQueue<byte[]> sendData = new LinkedBlockingQueue<byte[]>();
+    public LinkedBlockingQueue<byte[]> sendData = new LinkedBlockingQueue<>();
 
     //连接成功 初始化发送的消息
     public void initSendData() {
         sendData.clear();
-        sendData.offer(SenDataUtil.sendGetDeviceID());
-        sendData.offer(SenDataUtil.sendGetVersion());
-        sendData.offer(SenDataUtil.sendGetPressLimit());
+        sendData.offer(SenDataUtil.getDeviceID);
+        sendData.offer(SenDataUtil.getDeviceVersion);
+        sendData.offer(SenDataUtil.getDeviceType);
+        sendData.offer(SenDataUtil.getDeviceLimit);
     }
 
     //收到回复发送下个消息
-    public void receiceData() {
-        //弹出
-        sendData.poll();
+    public void receiceData(byte type) {
+        //TODO 待验证 类型未区分读写 是否会出现其他问题
+        if (!sendData.isEmpty()) {
+            byte[] peek = sendData.peek();
+            if (peek.length > 6) {
+                if (peek[6] == type) {
+                    //弹出
+                    sendData.poll();
+                }
+            }
+        }
         //发送下个指令
-        if (!LiveDataStateBean.getInstant().sendData.isEmpty()) {
-            byte[] peek = LiveDataStateBean.getInstant().sendData.peek();
+        if (!sendData.isEmpty()) {
+            byte[] peek = sendData.peek();
             connected.sendMsg(peek);
+        } else {
+            //TODO 待验证 队列协议发送完成直接发送监测状态是否会出现其他问题
+            //队列没有待发送的指令后，跟着就发送一次系统监控状态
+            connected.sendMsg(SenDataUtil.sendGetMonitorState());
         }
     }
 

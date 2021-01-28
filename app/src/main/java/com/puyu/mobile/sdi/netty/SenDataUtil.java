@@ -13,6 +13,11 @@ import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 
 public class SenDataUtil {
+    public static final byte[] getDeviceID = new byte[]{0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, ProtocolParams.CMD_DEVICE_ID, 0x55, 0x00, 0x00, 0x7f, 0x1c, 0x7d, 0x7d};
+    public static final byte[] getDeviceVersion = new byte[]{0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, ProtocolParams.CMD_DEVICE_Version, 0x55, 0x00, 0x00, 0x7e, (byte) 0xe0, 0x7d, 0x7d};
+    public static final byte[] getDeviceType = new byte[]{0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, ProtocolParams.CMD_DEVICE_Type, 0x55, 0x00, 0x00, 0x7f, 0x58, 0x7d, 0x7d};
+    public static final byte[] getDeviceLimit = new byte[]{0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, ProtocolParams.CMD_pressure_up_low, 0x55, 0x00, 0x00, 0x7b, 0x54, 0x7d, 0x7d};
+    public static final byte[] getDeviceMonitor = new byte[]{0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, ProtocolParams.CMD_system_monitoring, 0x55, 0x00, 0x00, 0x61, (byte) 0xd0, 0x7d, 0x7d};
 
 
     //字符串 要添加空格
@@ -46,24 +51,181 @@ public class SenDataUtil {
 
     }
 
-    //发送标气名称配置指令
-    public static void sendGasName(SendGasNameConfig gasNameConfig) {
-        ByteBuf byteBuf = Unpooled.buffer();
+    //发送获取仪器ID
+    public static byte[] sendGetDeviceID() {
+       /* ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
-        byteBuf.writeByte(0x34);
-        byteBuf.writeByte(0x66);
-        byteBuf.writeShort(84);
-        add20(byteBuf, gasNameConfig.sGasName1, 20, true);
-        add20(byteBuf, gasNameConfig.sGasName2, 20, true);
-        add20(byteBuf, gasNameConfig.sGasName3, 20, true);
-        add20(byteBuf, gasNameConfig.sGasName4, 20, true);
+        byteBuf.writeByte(0x20);
+        byteBuf.writeByte(0x55);
+        byteBuf.writeShort(0);
         byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
         byteBuf.writeBytes(crcByte);
         byteBuf.writeBytes(ProtocolParams.frameEnd);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
         add82(byteBuf);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.getBytes(0, bytes);
+        byteBuf.release();
+        return bytes;*/
+        //7d7b01f101f3205500007f1c7d7d
+        return getDeviceID;
+    }
+
+    //发送设置仪器ID
+    public static void sendSetDeviceID(String deviceID) {
+        ByteBuf byteBuf = Unpooled.buffer();
+        byteBuf.writeBytes(ProtocolParams.frameHead);
+        byteBuf.writeBytes(ProtocolParams.sendAddr);
+        byteBuf.writeByte(0x20);
+        byteBuf.writeByte(0x66);
+        add20(byteBuf, deviceID, 12, true);
+        byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
+        byteBuf.writeBytes(crcByte);
+        byteBuf.writeBytes(ProtocolParams.frameEnd);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+        add82(byteBuf);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+
+    }
+
+    //发送获取软件版本
+    public static byte[] sendGetVersion() {
+        /*ByteBuf byteBuf = Unpooled.buffer();
+        byteBuf.writeBytes(ProtocolParams.frameHead);
+        byteBuf.writeBytes(ProtocolParams.sendAddr);
+        byteBuf.writeByte(0x21);
+        byteBuf.writeByte(0x55);
+        byteBuf.writeShort(0);
+        byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
+        byteBuf.writeBytes(crcByte);
+        byteBuf.writeBytes(ProtocolParams.frameEnd);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+        add82(byteBuf);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.getBytes(0, bytes);
+        byteBuf.release();
+        return bytes;*/
+        //7d7b01f101f3215500007ee07d7d
+        return getDeviceVersion;
+
+    }
+
+    //发送获取仪器类型
+    public static byte[] sendGetDeviceType() {
+        /*ByteBuf byteBuf = Unpooled.buffer();
+        byteBuf.writeBytes(ProtocolParams.frameHead);
+        byteBuf.writeBytes(ProtocolParams.sendAddr);
+        byteBuf.writeByte(0x23);
+        byteBuf.writeByte(0x55);
+        byteBuf.writeShort(0);
+        byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
+        byteBuf.writeBytes(crcByte);
+        byteBuf.writeBytes(ProtocolParams.frameEnd);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+        add82(byteBuf);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.getBytes(0, bytes);
+        byteBuf.release();
+        return bytes;*/
+        //7d7b01f101f3235500007f587d7d
+        return getDeviceType;
+
+    }
+
+    //发送设置仪器类型
+    public static byte[] sendSetDeviceType() {
+        ByteBuf byteBuf = Unpooled.buffer();
+        byteBuf.writeBytes(ProtocolParams.frameHead);
+        byteBuf.writeBytes(ProtocolParams.sendAddr);
+        byteBuf.writeByte(0x23);
+        byteBuf.writeByte(0x66);
+        byteBuf.writeShort(1);
+        byteBuf.writeByte(0x00);//1字节(INT8U)仪器类型0x00:静态稀释仪
+        byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
+        byteBuf.writeBytes(crcByte);
+        byteBuf.writeBytes(ProtocolParams.frameEnd);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+        add82(byteBuf);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.getBytes(0, bytes);
+        byteBuf.release();
+        return bytes;
+    }
+
+    //发送加压指令
+    public static void sendPressureConfig(boolean start, float targetVal) {
+        System.out.println("start:" + start + " targetVal:" + targetVal);
+        ByteBuf byteBuf = Unpooled.buffer();
+        byteBuf.writeBytes(ProtocolParams.frameHead);
+        byteBuf.writeBytes(ProtocolParams.sendAddr);
+        byteBuf.writeByte(0x30);
+        byteBuf.writeByte(0x66);
+        byteBuf.writeShort(5);
+        byteBuf.writeBoolean(start);
+        byteBuf.writeFloat(targetVal);
+        byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
+        byteBuf.writeBytes(crcByte);
+        byteBuf.writeBytes(ProtocolParams.frameEnd);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+        add82(byteBuf);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+
+    }
+
+    //发送冲洗指令
+    public static void sendRinseConfig(SendRinseConfig configSend) {
+        System.out.println(configSend);
+        ByteBuf byteBuf = Unpooled.buffer();
+        byteBuf.writeBytes(ProtocolParams.frameHead);
+        byteBuf.writeBytes(ProtocolParams.sendAddr);
+        byteBuf.writeByte(0x31);
+        byteBuf.writeByte(0x66);
+        byteBuf.writeShort(17);
+        byteBuf.writeBoolean(configSend.start);
+        byteBuf.writeBoolean(configSend.pass1);
+        byteBuf.writeBoolean(configSend.pass2);
+        byteBuf.writeBoolean(configSend.pass3);
+        byteBuf.writeBoolean(configSend.pass4);
+        byteBuf.writeFloat(configSend.dRimsetime);
+        byteBuf.writeFloat(configSend.sRimsetime);
+        byteBuf.writeFloat(configSend.iimsetime);
+        byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
+        byteBuf.writeBytes(crcByte);
+        byteBuf.writeBytes(ProtocolParams.frameEnd);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+        add82(byteBuf);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+
+    }
+
+    //发送加样指令
+    public static void sendAddSampConfig(boolean start, int passWitch, Float addSampvalue) {
+        System.out.println("start:" + start + " addSampvalue:" + addSampvalue + " passWitch:" + passWitch);
+        ByteBuf byteBuf = Unpooled.buffer();
+        byteBuf.writeBytes(ProtocolParams.frameHead);
+        byteBuf.writeBytes(ProtocolParams.sendAddr);
+        byteBuf.writeByte(0x32);
+        byteBuf.writeByte(0x66);
+        byteBuf.writeShort(10);
+        byteBuf.writeBoolean(start);
+        byteBuf.writeBoolean(passWitch == LiveDataStateBean.stand1PassNumber);
+        byteBuf.writeBoolean(passWitch == LiveDataStateBean.stand2PassNumber);
+        byteBuf.writeBoolean(passWitch == LiveDataStateBean.stand3PassNumber);
+        byteBuf.writeBoolean(passWitch == LiveDataStateBean.stand4PassNumber);
+        byteBuf.writeBoolean(passWitch == LiveDataStateBean.mulDiluentPassNumber);//多级稀释气
+        byteBuf.writeFloat(addSampvalue);
+        byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
+        byteBuf.writeBytes(crcByte);
+        byteBuf.writeBytes(ProtocolParams.frameEnd);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+        add82(byteBuf);
+        System.out.println(ByteBufUtil.hexDump(byteBuf));
+
 
     }
 
@@ -99,82 +261,26 @@ public class SenDataUtil {
         System.out.println(ByteBufUtil.hexDump(byteBuf));
         add82(byteBuf);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
-
-
     }
 
-    //发送冲洗指令
-    public static void sendRinseConfig(SendRinseConfig configSend) {
-        System.out.println(configSend);
+    //发送标气名称配置指令
+    public static void sendGasName(SendGasNameConfig gasNameConfig) {
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
-        byteBuf.writeByte(0x31);
+        byteBuf.writeByte(0x34);
         byteBuf.writeByte(0x66);
-        byteBuf.writeShort(17);
-        byteBuf.writeBoolean(configSend.start);
-        byteBuf.writeBoolean(configSend.pass1);
-        byteBuf.writeBoolean(configSend.pass2);
-        byteBuf.writeBoolean(configSend.pass3);
-        byteBuf.writeBoolean(configSend.pass4);
-        byteBuf.writeFloat(configSend.dRimsetime);
-        byteBuf.writeFloat(configSend.sRimsetime);
-        byteBuf.writeFloat(configSend.iimsetime);
+        byteBuf.writeShort(84);
+        add20(byteBuf, gasNameConfig.sGasName1, 20, true);
+        add20(byteBuf, gasNameConfig.sGasName2, 20, true);
+        add20(byteBuf, gasNameConfig.sGasName3, 20, true);
+        add20(byteBuf, gasNameConfig.sGasName4, 20, true);
         byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
         byteBuf.writeBytes(crcByte);
         byteBuf.writeBytes(ProtocolParams.frameEnd);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
         add82(byteBuf);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
-
-
-    }
-
-    //发送加压指令
-    public static void sendPressureConfig(boolean start, float targetVal) {
-        System.out.println("start:" + start + " targetVal:" + targetVal);
-        ByteBuf byteBuf = Unpooled.buffer();
-        byteBuf.writeBytes(ProtocolParams.frameHead);
-        byteBuf.writeBytes(ProtocolParams.sendAddr);
-        byteBuf.writeByte(0x30);
-        byteBuf.writeByte(0x66);
-        byteBuf.writeShort(5);
-        byteBuf.writeBoolean(start);
-        byteBuf.writeFloat(targetVal);
-        byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
-        byteBuf.writeBytes(crcByte);
-        byteBuf.writeBytes(ProtocolParams.frameEnd);
-        System.out.println(ByteBufUtil.hexDump(byteBuf));
-        add82(byteBuf);
-        System.out.println(ByteBufUtil.hexDump(byteBuf));
-
-
-    }
-
-    //发送加样指令
-    public static void sendAddSampConfig(boolean start, int passWitch, Float addSampvalue) {
-        System.out.println("start:" + start + " addSampvalue:" + addSampvalue + " passWitch:" + passWitch);
-        ByteBuf byteBuf = Unpooled.buffer();
-        byteBuf.writeBytes(ProtocolParams.frameHead);
-        byteBuf.writeBytes(ProtocolParams.sendAddr);
-        byteBuf.writeByte(0x32);
-        byteBuf.writeByte(0x66);
-        byteBuf.writeShort(10);
-        byteBuf.writeBoolean(start);
-        byteBuf.writeBoolean(passWitch == LiveDataStateBean.stand1PassNumber);
-        byteBuf.writeBoolean(passWitch == LiveDataStateBean.stand2PassNumber);
-        byteBuf.writeBoolean(passWitch == LiveDataStateBean.stand3PassNumber);
-        byteBuf.writeBoolean(passWitch == LiveDataStateBean.stand4PassNumber);
-        byteBuf.writeBoolean(passWitch == LiveDataStateBean.mulDiluentPassNumber);//多级稀释气
-        byteBuf.writeFloat(addSampvalue);
-        byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
-        byteBuf.writeBytes(crcByte);
-        byteBuf.writeBytes(ProtocolParams.frameEnd);
-        System.out.println(ByteBufUtil.hexDump(byteBuf));
-        add82(byteBuf);
-        System.out.println(ByteBufUtil.hexDump(byteBuf));
-
-
     }
 
     //发送压力校准
@@ -197,7 +303,7 @@ public class SenDataUtil {
 
     //发送获取压力上下限
     public static byte[] sendGetPressLimit() {
-        ByteBuf byteBuf = Unpooled.buffer();
+        /*ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
         byteBuf.writeByte(0x36);
@@ -212,8 +318,9 @@ public class SenDataUtil {
         byte[] bytes = new byte[byteBuf.readableBytes()];
         byteBuf.getBytes(0, bytes);
         byteBuf.release();
-        return bytes;
-
+        return bytes;*/
+        //7d7b01f101f3365500007b547d7d
+        return getDeviceLimit;
     }
 
     //发送获取压力上下限
@@ -235,67 +342,10 @@ public class SenDataUtil {
         System.out.println(ByteBufUtil.hexDump(byteBuf));
     }
 
-    //发送获取软件版本
-    public static byte[] sendGetVersion() {
-        ByteBuf byteBuf = Unpooled.buffer();
-        byteBuf.writeBytes(ProtocolParams.frameHead);
-        byteBuf.writeBytes(ProtocolParams.sendAddr);
-        byteBuf.writeByte(0x21);
-        byteBuf.writeByte(0x55);
-        byteBuf.writeShort(0);
-        byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
-        byteBuf.writeBytes(crcByte);
-        byteBuf.writeBytes(ProtocolParams.frameEnd);
-        System.out.println(ByteBufUtil.hexDump(byteBuf));
-        add82(byteBuf);
-        System.out.println(ByteBufUtil.hexDump(byteBuf));
-        byte[] bytes = new byte[byteBuf.readableBytes()];
-        byteBuf.getBytes(0, bytes);
-        byteBuf.release();
-        return bytes;
-
-    }
-
-    //发送获取仪器ID
-    public static byte[] sendGetDeviceID() {
-        ByteBuf byteBuf = Unpooled.buffer();
-        byteBuf.writeBytes(ProtocolParams.frameHead);
-        byteBuf.writeBytes(ProtocolParams.sendAddr);
-        byteBuf.writeByte(0x20);
-        byteBuf.writeByte(0x55);
-        byteBuf.writeShort(0);
-        byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
-        byteBuf.writeBytes(crcByte);
-        byteBuf.writeBytes(ProtocolParams.frameEnd);
-        System.out.println(ByteBufUtil.hexDump(byteBuf));
-        add82(byteBuf);
-        System.out.println(ByteBufUtil.hexDump(byteBuf));
-        byte[] bytes = new byte[byteBuf.readableBytes()];
-        byteBuf.getBytes(0, bytes);
-        byteBuf.release();
-        return bytes;
-    }
-
-    //发送设置仪器ID
-    public static void sendSetDeviceID(String deviceID) {
-        ByteBuf byteBuf = Unpooled.buffer();
-        byteBuf.writeBytes(ProtocolParams.frameHead);
-        byteBuf.writeBytes(ProtocolParams.sendAddr);
-        byteBuf.writeByte(0x20);
-        byteBuf.writeByte(0x66);
-        add20(byteBuf, deviceID, 12, true);
-        byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
-        byteBuf.writeBytes(crcByte);
-        byteBuf.writeBytes(ProtocolParams.frameEnd);
-        System.out.println(ByteBufUtil.hexDump(byteBuf));
-        add82(byteBuf);
-        System.out.println(ByteBufUtil.hexDump(byteBuf));
-
-    }
 
     //获取系统监控
     public static byte[] sendGetMonitorState() {
-        ByteBuf byteBuf = Unpooled.buffer();
+       /* ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
         byteBuf.writeByte(0x45);
@@ -310,7 +360,9 @@ public class SenDataUtil {
         byte[] bytes = new byte[byteBuf.readableBytes()];
         byteBuf.getBytes(0, bytes);
         byteBuf.release();
-        return bytes;
+        return bytes;*/
+        //7d7b01f101f34555000061d07d7d
+        return getDeviceMonitor;
     }
 
 

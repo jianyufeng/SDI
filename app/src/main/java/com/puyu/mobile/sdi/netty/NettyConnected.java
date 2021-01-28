@@ -139,16 +139,20 @@ public class NettyConnected extends Thread {
                         nettyClient.reConnect();
                     }
                 }, 5, TimeUnit.SECONDS);
-            } else {
-                //连接成功
+            } else { //连接成功
+
+                //清空监测状态
                 LiveDataStateBean.getInstant().systemMonitor.postValue(null);
-                LiveDataStateBean.getInstant().wifiState.postValue(WifiLinkStateEnum.LinkSuccess);
+                //初始化发送指令
                 LiveDataStateBean.getInstant().initSendData();
                 //开始发送指令
                 if (!LiveDataStateBean.getInstant().sendData.isEmpty()) {
                     byte[] peek = LiveDataStateBean.getInstant().sendData.peek();
                     sendMsg(peek);
                 }
+                //显示连接成功  防止过快点击
+                LiveDataStateBean.getInstant().wifiState.postValue(WifiLinkStateEnum.LinkSuccess);
+
             }
         }
     }
