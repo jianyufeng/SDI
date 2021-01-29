@@ -4,10 +4,10 @@ import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.bean.RecDeviceId;
 import com.puyu.mobile.sdi.bean.RecDeviceMCUVersion;
 import com.puyu.mobile.sdi.bean.RecDeviceType;
-import com.puyu.mobile.sdi.bean.RecSystemMonitor;
-import com.puyu.mobile.sdi.bean.WifiLinkStateEnum;
 import com.puyu.mobile.sdi.bean.RecPressureLimit;
+import com.puyu.mobile.sdi.bean.RecSystemMonitor;
 import com.puyu.mobile.sdi.bean.SysStateEnum;
+import com.puyu.mobile.sdi.bean.WifiLinkStateEnum;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
@@ -60,15 +60,16 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                 //  byte[] bytes = {0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, 0x20, 0x55, 0x00, 0x00, 0x7d, 0x7d};
                 //  channel.writeAndFlush(bytes);
                 System.out.println("-------userEventTriggered WRITER_IDLE" + "  超时\n");
-                // TODO: 2018/6/13
                 //ctx.writeAndFlush(HEARTBEAT_SEQUENCE.duplicate()).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
             } else if (e.state() == IdleState.READER_IDLE) {
                 System.out.println("-------userEventTriggered READER_IDLE" + "  超时\n");
 
             } else if (e.state() == IdleState.ALL_IDLE) {
+                // TODO: 配合发送协议数据
                 System.out.println("-------userEventTriggered ALL_IDLE" + "  超时\n");
-                //开始发送指令
+                //超时   开始发送指令
                 if (!LiveDataStateBean.getInstant().sendData.isEmpty()) {
+                    //未响应之前的指令  继续发送
                     byte[] peek = LiveDataStateBean.getInstant().sendData.peek();
                     ctx.channel().writeAndFlush(peek);
                 } else {
@@ -209,11 +210,13 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                         if (date[0] == ProtocolParams.CMD_set_R_s) { //方法设置成功
                             //写入成功
                             System.out.println("配气方法设置 成功:" + date.length);
+                            LiveDataStateBean.getInstant().disLoadDialog.postValue("设置成功:");
+
 
                         } else if (date[0] == ProtocolParams.CMD_set_R_f) { //方法设置失败
                             //写入失败
                             System.out.println("配气方法设置 失败:" + date.length);
-
+                            LiveDataStateBean.getInstant().disLoadDialog.postValue("设置失败:");
                         }
                     }
 
@@ -286,6 +289,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
 
                 }
             } else if (cmd == ProtocolParams.CMD_system_monitoring) { //系统监控
+                LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_system_monitoring);//系统监控
                 if (rw == ProtocolParams.CMD_Ex_R_R) {
                     RecSystemMonitor monitor = new RecSystemMonitor();
                     //系统监控 返回 76+N个字节  //获取数据

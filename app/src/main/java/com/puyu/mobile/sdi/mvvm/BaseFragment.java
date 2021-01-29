@@ -177,6 +177,7 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseVie
     }
 
     public void showDialog(DialogOption option) {
+        dismissDialog();
         dialog = null;
         dialog = new QMUITipDialog.Builder(getContext())
                 .setIconType(option.type)

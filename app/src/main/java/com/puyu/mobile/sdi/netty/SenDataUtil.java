@@ -261,6 +261,11 @@ public class SenDataUtil {
         System.out.println(ByteBufUtil.hexDump(byteBuf));
         add82(byteBuf);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.getBytes(0, bytes);
+        byteBuf.release();
+        //添加到发送协议数据的队列中
+        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送配气设置
     }
 
     //发送标气名称配置指令
@@ -281,6 +286,11 @@ public class SenDataUtil {
         System.out.println(ByteBufUtil.hexDump(byteBuf));
         add82(byteBuf);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.getBytes(0, bytes);
+        byteBuf.release();
+        //添加到发送协议数据的队列中
+        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送配气名称
     }
 
     //发送压力校准

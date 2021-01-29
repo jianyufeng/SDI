@@ -190,37 +190,37 @@ public class LiveDataStateBean {
 
 
     /********************发送数据使用队列*****************************/
+    public SingleLiveEvent<String> disLoadDialog = new SingleLiveEvent<>();
+
     public LinkedBlockingQueue<byte[]> sendData = new LinkedBlockingQueue<>();
 
     //连接成功 初始化发送的消息
     public void initSendData() {
         sendData.clear();
-        sendData.offer(SenDataUtil.getDeviceID);
-        sendData.offer(SenDataUtil.getDeviceVersion);
-        sendData.offer(SenDataUtil.getDeviceType);
-        sendData.offer(SenDataUtil.getDeviceLimit);
+        sendData.offer(SenDataUtil.getDeviceID);//仪器ID
+        sendData.offer(SenDataUtil.getDeviceVersion);//仪器版本
+        sendData.offer(SenDataUtil.getDeviceType); //仪器类型
+        sendData.offer(SenDataUtil.getDeviceLimit);//仪器上下限
+        sendData.offer(SenDataUtil.getDeviceMonitor); //仪器检测状态
     }
 
     //收到回复发送下个消息
     public void receiceData(byte type) {
         //TODO 待验证 类型未区分读写 是否会出现其他问题
         if (!sendData.isEmpty()) {
-            byte[] peek = sendData.peek();
+            byte[] peek = sendData.peek();//获取上次发送的类型
             if (peek.length > 6) {
                 if (peek[6] == type) {
-                    //弹出
+                    //弹出 收到的和发送的是一致的 去掉发送的
                     sendData.poll();
                 }
             }
-        }
-        //发送下个指令
-        if (!sendData.isEmpty()) {
-            byte[] peek = sendData.peek();
-            connected.sendMsg(peek);
-        } else {
-            //TODO 待验证 队列协议发送完成直接发送监测状态是否会出现其他问题
-            //队列没有待发送的指令后，跟着就发送一次系统监控状态
-            connected.sendMsg(SenDataUtil.sendGetMonitorState());
+            //检测是否有下个指令协议  发送下个指令
+            //TODO 只有等待收到回复 才会发送下次数据
+            if (!sendData.isEmpty()) {
+                byte[] peekNext = sendData.peek();
+                connected.sendMsg(peekNext);
+            }
         }
     }
 

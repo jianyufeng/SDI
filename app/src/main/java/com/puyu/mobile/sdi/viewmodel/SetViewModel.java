@@ -101,7 +101,7 @@ public class SetViewModel extends BaseViewModel<SetRepository> {
         public void call(String s) {
             //获取版本
             SenDataUtil.sendGetVersion();
-            liveDataStateBean.deviceVersion.setValue(new RecDeviceMCUVersion("2.560"));
+            liveDataStateBean.deviceVersion.setValue(new RecDeviceMCUVersion("123456"));
         }
     });
     //获取仪器ID的点击事件

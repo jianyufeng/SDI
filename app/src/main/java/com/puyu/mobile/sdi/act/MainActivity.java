@@ -5,6 +5,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -144,7 +145,14 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                     binding.vp2.setCurrentItem(4, false);
                     break;
             }
-            binding.layoutRealState.setVisibility(checkedId==R.id.set?View.GONE:View.VISIBLE);
+            binding.layoutRealState.setVisibility(checkedId == R.id.set ? View.GONE : View.VISIBLE);
+        });
+        viewModel.liveDataStateBean.disLoadDialog.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String msg) {
+                dismissDialog();
+                showToast(msg);
+            }
         });
     }
 
