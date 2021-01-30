@@ -60,17 +60,25 @@ public class SetFrag extends BaseFragment<FragSetBinding, SetViewModel> {
         viewModel.liveDataStateBean.pressureLimit.observe(this, new Observer<RecPressureLimit>() {
             @Override
             public void onChanged(RecPressureLimit limit) {
-                viewModel.pressUp.setValue(String.valueOf(limit.upLimit));
-                viewModel.pressLow.setValue(String.valueOf(limit.lowLimit));
+                viewModel.liveDataStateBean.pressUp.setValue(String.valueOf(limit.upLimit));
+                viewModel.liveDataStateBean.pressLow.setValue(String.valueOf(limit.lowLimit));
             }
         });
         viewModel.liveDataStateBean.deviceIdLiveData.observe(this, new Observer<RecDeviceId>() {
             @Override
             public void onChanged(RecDeviceId deviceId) {
-                viewModel.changeDeviceID.setValue(deviceId.deviceId);
+                viewModel.liveDataStateBean.changeDeviceID.setValue(deviceId.deviceId);
             }
         });
-
+        viewModel.liveDataStateBean.fragDisLoadDialog.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String msg) {
+                if (SetFrag.this.isResumed()) {//是否是显示的
+                    dismissDialog();
+                    showToast(msg);
+                }
+            }
+        });
     }
 
     @Override

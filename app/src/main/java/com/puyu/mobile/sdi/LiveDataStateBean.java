@@ -187,10 +187,19 @@ public class LiveDataStateBean {
 
 
     /*********************设置界面*************************************/
+    //压力上下限设置
+    //修改上限
+    public SingleLiveEvent<String> pressUp = new SingleLiveEvent<>();
+    //修改下限
+    public SingleLiveEvent<String> pressLow = new SingleLiveEvent<>();
+    //修改仪器ID
+    public SingleLiveEvent<String> changeDeviceID = new SingleLiveEvent<>();
+
 
 
     /********************发送数据使用队列*****************************/
-    public SingleLiveEvent<String> disLoadDialog = new SingleLiveEvent<>();
+    public SingleLiveEvent<String> mainActivityDisLoadDialog = new SingleLiveEvent<>();
+    public SingleLiveEvent<String> fragDisLoadDialog = new SingleLiveEvent<>();
 
     public LinkedBlockingQueue<byte[]> sendData = new LinkedBlockingQueue<>();
 
@@ -201,7 +210,7 @@ public class LiveDataStateBean {
         sendData.offer(SenDataUtil.getDeviceVersion);//仪器版本
         sendData.offer(SenDataUtil.getDeviceType); //仪器类型
         sendData.offer(SenDataUtil.getDeviceLimit);//仪器上下限
-        sendData.offer(SenDataUtil.getDeviceMonitor); //仪器检测状态
+        //sendData.offer(SenDataUtil.getDeviceMonitor); //系统监控
     }
 
     //收到回复发送下个消息
@@ -220,6 +229,9 @@ public class LiveDataStateBean {
             if (!sendData.isEmpty()) {
                 byte[] peekNext = sendData.peek();
                 connected.sendMsg(peekNext);
+            }else {
+                //每次最后都发送一次 系统监控
+                connected.sendMsg(SenDataUtil.getDeviceMonitor);
             }
         }
     }

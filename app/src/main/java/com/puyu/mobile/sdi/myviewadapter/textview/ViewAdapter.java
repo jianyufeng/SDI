@@ -7,6 +7,7 @@ import androidx.databinding.BindingAdapter;
 
 import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.R;
+import com.puyu.mobile.sdi.bean.RecDeviceId;
 import com.puyu.mobile.sdi.bean.RecPressureLimit;
 import com.puyu.mobile.sdi.util.NumberUtil;
 import com.puyu.mobile.sdi.util.StringUtil;
@@ -106,10 +107,10 @@ public class ViewAdapter {
 
     //设置压力下限 报警页面
     @BindingAdapter(value = {"bgPresLimitUp", "bgPresLimitLow", "checkChange"}, requireAll = true)
-    public static void setChangeLimitBg(TextView view, final String upLimit, final String lowLimit, final boolean chenkChange) {
+    public static void setChangeLimitBg(TextView view, final String upLimit, final String lowLimit, final boolean checkChange) {
         Float upV = NumberUtil.parseFloat(upLimit, -1.0f);
         Float lowV = NumberUtil.parseFloat(lowLimit, -1.0f);
-        if (chenkChange) {
+        if (checkChange) {
             RecPressureLimit limit = LiveDataStateBean.getInstant().pressureLimit.getValue();
             if (upV == limit.upLimit && lowV == limit.lowLimit) {
                 view.setBackgroundResource(R.drawable.big_corner_bg);
@@ -129,6 +130,23 @@ public class ViewAdapter {
             view.setBackgroundResource(R.drawable.big_strocke_bg_red);
         } else {
             view.setBackgroundResource(R.drawable.big_corner_bg);
+        }
+    }
+
+    //设置仪器ID按钮 变化页面
+    @BindingAdapter(value = {"bgDeviceIdChange", "checkChange"}, requireAll = true)
+    public static void setBgChangeDeviceId(TextView view, final String deviceId, boolean checkChange) {
+        RecDeviceId recDeviceId = LiveDataStateBean.getInstant().deviceIdLiveData.getValue();
+        if (checkChange) {
+            if (recDeviceId != null) {
+                if (!StringUtil.isEmpty(deviceId) && deviceId.equals(recDeviceId.deviceId)) {
+                    view.setBackgroundResource(R.drawable.big_corner_bg);
+                    view.setTextColor(ContextCompat.getColor(view.getContext(), R.color.c_384051));
+                } else {
+                    view.setBackgroundResource(R.drawable.big_corner_bg_blue);
+                    view.setTextColor(ContextCompat.getColor(view.getContext(), R.color.c_ffffff));
+                }
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ import com.puyu.mobile.sdi.bean.RecPressureLimit;
 import com.puyu.mobile.sdi.bean.RecSystemMonitor;
 import com.puyu.mobile.sdi.bean.SysStateEnum;
 import com.puyu.mobile.sdi.bean.WifiLinkStateEnum;
+import com.puyu.mobile.sdi.util.NumberUtil;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
@@ -96,13 +97,17 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
             cmdData.getBytes(4, date);
             if (cmd == ProtocolParams.CMD_DEVICE_ID) { //仪器ID
                 if (rw == ProtocolParams.CMD_Ex_R_R) { //读取仪器ID 返回 12个字节
-                    LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_DEVICE_ID);//读取仪器ID
+                    LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_DEVICE_ID);//读取仪器ID 获取
                     //获取数据
                     System.out.println("仪器ID:" + ByteBufUtil.hexDump(date));
                     LiveDataStateBean.getInstant().deviceIdLiveData.postValue(new RecDeviceId(new String(date).trim()));
+                    LiveDataStateBean.getInstant().fragDisLoadDialog.postValue("获取成功");
+
                 } else if (rw == ProtocolParams.CMD_Ex_W_R) { //写入仪器ID 返回 1个字节
                     if (date.length == 1) {
                         if (date[0] == ProtocolParams.CMD_Ex_W_R_s) {
+                            LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_DEVICE_ID);//写入仪器ID 成功
+                            LiveDataStateBean.getInstant().fragDisLoadDialog.postValue("设置成功");
                             //写入成功
                             System.out.println("仪器ID 写入成功:" + date.length);
 
@@ -119,16 +124,18 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                 }
             } else if (cmd == ProtocolParams.CMD_DEVICE_Version) { //软件版本号读取
                 if (rw == ProtocolParams.CMD_Ex_R_R) { //软件版本号读取 返回 32个字节
-                    LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_DEVICE_Version);//软件版本号读取
+                    LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_DEVICE_Version);//软件版本号读取 获取
                     //获取数据
                     System.out.println("软件版本号读取:" + ByteBufUtil.hexDump(date));
                     LiveDataStateBean.getInstant().deviceVersion.postValue(new RecDeviceMCUVersion(new String(date).trim()));
+                    LiveDataStateBean.getInstant().fragDisLoadDialog.postValue("获取成功");
+
                 }
 
             } else if (cmd == ProtocolParams.CMD_DEVICE_Type) { //仪器类型
 
                 if (rw == ProtocolParams.CMD_Ex_R_R) { //仪器类型 返回 1个字节 0x00:静态稀释仪
-                    LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_DEVICE_Type);//仪器类型
+                    LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_DEVICE_Type);//仪器类型 获取
                     //获取数据
                     if (date.length == 1 && date[0] == 0x00) {//静态稀释仪
                         System.out.println("仪器类型 读取:" + ByteBufUtil.hexDump(date));
@@ -157,10 +164,14 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                 } else if (rw == ProtocolParams.CMD_Ex_W_R) { //加压方法设置 返回 1个字节
                     if (date.length == 1) {
                         if (date[0] == ProtocolParams.CMD_set_R_s) { //方法设置成功
+                            LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_ADD_Pressurize);//加压方法设置 写入成功
+                            LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("加压方法设置成功");
                             //写入成功
                             System.out.println("加压方法设置 成功:" + date.length);
 
                         } else if (date[0] == ProtocolParams.CMD_set_R_f) { //方法设置失败
+                            LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("加压方法设置失败");
+
                             //写入失败
                             System.out.println("加压方法设置 失败:" + date.length);
 
@@ -174,10 +185,14 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                 } else if (rw == ProtocolParams.CMD_Ex_W_R) { //冲洗方法设置 返回 1个字节
                     if (date.length == 1) {
                         if (date[0] == ProtocolParams.CMD_set_R_s) { //方法设置成功
+                            LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_rinse);//冲洗方法设置 写入成功
+                            LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("冲洗方法设置成功");
                             //写入成功
                             System.out.println("冲洗方法设置 成功:" + date.length);
 
                         } else if (date[0] == ProtocolParams.CMD_set_R_f) { //方法设置失败
+                            LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("冲洗方法设置失败");
+
                             //写入失败
                             System.out.println("冲洗方法设置 失败:" + date.length);
 
@@ -191,10 +206,15 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                 } else if (rw == ProtocolParams.CMD_Ex_W_R) { //加样方法设置 返回 1个字节
                     if (date.length == 1) {
                         if (date[0] == ProtocolParams.CMD_set_R_s) { //方法设置成功
+                            LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_add_samp);//加压方法设置 写入成功
+                            LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("加样方法设置成功");
+
                             //写入成功
                             System.out.println("加样方法 成功:" + date.length);
 
                         } else if (date[0] == ProtocolParams.CMD_set_R_f) { //方法设置失败
+                            LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("加样方法设置失败");
+
                             //写入失败
                             System.out.println("加样方法 失败:" + date.length);
 
@@ -210,13 +230,12 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                         if (date[0] == ProtocolParams.CMD_set_R_s) { //方法设置成功
                             //写入成功
                             System.out.println("配气方法设置 成功:" + date.length);
-                            LiveDataStateBean.getInstant().disLoadDialog.postValue("设置成功:");
-
-
+                            LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_gas_config);//配气方法设置 写入成功
+                            LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("配气方法设置成功");
                         } else if (date[0] == ProtocolParams.CMD_set_R_f) { //方法设置失败
                             //写入失败
                             System.out.println("配气方法设置 失败:" + date.length);
-                            LiveDataStateBean.getInstant().disLoadDialog.postValue("设置失败:");
+                            LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("配气方法设置失败");
                         }
                     }
 
@@ -227,6 +246,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                 } else if (rw == ProtocolParams.CMD_Ex_W_R) { //配气 气体名称设置 返回 1个字节
                     if (date.length == 1) {
                         if (date[0] == ProtocolParams.CMD_Ex_W_R_s) {
+                            LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_gas_name_config);//气体名称设置 写入成功
                             //写入成功
                             System.out.println("配气 气体名称设置 写入成功:" + date.length);
 
@@ -242,16 +262,20 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                     }
 
                 }
-            } else if (cmd == ProtocolParams.CMD_calibration) { //校准 设置
+            } else if (cmd == ProtocolParams.CMD_calibration) { //压力校准 设置
                 if (rw == ProtocolParams.CMD_Ex_R_R) {
                     //获取数据
                 } else if (rw == ProtocolParams.CMD_Ex_W_R) { //校准设置 返回 1个字节
                     if (date.length == 1) {
                         if (date[0] == ProtocolParams.CMD_set_R_s) { //方法设置成功
+                            LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_calibration);//压力校准 成功
+                            LiveDataStateBean.getInstant().fragDisLoadDialog.postValue("压力校准成功");
                             //写入成功
                             System.out.println("校准 成功:" + date.length);
 
                         } else if (date[0] == ProtocolParams.CMD_set_R_f) { //方法设置失败
+                            LiveDataStateBean.getInstant().fragDisLoadDialog.postValue("压力校准失败:");
+
                             //写入失败
                             System.out.println("校准 失败:" + date.length);
 
@@ -263,7 +287,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                 if (rw == ProtocolParams.CMD_Ex_R_R) {
                     //读取压力上下限 返回 8 个字节 4字节(FP32)上限压力(0-50psia)4字节(FP32)下限压力(0-1psia)
                     //获取数据
-                    LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_pressure_up_low);//压力上下限
+                    LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_pressure_up_low);//压力上下限 获取
+                    LiveDataStateBean.getInstant().fragDisLoadDialog.postValue("压力上下限获取成功");
                     if (date.length == 8) {
                         ByteBuf byteBuf = Unpooled.copiedBuffer(date);
                         float ul = byteBuf.readFloat();
@@ -274,13 +299,20 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                         LiveDataStateBean.getInstant().pressureLimit.postValue(new RecPressureLimit(ul, ll));
                     }
 
-                } else if (rw == ProtocolParams.CMD_Ex_W_R) { //校准设置 返回 1个字节
+                } else if (rw == ProtocolParams.CMD_Ex_W_R) { //压力设置 返回 1个字节
                     if (date.length == 1) {
                         if (date[0] == ProtocolParams.CMD_set_R_s) { //方法设置成功
+                            LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_pressure_up_low);//压力上下限 设置成功
+                            LiveDataStateBean.getInstant().fragDisLoadDialog.postValue("压力限值设置成功");
+                            LiveDataStateBean.getInstant().pressureLimit.postValue(
+                                    new RecPressureLimit(NumberUtil.parseFloat(LiveDataStateBean.getInstant().pressUp.getValue(), -1.0f)
+                                            , NumberUtil.parseFloat(LiveDataStateBean.getInstant().pressLow.getValue(), -1.0f)));
                             //写入成功
                             System.out.println("压力上下限 设置成功:" + date.length);
 
                         } else if (date[0] == ProtocolParams.CMD_set_R_f) { //方法设置失败
+                            LiveDataStateBean.getInstant().fragDisLoadDialog.postValue("压力限值设置失败");
+
                             //写入失败
                             System.out.println("压力上下限 设置失败:" + date.length);
 
@@ -289,8 +321,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
 
                 }
             } else if (cmd == ProtocolParams.CMD_system_monitoring) { //系统监控
-                LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_system_monitoring);//系统监控
                 if (rw == ProtocolParams.CMD_Ex_R_R) {
+                    LiveDataStateBean.getInstant().receiceData(ProtocolParams.CMD_system_monitoring);//系统监控 获取
                     RecSystemMonitor monitor = new RecSystemMonitor();
                     //系统监控 返回 76+N个字节  //获取数据
                     if (date.length >= 76) {

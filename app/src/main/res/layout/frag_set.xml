@@ -202,9 +202,9 @@
                     app:layout_constraintTop_toTopOf="@id/tv_pressure_up_val_tip"
                     app:layout_constraintBottom_toBottomOf="@id/tv_pressure_up_val_tip"
                     android:textSize="@dimen/sp16"
-                    android:text="@={viewModel.pressUp}"
-                    app:bgPresLimitUp="@{viewModel.pressUp}"
-                    app:bgPresLimitLow="@{viewModel.pressLow}"
+                    android:text="@={viewModel.liveDataStateBean.pressUp}"
+                    app:bgPresLimitUp="@{viewModel.liveDataStateBean.pressUp}"
+                    app:bgPresLimitLow="@{viewModel.liveDataStateBean.pressLow}"
                     app:checkUp="@{true}"
 
                     android:gravity="center_vertical"
@@ -236,13 +236,13 @@
                     android:singleLine="true"
                     android:imeOptions="actionDone"
                     android:inputType="numberDecimal"
-                    android:text="@={viewModel.pressLow}"
+                    android:text="@={viewModel.liveDataStateBean.pressLow}"
                     android:layout_width="@dimen/dp150"
                     android:background="@drawable/big_corner_bg"
                     android:textColor="@color/c_384051"
                     android:layout_height="@dimen/dp35"
-                    app:bgPresLimitUp="@{viewModel.pressUp}"
-                    app:bgPresLimitLow="@{viewModel.pressLow}"
+                    app:bgPresLimitUp="@{viewModel.liveDataStateBean.pressUp}"
+                    app:bgPresLimitLow="@{viewModel.liveDataStateBean.pressLow}"
                     app:checkUp="@{false}" />
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -276,8 +276,8 @@
                     app:onClickCommand="@{viewModel.changePressLimit}"
                     android:textSize="@dimen/sp16"
                     android:layout_height="@dimen/dp35"
-                    app:bgPresLimitUp="@{viewModel.pressUp}"
-                    app:bgPresLimitLow="@{viewModel.pressLow}"
+                    app:bgPresLimitUp="@{viewModel.liveDataStateBean.pressUp}"
+                    app:bgPresLimitLow="@{viewModel.liveDataStateBean.pressLow}"
                     app:checkChange="@{true}" />
 
 
@@ -406,10 +406,9 @@
                     android:textSize="@dimen/sp16"
                     android:singleLine="true"
                     android:padding="0dp"
-
                     android:imeOptions="actionDone"
-                    app:bgDeviceId="@{viewModel.changeDeviceID}"
-                    android:text="@={viewModel.changeDeviceID}"
+                    app:bgDeviceId="@{viewModel.liveDataStateBean.changeDeviceID}"
+                    android:text="@={viewModel.liveDataStateBean.changeDeviceID}"
                     android:gravity="center_vertical"
                     android:layout_width="@dimen/dp150"
                     android:textColor="@color/c_384051"
@@ -444,8 +443,10 @@
                     android:layout_width="wrap_content"
                     android:text="设置仪器ID"
                     app:isThrottleFirst="@{true}"
+                    app:bgDeviceIdChange = "@{viewModel.liveDataStateBean.changeDeviceID}"
+                    app:checkChange="@{true}"
                     app:onClickCommand="@{viewModel.setDeviceId}"
-                    app:params="@{viewModel.changeDeviceID}"
+                    app:params="@{viewModel.liveDataStateBean.changeDeviceID}"
                     android:textSize="@dimen/sp16"
                     android:background="@drawable/big_corner_bg"
                     android:layout_height="0dp" />

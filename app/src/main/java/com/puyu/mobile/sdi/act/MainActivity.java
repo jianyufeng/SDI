@@ -147,7 +147,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
             }
             binding.layoutRealState.setVisibility(checkedId == R.id.set ? View.GONE : View.VISIBLE);
         });
-        viewModel.liveDataStateBean.disLoadDialog.observe(this, new Observer<String>() {
+        viewModel.liveDataStateBean.mainActivityDisLoadDialog.observe(this, new Observer<String>() {
             @Override
             public void onChanged(String msg) {
                 dismissDialog();

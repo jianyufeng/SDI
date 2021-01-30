@@ -13,11 +13,11 @@ import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 
 public class SenDataUtil {
-    public static final byte[] getDeviceID = new byte[]{0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, ProtocolParams.CMD_DEVICE_ID, 0x55, 0x00, 0x00, 0x7f, 0x1c, 0x7d, 0x7d};
-    public static final byte[] getDeviceVersion = new byte[]{0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, ProtocolParams.CMD_DEVICE_Version, 0x55, 0x00, 0x00, 0x7e, (byte) 0xe0, 0x7d, 0x7d};
-    public static final byte[] getDeviceType = new byte[]{0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, ProtocolParams.CMD_DEVICE_Type, 0x55, 0x00, 0x00, 0x7f, 0x58, 0x7d, 0x7d};
-    public static final byte[] getDeviceLimit = new byte[]{0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, ProtocolParams.CMD_pressure_up_low, 0x55, 0x00, 0x00, 0x7b, 0x54, 0x7d, 0x7d};
-    public static final byte[] getDeviceMonitor = new byte[]{0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, ProtocolParams.CMD_system_monitoring, 0x55, 0x00, 0x00, 0x61, (byte) 0xd0, 0x7d, 0x7d};
+    public static final byte[] getDeviceID = new byte[]{0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, ProtocolParams.CMD_DEVICE_ID,ProtocolParams.CMD_Ex_R_S, 0x00, 0x00, 0x7f, 0x1c, 0x7d, 0x7d};
+    public static final byte[] getDeviceVersion = new byte[]{0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, ProtocolParams.CMD_DEVICE_Version, ProtocolParams.CMD_Ex_R_S, 0x00, 0x00, 0x7e, (byte) 0xe0, 0x7d, 0x7d};
+    public static final byte[] getDeviceType = new byte[]{0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, ProtocolParams.CMD_DEVICE_Type, ProtocolParams.CMD_Ex_R_S, 0x00, 0x00, 0x7f, 0x58, 0x7d, 0x7d};
+    public static final byte[] getDeviceLimit = new byte[]{0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, ProtocolParams.CMD_pressure_up_low, ProtocolParams.CMD_Ex_R_S, 0x00, 0x00, 0x7b, 0x54, 0x7d, 0x7d};
+    public static final byte[] getDeviceMonitor = new byte[]{0x7d, 0x7b, 0x01, (byte) 0xf1, 0x01, (byte) 0xf3, ProtocolParams.CMD_system_monitoring, ProtocolParams.CMD_Ex_R_S, 0x00, 0x00, 0x61, (byte) 0xd0, 0x7d, 0x7d};
 
 
     //字符串 要添加空格
@@ -78,8 +78,8 @@ public class SenDataUtil {
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
-        byteBuf.writeByte(0x20);
-        byteBuf.writeByte(0x66);
+        byteBuf.writeByte(ProtocolParams.CMD_DEVICE_ID);
+        byteBuf.writeByte(ProtocolParams.CMD_Ex_W_S);
         add20(byteBuf, deviceID, 12, true);
         byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
         byteBuf.writeBytes(crcByte);
@@ -87,6 +87,11 @@ public class SenDataUtil {
         System.out.println(ByteBufUtil.hexDump(byteBuf));
         add82(byteBuf);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.getBytes(0, bytes);
+        byteBuf.release();
+        //添加到发送协议数据的队列中
+        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送设置仪器ID
 
     }
 
@@ -141,8 +146,8 @@ public class SenDataUtil {
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
-        byteBuf.writeByte(0x23);
-        byteBuf.writeByte(0x66);
+        byteBuf.writeByte(ProtocolParams.CMD_DEVICE_Type);
+        byteBuf.writeByte(ProtocolParams.CMD_Ex_W_S);
         byteBuf.writeShort(1);
         byteBuf.writeByte(0x00);//1字节(INT8U)仪器类型0x00:静态稀释仪
         byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
@@ -163,8 +168,8 @@ public class SenDataUtil {
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
-        byteBuf.writeByte(0x30);
-        byteBuf.writeByte(0x66);
+        byteBuf.writeByte(ProtocolParams.CMD_ADD_Pressurize);
+        byteBuf.writeByte(ProtocolParams.CMD_Ex_W_S);
         byteBuf.writeShort(5);
         byteBuf.writeBoolean(start);
         byteBuf.writeFloat(targetVal);
@@ -174,6 +179,11 @@ public class SenDataUtil {
         System.out.println(ByteBufUtil.hexDump(byteBuf));
         add82(byteBuf);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.getBytes(0, bytes);
+        byteBuf.release();
+        //添加到发送协议数据的队列中
+        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送加压指令
 
     }
 
@@ -183,8 +193,8 @@ public class SenDataUtil {
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
-        byteBuf.writeByte(0x31);
-        byteBuf.writeByte(0x66);
+        byteBuf.writeByte(ProtocolParams.CMD_rinse);
+        byteBuf.writeByte(ProtocolParams.CMD_Ex_W_S);
         byteBuf.writeShort(17);
         byteBuf.writeBoolean(configSend.start);
         byteBuf.writeBoolean(configSend.pass1);
@@ -200,6 +210,11 @@ public class SenDataUtil {
         System.out.println(ByteBufUtil.hexDump(byteBuf));
         add82(byteBuf);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.getBytes(0, bytes);
+        byteBuf.release();
+        //添加到发送协议数据的队列中
+        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送冲洗指令
 
     }
 
@@ -209,8 +224,8 @@ public class SenDataUtil {
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
-        byteBuf.writeByte(0x32);
-        byteBuf.writeByte(0x66);
+        byteBuf.writeByte(ProtocolParams.CMD_add_samp);
+        byteBuf.writeByte(ProtocolParams.CMD_Ex_W_S);
         byteBuf.writeShort(10);
         byteBuf.writeBoolean(start);
         byteBuf.writeBoolean(passWitch == LiveDataStateBean.stand1PassNumber);
@@ -225,6 +240,11 @@ public class SenDataUtil {
         System.out.println(ByteBufUtil.hexDump(byteBuf));
         add82(byteBuf);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.getBytes(0, bytes);
+        byteBuf.release();
+        //添加到发送协议数据的队列中
+        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送加样指令
 
 
     }
@@ -235,8 +255,8 @@ public class SenDataUtil {
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
-        byteBuf.writeByte(0x33);
-        byteBuf.writeByte(0x66);
+        byteBuf.writeByte(ProtocolParams.CMD_gas_config);
+        byteBuf.writeByte(ProtocolParams.CMD_Ex_W_S);
         byteBuf.writeShort(50);
         byteBuf.writeBoolean(configSend.start);
         byteBuf.writeBoolean(configSend.pass1);
@@ -273,8 +293,8 @@ public class SenDataUtil {
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
-        byteBuf.writeByte(0x34);
-        byteBuf.writeByte(0x66);
+        byteBuf.writeByte(ProtocolParams.CMD_gas_name_config);
+        byteBuf.writeByte(ProtocolParams.CMD_Ex_W_S);
         byteBuf.writeShort(84);
         add20(byteBuf, gasNameConfig.sGasName1, 20, true);
         add20(byteBuf, gasNameConfig.sGasName2, 20, true);
@@ -299,8 +319,8 @@ public class SenDataUtil {
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
-        byteBuf.writeByte(0x35);
-        byteBuf.writeByte(0x66);
+        byteBuf.writeByte(ProtocolParams.CMD_calibration);
+        byteBuf.writeByte(ProtocolParams.CMD_Ex_W_S);
         byteBuf.writeShort(4);
         byteBuf.writeFloat(currentPress);//大气压力 Kpa
         byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
@@ -309,6 +329,11 @@ public class SenDataUtil {
         System.out.println(ByteBufUtil.hexDump(byteBuf));
         add82(byteBuf);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.getBytes(0, bytes);
+        byteBuf.release();
+        //添加到发送协议数据的队列中
+        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送压力校准
     }
 
     //发送获取压力上下限
@@ -333,14 +358,14 @@ public class SenDataUtil {
         return getDeviceLimit;
     }
 
-    //发送获取压力上下限
+    //发送设置压力上下限
     public static void sendSetPressLimit(float upLimit, float lowLimit) {
         System.out.println("upLimit:" + upLimit + " lowLimit:" + lowLimit);
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeBytes(ProtocolParams.frameHead);
         byteBuf.writeBytes(ProtocolParams.sendAddr);
-        byteBuf.writeByte(0x36);
-        byteBuf.writeByte(0x66);
+        byteBuf.writeByte(ProtocolParams.CMD_pressure_up_low);
+        byteBuf.writeByte(ProtocolParams.CMD_Ex_W_S);
         byteBuf.writeShort(8);
         byteBuf.writeFloat(upLimit);//0-50psia
         byteBuf.writeFloat(lowLimit);//0-50psia
@@ -350,6 +375,11 @@ public class SenDataUtil {
         System.out.println(ByteBufUtil.hexDump(byteBuf));
         add82(byteBuf);
         System.out.println(ByteBufUtil.hexDump(byteBuf));
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        byteBuf.getBytes(0, bytes);
+        byteBuf.release();
+        //添加到发送协议数据的队列中
+        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送设置压力上下限
     }
 
 
