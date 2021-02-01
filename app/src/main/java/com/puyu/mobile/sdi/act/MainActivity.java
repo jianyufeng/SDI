@@ -32,7 +32,7 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewModel> {
 
-
+    private RinseFrag rinseFrag;
     /**
      * 延时显示更新对话框
      */
@@ -74,14 +74,15 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     int indw = 0;
     @Override
     protected void initViewObservable() {
-        viewModel.selectType.observe(this, checkedId -> {
+        viewModel.liveDataStateBean.selectType.observe(this, checkedId -> {
             switch (checkedId) {
                 case R.id.standard_gas_config:
                     binding.vp2.setCurrentItem(0, false);
                     break;
                 case R.id.rinse:
                     binding.vp2.setCurrentItem(1, false);
-                    indw++;
+                    rinseFrag.setRefreshAdapter();
+                    /*indw++;
                     if (indw == 1) {
                         byte[] bytes = {0x44, 0x41, 0x7d, 0x7b, 0x01, (byte) 0xf3, 0x01, (byte) 0xf2, 0x7d, (byte) 0x82, (byte) 0xf3, 0x20, 0x7d, (byte) 0x82, 0x7d, 0x7d, 0x00, 0x00};
                         client.sendMsg(bytes);
@@ -133,7 +134,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                                 0x00,
                                 (byte) 0x98, (byte) 0x2d, 0x7d, 0x7d};
                         client.sendMsg(bytes);
-                    }
+                    }*/
                     break;
                 case R.id.pressurize:
                     binding.vp2.setCurrentItem(2, false);
@@ -161,7 +162,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
     protected void initData() {
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(StandardGasConfigFrag.getInstance());
-        fragments.add(RinseFrag.getInstance());
+        fragments.add(rinseFrag = RinseFrag.getInstance());
         fragments.add(PressurizeFrag.getInstance());
         fragments.add(AddSampleFrag.getInstance());
         fragments.add(SetFrag.getInstance());

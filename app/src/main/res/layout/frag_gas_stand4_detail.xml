@@ -47,7 +47,8 @@
             android:text="@={viewModel.liveDataStateBean.standardGases[4].gasName}"
             android:gravity="center_vertical"
             android:layout_width="@dimen/dp150"
-            android:maxEms="10"
+            android:maxLength="20"
+
             android:textColor="@color/c_384051"
             android:layout_height="@dimen/dp35" />
 
@@ -71,7 +72,7 @@
             app:layout_constraintLeft_toRightOf="@id/barrier1"
             android:textSize="@dimen/sp16"
             android:imeOptions="actionDone"
-
+            android:maxLength="4"
             android:inputType="numberDecimal"
             android:singleLine="true"
             app:check0="@{true}"
@@ -111,7 +112,8 @@
             android:onFocusChangeListener="@{(view,hasFocus)->viewModel.liveDataStateBean.viewFocus(view,hasFocus)}"
             android:afterTextChanged="@{(editable)->viewModel.liveDataStateBean.mulChangecalTarget(editable,4,viewModel.liveDataStateBean.standardGases[4].initVal,viewModel.liveDataStateBean.standardGases[4].dilutionMul)}"
             android:text="@={viewModel.liveDataStateBean.standardGases[4].dilutionMul}"
-            android:maxEms="10"
+            android:maxLength="4"
+
             android:background="@drawable/big_corner_bg"
             android:textColor="@color/c_384051"
             android:layout_height="@dimen/dp35" />
@@ -196,7 +198,7 @@
             android:textSize="@dimen/sp16"
             android:padding="0dp"
             android:imeOptions="actionDone"
-
+            android:maxLength="8"
             android:inputType="numberDecimal"
             android:singleLine="true"
             android:layout_width="@dimen/dp150"

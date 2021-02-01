@@ -31,6 +31,10 @@ import java.util.concurrent.LinkedBlockingQueue;
  * version: 1.0
  */
 public class LiveDataStateBean {
+    //tab切换
+    public SingleLiveEvent<Integer> selectType = new SingleLiveEvent<>(0);
+
+
     public static LiveDataStateBean dataStateBean = new LiveDataStateBean();
 
 

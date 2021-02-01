@@ -98,9 +98,6 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
     public void onResume() {
         super.onResume();
         Log.e(TAG, "onResume: ");
-        if (stationAdapter != null) {
-            stationAdapter.notifyDataSetChanged();
-        }
     }
 
     @Override
@@ -139,6 +136,12 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
     public void onDestroy() {
         super.onDestroy();
         Log.e(TAG, "onDestroy: ");
+    }
+
+    public void setRefreshAdapter() {
+        if (stationAdapter!=null){
+            stationAdapter.notifyDataSetChanged();
+        }
     }
 
     private class PassageAdapter extends BaseQuickAdapter<StandardGas, BaseViewHolder> {

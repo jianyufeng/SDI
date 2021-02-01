@@ -98,7 +98,7 @@ public class ViewAdapter {
                 return;
             }
         }
-        if (upV < lowV) {
+        if (upV <= lowV) {
             view.setBackgroundResource(R.drawable.big_strocke_bg_red);
             return;
         }

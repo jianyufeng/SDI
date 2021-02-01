@@ -113,7 +113,7 @@ public class SetViewModel extends BaseViewModel<SetRepository> {
                 showToast("压力下限范围0~1psia");
                 return;
             }
-            if (upV < lowV) {
+            if (upV <= lowV) {
                 showToast("压力上限大于下限");
                 return;
             }

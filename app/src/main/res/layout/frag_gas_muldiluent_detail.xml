@@ -43,7 +43,7 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_gas_name_tip"
             android:textSize="@dimen/sp16"
             android:imeOptions="actionDone"
-
+            android:maxLength="20"
             android:text="@={viewModel.liveDataStateBean.standardGases[5].gasName}"
             android:padding="0dp"
             android:background="@{(StringUtil.isEmpty(viewModel.liveDataStateBean.standardGases[5].gasName)||viewModel.liveDataStateBean.standardGases[5].gasName.getBytes().length&gt;20)?@drawable/big_strocke_bg_red:@drawable/big_corner_bg}"
@@ -75,7 +75,7 @@
             android:singleLine="true"
             android:padding="0dp"
             android:imeOptions="actionDone"
-
+            android:maxLength="4"
             app:bgInitV="@{viewModel.liveDataStateBean.standardGases[5].initVal}"
             app:bgTargetV="@{viewModel.liveDataStateBean.standardGases[5].targetVal}"
             app:check0="@{true}"
@@ -107,13 +107,12 @@
             app:layout_constraintLeft_toRightOf="@id/barrier1"
             android:textSize="@dimen/sp16"
             android:imeOptions="actionDone"
-
+            android:maxLength="4"
             android:layout_width="@dimen/dp150"
             android:onFocusChangeListener="@{(view,hasFocus)->viewModel.liveDataStateBean.viewFocus(view,hasFocus)}"
             android:afterTextChanged="@{(editable)->viewModel.liveDataStateBean.mulChangecalTarget(editable,5,viewModel.liveDataStateBean.standardGases[5].initVal,viewModel.liveDataStateBean.standardGases[5].dilutionMul)}"
             android:text="@={viewModel.liveDataStateBean.standardGases[5].dilutionMul}"
             app:bgMul="@{viewModel.liveDataStateBean.standardGases[5].dilutionMul}"
-            android:maxEms="10"
             android:background="@drawable/big_corner_bg"
             android:textColor="@color/c_384051"
             android:layout_height="@dimen/dp35" />
@@ -198,7 +197,7 @@
             android:textSize="@dimen/sp16"
             android:padding="0dp"
             android:imeOptions="actionDone"
-
+            android:maxLength="8"
             android:singleLine="true"
             android:inputType="numberDecimal"
             android:layout_width="@dimen/dp150"

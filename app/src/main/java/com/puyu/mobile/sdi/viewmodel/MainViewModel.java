@@ -18,7 +18,6 @@ import com.puyu.mobile.sdi.model.MainRepository;
 import com.puyu.mobile.sdi.mvvm.BaseViewModel;
 import com.puyu.mobile.sdi.mvvm.command.BindingCommand;
 import com.puyu.mobile.sdi.mvvm.command.BindingConsumer;
-import com.puyu.mobile.sdi.mvvm.livedata.SingleLiveEvent;
 import com.puyu.mobile.sdi.mvvm.view.DialogOption;
 import com.puyu.mobile.sdi.mvvm.view.QMUITipDialog;
 import com.puyu.mobile.sdi.netty.SenDataUtil;
@@ -43,8 +42,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 public class MainViewModel extends BaseViewModel<MainRepository> {
 
     public final LiveDataStateBean liveDataStateBean;
-    //tab切换
-    public SingleLiveEvent<Integer> selectType = new SingleLiveEvent<>(0);
 
 
     public MainViewModel(@NonNull Application application, MainRepository model) {
@@ -80,7 +77,7 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
             boolean start = monitor.runProcess == 0x00;//空闲状态可以启动
 
             //获取当前显示 点击的页面  获取启动的类型
-            Integer checkedId = selectType.getValue();
+            Integer checkedId = liveDataStateBean.selectType.getValue();
 
             switch (checkedId) {
                 case R.id.standard_gas_config://配气启动
@@ -248,6 +245,6 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
 
     //设置Tab选中事件 切换页面要用
     public void statusCheckListener(int checkId) {
-        selectType.setValue(checkId);
+        liveDataStateBean.selectType.setValue(checkId);
     }
 }
