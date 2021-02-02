@@ -15,9 +15,7 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -28,6 +26,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.MessageToByteEncoder;
+import io.netty.handler.codec.bytes.ByteArrayEncoder;
 
 /**
  * author : 简玉锋
@@ -63,13 +62,14 @@ public class NettyServer {
                             //添加发送数据编码器
                             //pipeline.addLast(new ServerEncoder());
                             //添加解码器，对收到的数据进行解码
-                            pipeline.addLast(new ServerDecoder());
+                            pipeline.addLast("frame", new ServerDecoder());
+                            pipeline.addLast("encoder", new ByteArrayEncoder());
                             //添加数据处理
-                            pipeline.addLast(new ServerHandler());
+                            pipeline.addLast("handler", new ServerHandler()); //添加数据处理器
                         }
                     });
             //服务器启动辅助类配置完成后，调用 bind 方法绑定监听端口，调用 sync 方法同步等待绑定操作完成
-            b.bind(PORT).sync();
+            ChannelFuture f = b.bind(PORT).sync();
             Log.d(TAG, "TCP 服务启动成功 PORT = " + PORT);
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,9 +81,10 @@ public class NettyServer {
         private static final String TAG = "ServerEncoder";
 
         @Override
-        protected void encode(ChannelHandlerContext channelHandlerContext, Object data, ByteBuf byteBuf) throws Exception {
+        protected void encode(ChannelHandlerContext channelHantendlerCoxt, Object data, ByteBuf byteBuf) throws Exception {
             //自己发送过来的东西进行编码
-            byteBuf.writeBytes(data.toString().getBytes());
+            //  byteBuf.writeBytes(data.toString().getBytes());
+
         }
     }
 
@@ -225,19 +226,7 @@ public class NettyServer {
                         //仪器ID
                         byte[] bytes = {0x7d, 0x7b, 0x01, (byte) 0xf3, 0x01, (byte) 0xf1, 0x20, (byte) 0xaa, 0x00, 0x0C,
                                 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x61, 0x62, 0x63, (byte) 0x93, (byte) 0x04, 0x7d, 0x7d};
-                       // channel.write(bytes);
-                       // channel.flush();
-                        channel.write(bytes).addListener(new ChannelFutureListener() {
-                            @Override
-                            public void operationComplete(ChannelFuture future) {
-                                boolean success = future.isSuccess();
-                                boolean done = future.isDone();
-                                System.out.println("服务端 发送：future.isSuccess()：" + future.isSuccess());
-                                System.out.println("服务端 发送：future.isDone()：" + future.isDone());
-
-                            }
-                        });
-                        channel.flush();
+                        channelHandlerContext.channel().writeAndFlush(bytes);
                     } else if (rw == ProtocolParams.CMD_Ex_W_R) { //写入仪器ID 返回 1个字节
                         if (date.length == 1) {
                             if (date[0] == ProtocolParams.CMD_Ex_W_R_s) {
@@ -489,9 +478,7 @@ public class NettyServer {
         public void channelActive(ChannelHandlerContext ctx) throws Exception {
             super.channelActive(ctx);
             System.out.println("有客户端连接过来：" + ctx.toString());
-            channel = ctx.channel();
         }
-        private Channel channel;
 
         /**
          * 有客户端断开了连接的回调
