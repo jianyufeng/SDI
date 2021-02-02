@@ -12,7 +12,7 @@
         android:padding="@dimen/dp10"
         android:text="方法选择"
         android:textColor="@color/c_384051"
-        android:textSize="@dimen/sp20"
+        android:textSize="@dimen/sp16"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -115,6 +115,7 @@
                     <androidx.appcompat.widget.AppCompatEditText
                         android:layout_width="0dp"
                         android:padding="0dp"
+                        android:maxLength="6"
                         android:textSize="@dimen/sp16"
                         android:textColor="@color/c_384051"
                         android:background="@null"
@@ -206,7 +207,7 @@
                     app:bgPresLimitUp="@{viewModel.liveDataStateBean.pressUp}"
                     app:bgPresLimitLow="@{viewModel.liveDataStateBean.pressLow}"
                     app:checkUp="@{true}"
-
+                    android:maxLength="5"
                     android:gravity="center_vertical"
                     android:layout_width="@dimen/dp150"
                     android:textColor="@color/c_384051"
@@ -234,6 +235,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/tv_pressure_down_val_tip"
                     android:textSize="@dimen/sp16"
                     android:singleLine="true"
+                    android:maxLength="5"
                     android:imeOptions="actionDone"
                     android:inputType="numberDecimal"
                     android:text="@={viewModel.liveDataStateBean.pressLow}"
@@ -406,6 +408,7 @@
                     android:textSize="@dimen/sp16"
                     android:singleLine="true"
                     android:padding="0dp"
+                    android:maxLength="12"
                     android:imeOptions="actionDone"
                     app:bgDeviceId="@{viewModel.liveDataStateBean.changeDeviceID}"
                     android:text="@={viewModel.liveDataStateBean.changeDeviceID}"

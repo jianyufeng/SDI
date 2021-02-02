@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <import type="com.puyu.mobile.sdi.LiveDataStateBean" />
         <variable
             name="viewModel"
             type="com.puyu.mobile.sdi.viewmodel.AddSampViewModel" />
@@ -63,7 +63,7 @@
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
                         android:id="@+id/pas_stand1"
-                        android:text="@{viewModel.liveDataStateBean.stand1NameLiveData}"
+                        android:text="@{`(`+LiveDataStateBean.stand1PassNumber+`)`+viewModel.liveDataStateBean.stand1NameLiveData}"
                         android:drawableLeft="@{viewModel.runPassage==viewModel.liveDataStateBean.stand1PassNumber?@android:drawable/ic_notification_overlay:null}"
                         android:layout_weight="1"
                         android:textColor="@color/mul_add_select"
@@ -74,7 +74,7 @@
                         android:drawableLeft="@{viewModel.runPassage==viewModel.liveDataStateBean.stand2PassNumber?@android:drawable/ic_notification_overlay:null}"
 
                         android:layout_width="0dp"
-                        android:text="@{viewModel.liveDataStateBean.stand2NameLiveData}"
+                        android:text="@{`(`+LiveDataStateBean.stand2PassNumber+`)`+viewModel.liveDataStateBean.stand2NameLiveData}"
                         android:layout_weight="1"
                         android:textColor="@color/mul_add_select"
                         android:id="@+id/pas_stand2"
@@ -86,7 +86,7 @@
                         android:layout_width="0dp"
                         android:drawableLeft="@{viewModel.runPassage==viewModel.liveDataStateBean.stand3PassNumber?@android:drawable/ic_notification_overlay:null}"
 
-                        android:text="@{viewModel.liveDataStateBean.stand3NameLiveData}"
+                        android:text="@{`(`+LiveDataStateBean.stand3PassNumber+`)`+viewModel.liveDataStateBean.stand3NameLiveData}"
                         android:layout_weight="1"
                         android:textColor="@color/mul_add_select"
                         android:id="@+id/pas_stand3"
@@ -96,7 +96,7 @@
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
-                        android:text="@{viewModel.liveDataStateBean.stand4NameLiveData}"
+                        android:text="@{`(`+LiveDataStateBean.stand4PassNumber+`)`+viewModel.liveDataStateBean.stand4NameLiveData}"
                         android:layout_weight="1"
                         android:drawableLeft="@{viewModel.runPassage==viewModel.liveDataStateBean.stand4PassNumber?@android:drawable/ic_notification_overlay:null}"
 
@@ -107,7 +107,7 @@
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
-                        android:text="@{viewModel.liveDataStateBean.mulDiluentNameLiveData}"
+                        android:text="@{`(`+LiveDataStateBean.mulDiluentPassNumber+`)`+viewModel.liveDataStateBean.mulDiluentNameLiveData}"
                         android:drawableLeft="@{viewModel.runPassage==viewModel.liveDataStateBean.mulDiluentPassNumber?@android:drawable/ic_notification_overlay:null}"
                         android:layout_weight="1"
                         android:textColor="@color/mul_add_select"
@@ -153,7 +153,6 @@
 
                 <RadioGroup
                     android:onCheckedChanged="@{(group, checkedId)->viewModel.multipleClick(checkedId)}"
-
                     android:padding="@dimen/dp5"
                     android:id="@+id/multiple_rg"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -220,6 +219,7 @@
                     app:layout_constraintBottom_toBottomOf="@id/tv_absolute_pressure_val_tip"
                     android:textSize="@dimen/sp16"
                     android:singleLine="true"
+                    android:maxLength="5"
                     android:inputType="numberDecimal"
                     android:imeOptions="actionDone"
                     app:bgPresVal="@{viewModel.liveDataStateBean.addSampTargetPress}"
@@ -306,17 +306,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/et_target_pressure_val"
                     app:layout_constraintTop_toTopOf="@id/tv_target_pressure_val_tip"
                     app:layout_constraintLeft_toRightOf="@id/tv_target_pressure_val_tip"
                     app:layout_constraintBottom_toBottomOf="@id/tv_target_pressure_val_tip"
                     android:textSize="@dimen/sp16"
                     android:singleLine="true"
+                    android:maxLength="5"
+                    android:gravity="center_vertical"
                     android:layout_width="@dimen/dp150"
                     android:inputType="numberDecimal"
                     android:imeOptions="actionDone"
-
                     app:bgPresVal="@{viewModel.liveDataStateBean.addSampTargetPress}"
                     android:padding="0dp"
                     android:text="@={viewModel.liveDataStateBean.addSampTargetPress}"

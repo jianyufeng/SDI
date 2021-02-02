@@ -63,6 +63,7 @@ public class AddSampleFrag extends BaseFragment<FragAddSampleBinding, AddSampVie
                     binding.multipleRg.setVisibility(View.VISIBLE);
                     binding.gAbsPressure.setVisibility(View.INVISIBLE);
                 } else {
+                    binding.multipleRg.clearCheck();
                     binding.gAbsPressure.setVisibility(View.VISIBLE);
                     binding.multipleRg.setVisibility(View.INVISIBLE);
                 }

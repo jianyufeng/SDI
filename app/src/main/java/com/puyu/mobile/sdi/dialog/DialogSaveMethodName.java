@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.puyu.mobile.sdi.R;
+import com.puyu.mobile.sdi.db.DBManager;
 import com.puyu.mobile.sdi.mvvm.view.ToastInstance;
 import com.puyu.mobile.sdi.util.StringUtil;
 
@@ -87,6 +88,10 @@ public class DialogSaveMethodName extends DialogFragment {
                 String old = etName.getText().toString().trim();
                 if (StringUtil.isEmpty(old)) {
                     ToastInstance.ShowText("请输入方法名");
+                    return;
+                }
+                if (DBManager.getInstance().hasMethodName(old)){
+                    ToastInstance.ShowText("方法名重复");
                     return;
                 }
                 if (confirmMsg != null) confirmMsg.changePsw(old);

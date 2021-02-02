@@ -155,7 +155,7 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
 
         @Override
         protected void convert(BaseViewHolder holder, StandardGas item) {
-            holder.setText(R.id.tv_name, item.gasName.getValue())
+            holder.setText(R.id.tv_name, "(" + item.passageBean.prassage + ")" + item.gasName.getValue())
                     .setChecked(R.id.checkbox, item.passageBean.selected)
                     .setVisible(R.id.checkbox, item.passageBean.prassage != 0)
                     .setEnabled(R.id.layout_content, item.passageBean.prassage != 0)

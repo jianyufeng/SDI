@@ -47,7 +47,7 @@ public class StandGasPassageAdapter extends BaseQuickAdapter<StandardGas, BaseVi
 
     @Override
     protected void convert(BaseViewHolder holder, StandardGas item) {
-        holder.setText(R.id.tv_name, item.passageBean.name + "(" + item.passageBean.prassage + ")")
+        holder.setText(R.id.tv_name, "(" + item.passageBean.prassage + ")" + item.passageBean.name)
                 .setTextColor(R.id.tv_name, ContextCompat.getColor(APP.getInstance(), item.passageBean.selected ?
                         R.color.c_16a5ff : R.color.c_384051))
                 .setVisible(R.id.show_flag, holder.getLayoutPosition() == showIndex)

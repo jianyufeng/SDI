@@ -119,7 +119,7 @@ public class DialogChoseMethod extends DialogFragment implements View.OnClickLis
                 .setMinTableWidth((int) ((ScreenStateUtil.getWidth() - ScreenStateUtil.dip2px(50)) * 0.8))
                 .setColumnTitleStyle(new FontStyle(context, 16,
                         ContextCompat.getColor(context, R.color.c_384051)))
-                .setContentStyle(new FontStyle(context, 15,
+                .setContentStyle(new FontStyle(context, 16,
                         ContextCompat.getColor(context, R.color.c_384051)))
                 .setColumnTitleBackground(new IBackgroundFormat() {
                     @Override
@@ -166,7 +166,7 @@ public class DialogChoseMethod extends DialogFragment implements View.OnClickLis
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        getDialog().getWindow().setLayout(ScreenStateUtil.getWidth() - ScreenStateUtil.dip2px(50)
+        getDialog().getWindow().setLayout(ScreenStateUtil.getWidth() - ScreenStateUtil.dip2px(49)
                 , ScreenStateUtil.getHeight() - ScreenStateUtil.dip2px(50));
     }
 

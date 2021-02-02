@@ -56,5 +56,8 @@ public class DBManager {
         getBox(MethodGasConfig.class).remove(methodGasConfigs);
         return getBox(MethodSave.class).remove(methodSave);
     }
+    public boolean hasMethodName(String name){
+        return getBox(MethodSave.class).query().equal(MethodSave_.gasName,name).build().findFirst()!=null;
+    }
 
 }
