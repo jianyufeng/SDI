@@ -47,7 +47,7 @@ public class NettyConnected extends Thread {
                     protected void initChannel(Channel ch) {
                         ChannelPipeline pipeline = ch.pipeline();
                         //添加心跳处理Handler
-                        pipeline.addLast("timeOut", new IdleStateHandler(0, 0, 1));
+                        pipeline.addLast("timeOut", new IdleStateHandler(0, 0, 10));
                         pipeline.addLast("frame", new HeaderEnderDecoder());
                         pipeline.addLast("encoder", new ByteArrayEncoder());
                         //  pipeline.addLast("frame1", new GT06MsgDecoder());

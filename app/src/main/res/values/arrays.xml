@@ -3,9 +3,9 @@
     <string-array name="unitType">
         <item>ppm</item>
         <item>ppb</item>
-        <item>mg/m3</item>
-        <item>ug/m3</item>
-        <item>ng/m3</item>
+        <item>mg/m³</item>
+        <item>ug/m³</item>
+        <item>ng/m³</item>
     </string-array>
   <string-array name="addPressureType">
         <item>倍数加压</item>
