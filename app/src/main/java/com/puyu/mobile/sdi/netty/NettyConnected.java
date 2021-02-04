@@ -55,8 +55,7 @@ public class NettyConnected extends Thread {
                     }
                 });// 指定Handler
         // 连接到服务端
-        ChannelFuture channelFuture = bootstrap.connect(host,
-                port);
+        ChannelFuture channelFuture = bootstrap.connect(host, port);
         // 添加连接状态监听
         channelFuture.addListener(new ConnectListener(NettyConnected.this));
         try {
@@ -105,7 +104,8 @@ public class NettyConnected extends Thread {
 
     public void sendMsg(byte[] data) {
         if (channel != null) {
-            channel.writeAndFlush(data).addListener(new ChannelFutureListener() {
+            channel.writeAndFlush(data);
+            /*.addListener(new ChannelFutureListener() {
                 @Override
                 public void operationComplete(ChannelFuture future) {
                     boolean success = future.isSuccess();
@@ -113,7 +113,7 @@ public class NettyConnected extends Thread {
                     System.out.println("发送：future.isSuccess()：" + future.isSuccess());
                     System.out.println("发送：future.isDone()：" + future.isDone());
                 }
-            });
+            });*/
         }
     }
 
@@ -143,13 +143,11 @@ public class NettyConnected extends Thread {
 
                 //清空监测状态
                 LiveDataStateBean.getInstant().systemMonitor.postValue(null);
-                //初始化发送指令
+                //初始化发送指令             //开始发送指令
                 LiveDataStateBean.getInstant().initSendData();
-                //开始发送指令
-                if (!LiveDataStateBean.getInstant().sendData.isEmpty()) {
-                    byte[] peek = LiveDataStateBean.getInstant().sendData.peek();
-                    sendMsg(peek);
-                }
+
+
+
                 //显示连接成功  防止过快点击
                 LiveDataStateBean.getInstant().wifiState.postValue(WifiLinkStateEnum.LinkSuccess);
 

@@ -11,7 +11,7 @@ public class RecSystemMonitor {
     public SysStateEnum sysState;//系统状态
     public byte runProcess;//当前运行流程
     public byte runPassage;//当前运行通道数
-    public float currentPress = 0.25f;//当前压力
+    public float currentPress ;//当前压力
     public float targetPress;//目标压力
     public float averagePress;//平均压力
     public float surroundTem;//环境温度

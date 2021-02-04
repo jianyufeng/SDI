@@ -91,7 +91,8 @@ public class SenDataUtil {
         byteBuf.getBytes(0, bytes);
         byteBuf.release();
         //添加到发送协议数据的队列中
-        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送设置仪器ID
+        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送设置仪器ID trySendProtocol
+        LiveDataStateBean.getInstant().trySendProtocol();//发送设置仪器ID
 
     }
 
@@ -183,7 +184,8 @@ public class SenDataUtil {
         byteBuf.getBytes(0, bytes);
         byteBuf.release();
         //添加到发送协议数据的队列中
-        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送加压指令
+        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送加压指令  trySendProtocol
+        LiveDataStateBean.getInstant().trySendProtocol();//发送加压指令
 
     }
 
@@ -214,7 +216,8 @@ public class SenDataUtil {
         byteBuf.getBytes(0, bytes);
         byteBuf.release();
         //添加到发送协议数据的队列中
-        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送冲洗指令
+        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送冲洗指令 trySendProtocol
+        LiveDataStateBean.getInstant().trySendProtocol();//发送冲洗指令
 
     }
 
@@ -244,7 +247,8 @@ public class SenDataUtil {
         byteBuf.getBytes(0, bytes);
         byteBuf.release();
         //添加到发送协议数据的队列中
-        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送加样指令
+        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送加样指令 trySendProtocol
+        LiveDataStateBean.getInstant().trySendProtocol();//发送加样指令
 
 
     }
@@ -285,7 +289,9 @@ public class SenDataUtil {
         byteBuf.getBytes(0, bytes);
         byteBuf.release();
         //添加到发送协议数据的队列中
-        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送配气设置
+        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送配气设置  trySendProtocol
+        LiveDataStateBean.getInstant().trySendProtocol(); //发送配气设置
+
     }
 
     //发送标气名称配置指令
@@ -333,7 +339,8 @@ public class SenDataUtil {
         byteBuf.getBytes(0, bytes);
         byteBuf.release();
         //添加到发送协议数据的队列中
-        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送压力校准
+        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送压力校准   trySendProtocol
+        LiveDataStateBean.getInstant().trySendProtocol();//发送压力校准
     }
 
     //发送获取压力上下限
@@ -379,7 +386,8 @@ public class SenDataUtil {
         byteBuf.getBytes(0, bytes);
         byteBuf.release();
         //添加到发送协议数据的队列中
-        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送设置压力上下限
+        LiveDataStateBean.getInstant().sendData.offer(bytes);//发送设置压力上下限 trySendProtocol
+        LiveDataStateBean.getInstant().trySendProtocol();//发送设置压力上下限
     }
 
 

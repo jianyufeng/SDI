@@ -133,9 +133,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                 binding.rg.check(childAt.getId());
             }
         });
-//        client = new NettyConnected();
-//        client.start();
-//        viewModel.liveDataStateBean.setNettyConnected(client);
+        client = new NettyConnected();
+        client.start();
+        viewModel.liveDataStateBean.setNettyConnected(client);
 //        ChatController.getInstance().waitingForFriends();
         NettyServer nettyServer = new NettyServer();
         nettyServer.startServer();

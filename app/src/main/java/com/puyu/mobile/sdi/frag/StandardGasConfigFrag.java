@@ -128,6 +128,7 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
                 new Observer<RecSystemMonitor>() {
                     @Override
                     public void onChanged(RecSystemMonitor systemMonitor) {
+                        if (systemMonitor == null) return;
                         passageAdapter.setRun(systemMonitor.runProcess, systemMonitor.runPassage);
                     }
                 });

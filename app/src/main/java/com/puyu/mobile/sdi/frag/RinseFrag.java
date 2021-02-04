@@ -89,6 +89,7 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
         viewModel.liveDataStateBean.systemMonitor.observe(this, new Observer<RecSystemMonitor>() {
             @Override
             public void onChanged(RecSystemMonitor systemMonitor) {
+                if (systemMonitor==null)return;
                 stationAdapter.setRun(systemMonitor.runProcess, systemMonitor.runPassage);
             }
         });

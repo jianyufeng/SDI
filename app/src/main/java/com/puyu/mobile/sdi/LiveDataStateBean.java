@@ -16,6 +16,7 @@ import com.puyu.mobile.sdi.bean.StandardGas;
 import com.puyu.mobile.sdi.bean.WifiLinkStateEnum;
 import com.puyu.mobile.sdi.mvvm.livedata.SingleLiveEvent;
 import com.puyu.mobile.sdi.netty.NettyConnected;
+import com.puyu.mobile.sdi.netty.ProtocolParams;
 import com.puyu.mobile.sdi.netty.SenDataUtil;
 import com.puyu.mobile.sdi.util.NumberUtil;
 import com.puyu.mobile.sdi.util.StringUtil;
@@ -87,7 +88,7 @@ public class LiveDataStateBean {
     //压力上下限
     public SingleLiveEvent<RecPressureLimit> pressureLimit = new SingleLiveEvent<>(new RecPressureLimit(50f, 0.1f));
     //系统监控
-    public SingleLiveEvent<RecSystemMonitor> systemMonitor = new SingleLiveEvent<>();
+    public MutableLiveData<RecSystemMonitor> systemMonitor = new MutableLiveData<>();
     /*********************配气页面的设置*************************************/
     //通道 - 配气页面的设置
     public MutableLiveData<List<StandardGas>> standardGases = new MutableLiveData<>();
@@ -215,10 +216,12 @@ public class LiveDataStateBean {
         sendData.offer(SenDataUtil.getDeviceType); //仪器类型
         sendData.offer(SenDataUtil.getDeviceLimit);//仪器上下限
         //sendData.offer(SenDataUtil.getDeviceMonitor); //系统监控
+        //开始发送指令
+        receiveData((byte) 0x00);//假的类型 调用
     }
 
-    //收到回复发送下个消息
-    public void receiceData(byte type) {
+    //收到成功 回复发送下个消息
+    public void receiveData(byte type) {
         //TODO 待验证 类型未区分读写 是否会出现其他问题
         if (!sendData.isEmpty()) {
             byte[] peek = sendData.peek();//获取上次发送的类型
@@ -233,10 +236,66 @@ public class LiveDataStateBean {
             if (!sendData.isEmpty()) {
                 byte[] peekNext = sendData.peek();
                 connected.sendMsg(peekNext);
-            }else {
+            } else {
                 //每次最后都发送一次 系统监控
                 connected.sendMsg(SenDataUtil.getDeviceMonitor);
             }
+        }
+    }
+
+    public int failTimes = 0;
+    public static int MAX_failTimes = 3;
+
+    //收到失败 再次发送协议 3次后还失败，发送下一条协议
+    public void receiveFailData(byte type, boolean isFrag, String tipMSg) {
+        //TODO 待验证 只有写
+        if (!sendData.isEmpty()) {
+            failTimes++; //失败次数累计
+            System.out.println("失败次数" + failTimes);
+            if (failTimes > MAX_failTimes) {
+                sendData.poll();
+                failTimes = 0;
+                //TODO 待验证 名称设置失败 其他设置是否也需要设置名称
+                if (ProtocolParams.CMD_gas_name_config == type) { //配气名称失败或者出错
+                    sendData.poll();//继续弹出
+                }
+                //失败提醒
+                if (isFrag) {
+                    fragDisLoadDialog.postValue(tipMSg);
+                } else {
+                    mainActivityDisLoadDialog.postValue(tipMSg);
+                }
+            }
+            if (!sendData.isEmpty()) {
+                byte[] peek = sendData.peek();//继续发送协议数据
+                connected.sendMsg(peek);
+            }
+        }
+    }
+
+    //添加了发送数据 测试是否是空闲状态下可以发送
+    public void trySendProtocol() {
+        if (!idleSended) {
+            if (!sendData.isEmpty()) {
+                byte[] peekNext = sendData.peek();
+                connected.sendMsg(peekNext);
+            }
+        }
+    }
+
+    //空闲已发送状态监测
+    public volatile boolean idleSended = false;
+
+    //netty设置空闲时间 处理空闲时获取仪器状态
+    public void allIdleDeal() {
+        if (!sendData.isEmpty()) {
+            //未响应之前的指令  继续发送
+            byte[] peek = LiveDataStateBean.getInstant().sendData.peek();
+            connected.sendMsg(peek);
+        } else {
+            idleSended = true;//已经发送
+            //发送监测状态 空闲到的时候都是读取仪器状态
+            connected.sendMsg(SenDataUtil.getDeviceMonitor);
         }
     }
 

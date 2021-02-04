@@ -19,6 +19,7 @@ import com.puyu.mobile.sdi.databinding.FragSetBinding;
 import com.puyu.mobile.sdi.model.SetRepository;
 import com.puyu.mobile.sdi.mvvm.BaseFragment;
 import com.puyu.mobile.sdi.mvvm.ViewModelParamsFactory;
+import com.puyu.mobile.sdi.util.NumberUtil;
 import com.puyu.mobile.sdi.viewmodel.SetViewModel;
 
 /**
@@ -60,8 +61,8 @@ public class SetFrag extends BaseFragment<FragSetBinding, SetViewModel> {
         viewModel.liveDataStateBean.pressureLimit.observe(this, new Observer<RecPressureLimit>() {
             @Override
             public void onChanged(RecPressureLimit limit) {
-                viewModel.liveDataStateBean.pressUp.setValue(String.valueOf(limit.upLimit));
-                viewModel.liveDataStateBean.pressLow.setValue(String.valueOf(limit.lowLimit));
+                viewModel.liveDataStateBean.pressUp.setValue(String.valueOf(NumberUtil.keepPrecision(limit.upLimit,2)));
+                viewModel.liveDataStateBean.pressLow.setValue(String.valueOf(NumberUtil.keepPrecision(limit.lowLimit,2)));
             }
         });
         viewModel.liveDataStateBean.deviceIdLiveData.observe(this, new Observer<RecDeviceId>() {

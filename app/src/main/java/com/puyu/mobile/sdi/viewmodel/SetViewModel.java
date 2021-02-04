@@ -93,7 +93,8 @@ public class SetViewModel extends BaseViewModel<SetRepository> {
             showWaitingDialog(new DialogOption("正在获取", QMUITipDialog.Builder.ICON_TYPE_LOADING));
             //获取限值
             //SenDataUtil.sendGetPressLimit();
-            LiveDataStateBean.getInstant().sendData.offer(SenDataUtil.getDeviceLimit);//获取压力上下限
+            LiveDataStateBean.getInstant().sendData.offer(SenDataUtil.getDeviceLimit);//获取压力上下限 trySendProtocol
+            LiveDataStateBean.getInstant().trySendProtocol();//获取压力上下限
             //liveDataStateBean.pressureLimit.setValue(liveDataStateBean.pressureLimit.getValue());
 
         }
@@ -134,7 +135,8 @@ public class SetViewModel extends BaseViewModel<SetRepository> {
             //获取版本
             //SenDataUtil.sendGetVersion();
             //liveDataStateBean.deviceVersion.setValue(new RecDeviceMCUVersion("123456"));
-            LiveDataStateBean.getInstant().sendData.offer(SenDataUtil.getDeviceVersion);//获取版本
+            LiveDataStateBean.getInstant().sendData.offer(SenDataUtil.getDeviceVersion);//获取版本  trySendProtocol
+            LiveDataStateBean.getInstant().trySendProtocol();//获取版本
 
 
         }
@@ -149,7 +151,8 @@ public class SetViewModel extends BaseViewModel<SetRepository> {
             //获取ID
             // SenDataUtil.sendGetDeviceID();
             //liveDataStateBean.deviceIdLiveData.setValue(new RecDeviceId("fsdfdsfds5"));
-            LiveDataStateBean.getInstant().sendData.offer(SenDataUtil.getDeviceID);//获取ID
+            LiveDataStateBean.getInstant().sendData.offer(SenDataUtil.getDeviceID);//获取ID trySendProtocol
+            LiveDataStateBean.getInstant().trySendProtocol();//获取ID
 
         }
     });
@@ -157,7 +160,7 @@ public class SetViewModel extends BaseViewModel<SetRepository> {
     public BindingCommand<String> setDeviceId = new BindingCommand<>(new BindingConsumer<String>() {
         @Override
         public void call(String deviceId) {
-            if (StringUtil.isEmpty(deviceId) || deviceId.getBytes().length > 12) {
+            if (StringUtil.isEmpty(deviceId) || deviceId.trim().getBytes().length > 12) {
                 showToast("仪器ID长度有误");
                 return;
             }
@@ -165,7 +168,7 @@ public class SetViewModel extends BaseViewModel<SetRepository> {
             //显示加载框
             showWaitingDialog(new DialogOption("正在设置", QMUITipDialog.Builder.ICON_TYPE_LOADING));
             //设置版本
-            SenDataUtil.sendSetDeviceID(deviceId);
+            SenDataUtil.sendSetDeviceID(deviceId.trim());
         }
     });
 }

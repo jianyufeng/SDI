@@ -62,16 +62,14 @@ public class HeaderEnderDecoder extends ByteToMessageDecoder {
             return;
         }
         //5. 验证数据帧7D82
-        if (childBuf != null) {
-            System.out.println("协议数据去掉头尾----:" + ByteBufUtil.hexDump(childBuf));
-            int index;
-            while ((index = ByteBufUtil.indexOf(filter, childBuf)) != -1) {
-                //有
-                int length = childBuf.readableBytes();
-                childBuf.writerIndex(index + 1);
-                childBuf.writeBytes(childBuf, index + filter.capacity(), length - childBuf.writerIndex() - 1);
-                System.out.println("协议数据去掉7D82中的82----:" + ByteBufUtil.hexDump(childBuf));
-            }
+        System.out.println("协议数据去掉头尾----:" + ByteBufUtil.hexDump(childBuf));
+        int index;
+        while ((index = ByteBufUtil.indexOf(filter, childBuf)) != -1) {
+            //有
+            int length = childBuf.readableBytes();
+            childBuf.writerIndex(index + 1);
+            childBuf.writeBytes(childBuf, index + filter.capacity(), length - childBuf.writerIndex() - 1);
+            System.out.println("协议数据去掉7D82中的82----:" + ByteBufUtil.hexDump(childBuf));
         }
         //6.验证CRC校验
         //CRC校验
@@ -83,10 +81,8 @@ public class HeaderEnderDecoder extends ByteToMessageDecoder {
             return;
         }
         // 如果获得有效数据
-        if (childBuf != null) {
-            // 将有效数据备份加入接收列表
-            out.add(childBuf.copy(4,childBuf.readableBytes()-6));
-        }
+        // 将有效数据备份加入接收列表
+        out.add(childBuf.copy(4,childBuf.readableBytes()-6));
     }
 
 

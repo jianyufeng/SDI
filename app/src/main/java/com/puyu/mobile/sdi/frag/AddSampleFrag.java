@@ -81,6 +81,7 @@ public class AddSampleFrag extends BaseFragment<FragAddSampleBinding, AddSampVie
         viewModel.liveDataStateBean.systemMonitor.observe(this, new Observer<RecSystemMonitor>() {
             @Override
             public void onChanged(RecSystemMonitor systemMonitor) {
+                if (systemMonitor==null)return;
                 byte cRunProcess = systemMonitor.runProcess;
                 byte cRunPassage = systemMonitor.runPassage;
                 if (cRunProcess == (byte) 0x04) { //加样
