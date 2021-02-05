@@ -162,7 +162,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                     if (date.length == 1) {
                         if (date[0] == ProtocolParams.CMD_set_R_s) { //方法设置成功
                             LiveDataStateBean.getInstant().receiveData(ProtocolParams.CMD_ADD_Pressurize);//加压方法设置 写入成功
-                            LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("加压方法设置成功");
+                            LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("设置成功");
                             //写入成功
                             System.out.println("加压方法设置 成功:" + date.length);
 
@@ -182,7 +182,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                     if (date.length == 1) {
                         if (date[0] == ProtocolParams.CMD_set_R_s) { //方法设置成功
                             LiveDataStateBean.getInstant().receiveData(ProtocolParams.CMD_rinse);//冲洗方法设置 写入成功
-                            LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("冲洗方法设置成功");
+                            LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("设置成功");
                             //写入成功
                             System.out.println("冲洗方法设置 成功:" + date.length);
 
@@ -203,7 +203,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                     if (date.length == 1) {
                         if (date[0] == ProtocolParams.CMD_set_R_s) { //方法设置成功
                             LiveDataStateBean.getInstant().receiveData(ProtocolParams.CMD_add_samp);//加压方法设置 写入成功
-                            LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("加样方法设置成功");
+                            LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("设置成功");
 
                             //写入成功
                             System.out.println("加样方法 成功:" + date.length);
@@ -226,7 +226,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                             //写入成功
                             System.out.println("配气方法设置 成功:" + date.length);
                             LiveDataStateBean.getInstant().receiveData(ProtocolParams.CMD_gas_config);//配气方法设置 写入成功
-                            LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("配气方法设置成功");
+                            LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("设置成功");
                         } else if (date[0] == ProtocolParams.CMD_set_R_f) { //方法设置失败
                             LiveDataStateBean.getInstant().receiveFailData(ProtocolParams.CMD_gas_config, false, "配气方法设置失败");//写入配气方法设置失败 失败
                             //写入失败
@@ -293,7 +293,9 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                         float ll = byteBuf.readFloat();
                         System.out.println("压力下限:" + ll);
                         byteBuf.release();
-                        LiveDataStateBean.getInstant().pressureLimit.postValue(new RecPressureLimit(ul, ll));
+                        LiveDataStateBean.getInstant().pressureLimit.postValue(
+                                new RecPressureLimit(NumberUtil.keepPrecision(ul, 2),
+                                        NumberUtil.keepPrecision(ll, 2)));
                     }
 
                 } else if (rw == ProtocolParams.CMD_Ex_W_R) { //压力设置 返回 1个字节
@@ -378,7 +380,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                         } else if (runPassage == 0x06) {
                             System.out.println("当前运行通道数 二级稀释气");
                         }
-                        monitor.runPassage = runProcess;
+                        monitor.runPassage = runPassage;
 
                         //4字节(FP32)当前压力(psi)
                         byte[] currentPress = new byte[]{date[3], date[4], date[5], date[6]};
@@ -487,6 +489,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                         float d2rt = ByteBuffer.wrap(diluent2RunTime).getFloat();
                         System.out.println("二级稀释气配气运行时间:" + d2rt);
                         monitor.diluent2RunTime = d2rt;
+
+                        monitor.runAllTime = drt + sp1rt + sp2rt + sp3rt + sp4rt + mdrt + d2rt;
 
 
                         //1字节(INT8U)报警码个数N（0-10）

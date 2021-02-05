@@ -98,8 +98,6 @@ public class StandardGasConfigFrag extends BaseFragment<FragStandardGasConfigBin
             }
         });
         binding.rvPassage.setAdapter(passageAdapter);
-
-
         //创建右边的配置页面
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(GasDiluentDetailFrag.getInstance());

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.R;
+import com.puyu.mobile.sdi.bean.LabelSave;
 import com.puyu.mobile.sdi.bean.RecPressureLimit;
 import com.puyu.mobile.sdi.bean.RecSystemMonitor;
 import com.puyu.mobile.sdi.bean.SendGasNameConfig;
@@ -18,6 +19,7 @@ import com.puyu.mobile.sdi.model.MainRepository;
 import com.puyu.mobile.sdi.mvvm.BaseViewModel;
 import com.puyu.mobile.sdi.mvvm.command.BindingCommand;
 import com.puyu.mobile.sdi.mvvm.command.BindingConsumer;
+import com.puyu.mobile.sdi.mvvm.livedata.SingleLiveEvent;
 import com.puyu.mobile.sdi.mvvm.view.DialogOption;
 import com.puyu.mobile.sdi.mvvm.view.QMUITipDialog;
 import com.puyu.mobile.sdi.netty.SenDataUtil;
@@ -25,6 +27,7 @@ import com.puyu.mobile.sdi.util.CollectionUtil;
 import com.puyu.mobile.sdi.util.NumberUtil;
 import com.puyu.mobile.sdi.util.StringUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -43,6 +46,7 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
 
     public final LiveDataStateBean liveDataStateBean;
 
+    public SingleLiveEvent<List<LabelSave>> labels = new SingleLiveEvent<>();
 
     public MainViewModel(@NonNull Application application, MainRepository model) {
         super(application, model);
@@ -58,6 +62,14 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
             dismissDialog();
         });
     }
+
+    //启动按钮的点击事件  打印标签
+    public BindingCommand<String> printLabel = new BindingCommand<>(new BindingConsumer<String>() {
+        @Override
+        public void call(String s) {
+            labels.setValue(new ArrayList<>());
+        }
+    });
 
     //启动按钮的点击事件
     public BindingCommand<String> startRun = new BindingCommand<>(new BindingConsumer<String>() {

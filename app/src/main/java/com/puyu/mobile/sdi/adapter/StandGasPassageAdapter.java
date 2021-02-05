@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.puyu.mobile.sdi.APP;
+import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.R;
 import com.puyu.mobile.sdi.bean.StandardGas;
 
@@ -32,7 +33,7 @@ public class StandGasPassageAdapter extends BaseQuickAdapter<StandardGas, BaseVi
         super(R.layout.item_passage, standardGases.subList(0, standardGases.size() - 1));
         this.recyclerView = recyclerView;
         md = ContextCompat.getDrawable(APP.getInstance(), android.R.drawable.ic_notification_overlay);
-
+        md.setBounds(0, 0, md.getMinimumWidth(), md.getMinimumHeight());//必须设置图片大小，否则不显示
     }
 
     //显示对应的Tab  Tab和标气配置页面一致
@@ -65,10 +66,22 @@ public class StandGasPassageAdapter extends BaseQuickAdapter<StandardGas, BaseVi
             if (cRunPassage != mPassage) {
                 mPassage = cRunPassage;
                 notifyDataSetChanged();
+                showFrag(cRunPassage);
             }
         } else if (mPassage != -1) {
             mPassage = -1;
             notifyDataSetChanged();
+        }
+    }
+
+    private void showFrag(byte cRunPassage) {
+        List<StandardGas> data = getData();
+        for (int i = 0; i < data.size(); i++) {
+            int prassage = data.get(i).passageBean.prassage;
+            if (cRunPassage==prassage){
+                LiveDataStateBean.getInstant().showIndexFrag.setValue(data.get(i).passageBean.index);
+                break;
+            }
         }
     }
 

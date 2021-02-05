@@ -203,8 +203,8 @@ public class LiveDataStateBean {
 
 
     /********************发送数据使用队列*****************************/
-    public SingleLiveEvent<String> mainActivityDisLoadDialog = new SingleLiveEvent<>();
-    public SingleLiveEvent<String> fragDisLoadDialog = new SingleLiveEvent<>();
+    public MutableLiveData<String> mainActivityDisLoadDialog = new MutableLiveData<>();
+    public MutableLiveData<String> fragDisLoadDialog = new MutableLiveData<>();
 
     public LinkedBlockingQueue<byte[]> sendData = new LinkedBlockingQueue<>();
 
@@ -303,10 +303,5 @@ public class LiveDataStateBean {
 
     public void setNettyConnected(NettyConnected client) {
         connected = client;
-    }
-
-    public void release() {
-        connected = null;
-        dataStateBean = null;
     }
 }

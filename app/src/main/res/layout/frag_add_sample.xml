@@ -64,14 +64,14 @@
                         android:layout_width="0dp"
                         android:id="@+id/pas_stand1"
                         android:text="@{`(`+LiveDataStateBean.stand1PassNumber+`)`+viewModel.liveDataStateBean.stand1NameLiveData}"
-                        android:drawableLeft="@{viewModel.runPassage==viewModel.liveDataStateBean.stand1PassNumber?@android:drawable/ic_notification_overlay:null}"
+                        android:drawableLeft="@{viewModel.runPassage==LiveDataStateBean.stand1PassNumber?@android:drawable/ic_notification_overlay:null}"
                         android:layout_weight="1"
                         android:textColor="@color/mul_add_select"
                         android:textSize="@dimen/sp16"
                         android:layout_height="wrap_content" />
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
-                        android:drawableLeft="@{viewModel.runPassage==viewModel.liveDataStateBean.stand2PassNumber?@android:drawable/ic_notification_overlay:null}"
+                        android:drawableLeft="@{viewModel.runPassage==LiveDataStateBean.stand2PassNumber?@android:drawable/ic_notification_overlay:null}"
 
                         android:layout_width="0dp"
                         android:text="@{`(`+LiveDataStateBean.stand2PassNumber+`)`+viewModel.liveDataStateBean.stand2NameLiveData}"
@@ -84,7 +84,7 @@
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
-                        android:drawableLeft="@{viewModel.runPassage==viewModel.liveDataStateBean.stand3PassNumber?@android:drawable/ic_notification_overlay:null}"
+                        android:drawableLeft="@{viewModel.runPassage==LiveDataStateBean.stand3PassNumber?@android:drawable/ic_notification_overlay:null}"
 
                         android:text="@{`(`+LiveDataStateBean.stand3PassNumber+`)`+viewModel.liveDataStateBean.stand3NameLiveData}"
                         android:layout_weight="1"
@@ -98,7 +98,7 @@
                         android:layout_width="0dp"
                         android:text="@{`(`+LiveDataStateBean.stand4PassNumber+`)`+viewModel.liveDataStateBean.stand4NameLiveData}"
                         android:layout_weight="1"
-                        android:drawableLeft="@{viewModel.runPassage==viewModel.liveDataStateBean.stand4PassNumber?@android:drawable/ic_notification_overlay:null}"
+                        android:drawableLeft="@{viewModel.runPassage==LiveDataStateBean.stand4PassNumber?@android:drawable/ic_notification_overlay:null}"
 
                         android:textColor="@color/mul_add_select"
                         android:textSize="@dimen/sp16"
@@ -108,7 +108,7 @@
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="0dp"
                         android:text="@{`(`+LiveDataStateBean.mulDiluentPassNumber+`)`+viewModel.liveDataStateBean.mulDiluentNameLiveData}"
-                        android:drawableLeft="@{viewModel.runPassage==viewModel.liveDataStateBean.mulDiluentPassNumber?@android:drawable/ic_notification_overlay:null}"
+                        android:drawableLeft="@{viewModel.runPassage==LiveDataStateBean.mulDiluentPassNumber?@android:drawable/ic_notification_overlay:null}"
                         android:layout_weight="1"
                         android:textColor="@color/mul_add_select"
                         android:textSize="@dimen/sp16"

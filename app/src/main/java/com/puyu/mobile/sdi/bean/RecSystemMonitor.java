@@ -31,7 +31,7 @@ public class RecSystemMonitor {
     public float standP4RunTime;//标气通道4配气运行时间
     public float mulDiluentRunTime;//多级稀释气配气运行时间
     public float diluent2RunTime;//二级稀释气配气运行时间
-
+    public float runAllTime;//总运行时间
 
     public byte alarmNumber;//报警码个数N
     public byte[] alarmCode;//报警码

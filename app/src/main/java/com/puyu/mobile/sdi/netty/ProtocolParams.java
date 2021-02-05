@@ -45,7 +45,7 @@ public class ProtocolParams {
     public static byte CMD_ADD_Pressurize = (byte) 0x30;
     //加压方法设置 返回
     public static byte CMD_set_R_f = (byte) 0x11;//写 收到 失败 方法设置失败
-    public static byte CMD_set_R_s = (byte) 0x12;//写 收到 成功 方法设置成功
+    public static byte CMD_set_R_s = (byte) 0x22;//写 收到 成功 方法设置成功
 
     //冲洗方法设置
     public static byte CMD_rinse = (byte) 0x31;

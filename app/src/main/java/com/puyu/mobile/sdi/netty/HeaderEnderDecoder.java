@@ -51,17 +51,7 @@ public class HeaderEnderDecoder extends ByteToMessageDecoder {
             System.out.println("协议地址有问题:" + ByteBufUtil.hexDump(bytesAddr));
             return;
         }
-        //4.验证数据位长度 数据帧中包含多少个字节数据
-        byte[] dateLen = new byte[2];
-        childBuf.getBytes(6, dateLen);
-        int len = (dateLen[0] << 8) + dateLen[1];
-        System.out.println("验证数据长度----:" + ByteBufUtil.hexDump(dateLen));
-        System.out.println("验证数据长度:" + len);
-        if ((childBuf.readableBytes() - 10) != len) {
-            System.out.println("数据长度不符,实际数据长度:" + (childBuf.readableBytes() - 10));
-            return;
-        }
-        //5. 验证数据帧7D82
+        //4. 验证数据帧7D82
         System.out.println("协议数据去掉头尾----:" + ByteBufUtil.hexDump(childBuf));
         int index;
         while ((index = ByteBufUtil.indexOf(filter, childBuf)) != -1) {
@@ -71,6 +61,17 @@ public class HeaderEnderDecoder extends ByteToMessageDecoder {
             childBuf.writeBytes(childBuf, index + filter.capacity(), length - childBuf.writerIndex() - 1);
             System.out.println("协议数据去掉7D82中的82----:" + ByteBufUtil.hexDump(childBuf));
         }
+        //5.验证数据位长度 数据帧中包含多少个字节数据
+        byte[] dateLen = new byte[2];
+        childBuf.getBytes(6, dateLen);
+        int len = (dateLen[0] << 8) + dateLen[1];
+        System.out.println("验证数据长度----:" + ByteBufUtil.hexDump(dateLen));
+        System.out.println("验证数据长度:" + len);
+        if ((childBuf.readableBytes() - 10) != len) {
+            System.out.println("数据长度不符,实际数据长度:" + (childBuf.readableBytes() - 10));
+            return;
+        }
+
         //6.验证CRC校验
         //CRC校验
         byte[] crc = new byte[2];

@@ -199,7 +199,7 @@
                     app:layout_constraintLeft_toRightOf="@id/tv_all_time_tip"
                     app:layout_constraintTop_toTopOf="parent"
                     android:textSize="@dimen/sp16"
-                    android:text="24时60分60秒"
+                    app:textFloatRunTime="@{viewModel.liveDataStateBean.systemMonitor.runAllTime}"
                     android:textColor="@color/c_384051"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -230,6 +230,8 @@
                     android:textColor="@color/c_384051"
                     android:layout_width="wrap_content"
                     android:text="打印标签"
+                    app:isThrottleFirst="@{true}"
+                    app:onClickCommand="@{viewModel.printLabel}"
                     app:layout_constraintRight_toLeftOf="@id/btn_start"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"

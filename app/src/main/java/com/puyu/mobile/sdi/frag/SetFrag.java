@@ -74,7 +74,9 @@ public class SetFrag extends BaseFragment<FragSetBinding, SetViewModel> {
         viewModel.liveDataStateBean.fragDisLoadDialog.observe(this, new Observer<String>() {
             @Override
             public void onChanged(String msg) {
-                if (SetFrag.this.isResumed()) {//是否是显示的
+                //获取当前显示 点击的页面  获取启动的类型
+                Integer checkedId = viewModel.liveDataStateBean.selectType.getValue();
+                if (checkedId == R.id.set) {//在设置页面
                     dismissDialog();
                     showToast(msg);
                 }

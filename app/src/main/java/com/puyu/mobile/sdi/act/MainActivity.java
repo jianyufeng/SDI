@@ -23,7 +23,6 @@ import com.puyu.mobile.sdi.model.MainRepository;
 import com.puyu.mobile.sdi.mvvm.BaseActivity;
 import com.puyu.mobile.sdi.mvvm.ViewModelParamsFactory;
 import com.puyu.mobile.sdi.netty.NettyConnected;
-import com.puyu.mobile.sdi.netty.NettyServer;
 import com.puyu.mobile.sdi.util.ScreenStateUtil;
 import com.puyu.mobile.sdi.viewmodel.MainViewModel;
 
@@ -93,6 +92,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                     binding.vp2.setCurrentItem(4, false);
                     break;
             }
+            binding.tvAllTime.setVisibility(checkedId == R.id.standard_gas_config ? View.VISIBLE : View.GONE);
+            binding.tvAllTimeTip.setVisibility(checkedId == R.id.standard_gas_config ? View.VISIBLE : View.GONE);
             binding.layoutRealState.setVisibility(checkedId == R.id.set ? View.GONE : View.VISIBLE);
         });
         viewModel.liveDataStateBean.mainActivityDisLoadDialog.observe(this, new Observer<String>() {
@@ -102,6 +103,19 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                 showToast(msg);
             }
         });
+         /*viewModel.labels.observe(this, new Observer<List<LabelSave>>() {
+             @Override
+             public void onChanged(List<LabelSave> labelSaves) {
+                 new DialogChoseMethod(MainActivity.this, new DialogChoseMethod.ImportMethodCall() {
+                     @Override
+                     public void callMethod(MethodSave methodSave) {
+                         if (methodSave == null) return;
+                         viewModel.setChoseMethod(methodSave);
+                         passageAdapter.notifyDataSetChanged();
+                     }
+                 }, labelSaves).showNow(getSupportFragmentManager(), "labelDialog");
+             }
+         });*/
     }
 
 
@@ -137,14 +151,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
         client.start();
         viewModel.liveDataStateBean.setNettyConnected(client);
 //        ChatController.getInstance().waitingForFriends();
-        NettyServer nettyServer = new NettyServer();
-        nettyServer.startServer();
+//        NettyServer nettyServer = new NettyServer();
+//        nettyServer.startServer();
     }
     NettyConnected client;
 
     @Override
     protected void onDestroy() {
-        viewModel.liveDataStateBean.release();
         super.onDestroy();
         if (client != null) {
             client.close();

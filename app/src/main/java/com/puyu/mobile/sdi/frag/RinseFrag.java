@@ -152,6 +152,7 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
         public PassageAdapter(List<StandardGas> data) {
             super(R.layout.item_passage_1, data);
             md = ContextCompat.getDrawable(getActivity(), android.R.drawable.ic_notification_overlay);
+            md.setBounds(0, 0, md.getMinimumWidth(), md.getMinimumHeight());//必须设置图片大小，否则不显示
         }
 
         @Override
@@ -161,7 +162,7 @@ public class RinseFrag extends BaseFragment<FragRinseBinding, RinseViewModel> {
                     .setVisible(R.id.checkbox, item.passageBean.prassage != 0)
                     .setEnabled(R.id.layout_content, item.passageBean.prassage != 0)
                     .addOnClickListener(R.id.layout_content, R.id.checkbox);
-            ((TextView) holder.getView(R.id.checkbox)).setCompoundDrawables(
+            ((TextView) holder.getView(R.id.tv_name)).setCompoundDrawables(
                     item.passageBean.prassage == mPassage ? md : null, null,
                     null, null);
         }

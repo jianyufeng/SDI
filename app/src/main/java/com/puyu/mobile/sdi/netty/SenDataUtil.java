@@ -24,7 +24,7 @@ public class SenDataUtil {
     public static void add20(ByteBuf byteBuf, String val, int fixedLen, boolean addLen) {
         byte[] name = val.getBytes(StandardCharsets.UTF_8);
         if (addLen) {
-            byteBuf.writeShort(fixedLen);
+            byteBuf.writeByte(fixedLen);//长度使用1个字节
         }
         byteBuf.writeBytes(name);
         for (int i = 0; i < fixedLen - name.length; i++) {
@@ -80,7 +80,8 @@ public class SenDataUtil {
         byteBuf.writeBytes(ProtocolParams.sendAddr);
         byteBuf.writeByte(ProtocolParams.CMD_DEVICE_ID);
         byteBuf.writeByte(ProtocolParams.CMD_Ex_W_S);
-        add20(byteBuf, deviceID, 12, true);
+        byteBuf.writeShort(12);
+        add20(byteBuf, deviceID, 12, false);
         byte[] crcByte = AppCRC.GetCRC(byteBuf, 2, byteBuf.readableBytes() - 2);
         byteBuf.writeBytes(crcByte);
         byteBuf.writeBytes(ProtocolParams.frameEnd);
