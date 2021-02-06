@@ -1,7 +1,9 @@
 package com.puyu.mobile.sdi.bean;
 
+import io.objectbox.annotation.Backlink;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
+import io.objectbox.relation.ToMany;
 
 /**
  * author : 简玉锋
@@ -14,15 +16,23 @@ import io.objectbox.annotation.Id;
 public class LabelSave {
     @Id
     public long dbId;
-    public String label;
-    private long time;
+    public String label;//类型
+    public long time; //完成时间
+    public String personnel;//配气人员
+    public float startPress;//开始压力值
+    public float targetPress;//最新压力值
+    @Backlink(to = "labelSaveToOne")
+    public ToMany<LabelGasVal> labelGasVals;//标气浓度
 
 
     public LabelSave() {
     }
 
-    public LabelSave(String gasName, long time) {
-        this.time = time;
+    public LabelSave(String label, long time, String personnel, float startPress, float targetPress) {
         this.label = label;
+        this.time = time;
+        this.personnel = personnel;
+        this.startPress = startPress;
+        this.targetPress = targetPress;
     }
 }

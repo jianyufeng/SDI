@@ -176,6 +176,7 @@
                     app:layout_constraintLeft_toRightOf="@id/tv_target_pressure_val_tip"
                     app:layout_constraintTop_toTopOf="parent"
                     android:textSize="@dimen/sp16"
+                    android:minEms="3"
                     app:textFloatExpand="@{viewModel.liveDataStateBean.systemMonitor.targetPress}"
                     android:textColor="@color/c_384051"
                     android:layout_width="wrap_content"

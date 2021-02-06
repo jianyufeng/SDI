@@ -104,6 +104,7 @@
             android:textSize="@dimen/sp16"
             android:imeOptions="actionDone"
             android:layout_width="@dimen/dp150"
+            app:bgMul="@{viewModel.liveDataStateBean.standardGases[1].dilutionMul}"
             android:onFocusChangeListener="@{(view,hasFocus)->viewModel.liveDataStateBean.viewFocus(view,hasFocus)}"
             android:afterTextChanged="@{(editable)->viewModel.liveDataStateBean.mulChangecalTarget(editable,1,viewModel.liveDataStateBean.standardGases[1].initVal,viewModel.liveDataStateBean.standardGases[1].dilutionMul)}"
             android:text="@={viewModel.liveDataStateBean.standardGases[1].dilutionMul}"

@@ -24,7 +24,7 @@ public class MethodGasConfig {
     public String passName;
     public int passNumber;
     public boolean passSwitch;
-    public ToOne<MethodSave> methodSaveToOne; //匹配的牌号结果数据
+    public ToOne<MethodSave> methodSaveToOne;
 
 
     public MethodGasConfig() {
