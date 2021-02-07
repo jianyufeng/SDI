@@ -13,7 +13,9 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.puyu.mobile.sdi.BR;
 import com.puyu.mobile.sdi.R;
+import com.puyu.mobile.sdi.bean.LabelSave;
 import com.puyu.mobile.sdi.databinding.ActivityMainBinding;
+import com.puyu.mobile.sdi.dialog.DialogPrintLabel;
 import com.puyu.mobile.sdi.frag.AddSampleFrag;
 import com.puyu.mobile.sdi.frag.PressurizeFrag;
 import com.puyu.mobile.sdi.frag.RinseFrag;
@@ -103,19 +105,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
                 showToast(msg);
             }
         });
-         /*viewModel.labels.observe(this, new Observer<List<LabelSave>>() {
+         viewModel.labels.observe(this, new Observer<List<LabelSave>>() {
              @Override
              public void onChanged(List<LabelSave> labelSaves) {
-                 new DialogChoseMethod(MainActivity.this, new DialogChoseMethod.ImportMethodCall() {
-                     @Override
-                     public void callMethod(MethodSave methodSave) {
-                         if (methodSave == null) return;
-                         viewModel.setChoseMethod(methodSave);
-                         passageAdapter.notifyDataSetChanged();
-                     }
-                 }, labelSaves).showNow(getSupportFragmentManager(), "labelDialog");
+                 new DialogPrintLabel(MainActivity.this,null, labelSaves).showNow(getSupportFragmentManager(), "labelDialog");
              }
-         });*/
+         });
     }
 
 

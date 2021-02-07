@@ -7,6 +7,7 @@ import android.widget.EditText;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.puyu.mobile.sdi.bean.LabelSave;
 import com.puyu.mobile.sdi.bean.RecDeviceId;
 import com.puyu.mobile.sdi.bean.RecDeviceMCUVersion;
 import com.puyu.mobile.sdi.bean.RecDeviceType;
@@ -207,6 +208,8 @@ public class LiveDataStateBean {
     public MutableLiveData<String> fragDisLoadDialog = new MutableLiveData<>();
 
     public LinkedBlockingQueue<byte[]> sendData = new LinkedBlockingQueue<>();
+
+    public LinkedBlockingQueue<LabelSave> labelSavesQueue = new LinkedBlockingQueue<>();
 
     //连接成功 初始化发送的消息
     public void initSendData() {

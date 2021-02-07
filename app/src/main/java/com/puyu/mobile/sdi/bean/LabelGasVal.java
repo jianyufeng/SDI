@@ -18,7 +18,7 @@ public class LabelGasVal {
     public String gasName;
     public float initVal; //初识含量
     public float targetVal; //目标含量
-    public ToOne<LabelSave> labelSaveToOne; //匹配的牌号结果数据
+    public ToOne<LabelSave> labelSaveToOne; //
 
     public LabelGasVal() {
     }

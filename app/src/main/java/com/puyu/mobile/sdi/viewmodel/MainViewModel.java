@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.puyu.mobile.sdi.LiveDataStateBean;
 import com.puyu.mobile.sdi.R;
+import com.puyu.mobile.sdi.bean.LabelGasVal;
 import com.puyu.mobile.sdi.bean.LabelSave;
 import com.puyu.mobile.sdi.bean.RecPressureLimit;
 import com.puyu.mobile.sdi.bean.RecSystemMonitor;
@@ -15,6 +16,7 @@ import com.puyu.mobile.sdi.bean.SendRinseConfig;
 import com.puyu.mobile.sdi.bean.SendStandConfig;
 import com.puyu.mobile.sdi.bean.StandardGas;
 import com.puyu.mobile.sdi.bean.WifiLinkStateEnum;
+import com.puyu.mobile.sdi.db.DBManager;
 import com.puyu.mobile.sdi.model.MainRepository;
 import com.puyu.mobile.sdi.mvvm.BaseViewModel;
 import com.puyu.mobile.sdi.mvvm.command.BindingCommand;
@@ -27,7 +29,6 @@ import com.puyu.mobile.sdi.util.CollectionUtil;
 import com.puyu.mobile.sdi.util.NumberUtil;
 import com.puyu.mobile.sdi.util.StringUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -67,7 +68,19 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
     public BindingCommand<String> printLabel = new BindingCommand<>(new BindingConsumer<String>() {
         @Override
         public void call(String s) {
-            labels.setValue(new ArrayList<>());
+//            labels.setValue(DBManager.getInstance().getAllLabel());
+            List<LabelSave> allLabel = DBManager.getInstance().getAllLabel();
+            allLabel.add(new LabelSave());
+            allLabel.add(new LabelSave());
+            allLabel.add(new LabelSave());
+            allLabel.add(new LabelSave());
+            allLabel.add(new LabelSave());
+            allLabel.add(new LabelSave());
+            allLabel.add(new LabelSave());
+            allLabel.add(new LabelSave());
+            allLabel.add(new LabelSave());
+            allLabel.add(new LabelSave());
+            labels.setValue(allLabel);
         }
     });
 
@@ -180,6 +193,25 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                             NumberUtil.parseFloat(gasList.get(3).targetVal),
                             NumberUtil.parseFloat(gasList.get(4).targetVal),
                             NumberUtil.parseFloat(gasList.get(5).targetVal), tp));
+                    if (start) {
+                        LiveDataStateBean.getInstant().labelSavesQueue.clear();
+                        //要保存每一步的操作
+                        LabelSave labelSave = new LabelSave(getApplication().getString(R.string.standard_gas_config),
+                                System.currentTimeMillis(), "root",
+                                liveDataStateBean.systemMonitor.getValue().currentPress,
+                                tp, liveDataStateBean.deviceIdLiveData.getValue().deviceId);
+                        for (int i = 1; i < 6; i++) {
+                            boolean selected = gasList.get(i).passageBean.selected;
+                            if (selected) { //开启的通道
+                                String name = gasList.get(i).gasName.getValue();
+                                float initVal = NumberUtil.parseFloat(gasList.get(i).initVal);
+                                float targetVal = NumberUtil.parseFloat(gasList.get(i).targetVal);
+                                labelSave.labelGasVals.add(new LabelGasVal(name, initVal, targetVal));
+                            }
+                        }
+                        LiveDataStateBean.getInstant().labelSavesQueue.offer(labelSave);//暂存
+                        DBManager.getInstance().putLabelSave(labelSave);//保存
+                    }
                     break;
                 case R.id.rinse: //冲洗启动
                     if (CollectionUtil.isEmpty(liveDataStateBean.standardGasesRinse)) {
@@ -249,6 +281,16 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                     showWaitingDialog(new DialogOption("正在设置", QMUITipDialog.Builder.ICON_TYPE_LOADING));
                     SenDataUtil.sendAddSampConfig(start, pw, addSampvalue);
                     break;
+            }
+            //停止 需要移除启动的操作
+            if (!start) {
+                LabelSave lastLabel = DBManager.getInstance().getLastLabel();
+                if (!LiveDataStateBean.getInstant().labelSavesQueue.isEmpty()) {
+                    LabelSave labelSave = LiveDataStateBean.getInstant().labelSavesQueue.poll();
+                    if (labelSave.time == lastLabel.time) {
+                        DBManager.getInstance().removeLabelSave(lastLabel);
+                    }
+                }
             }
 
         }

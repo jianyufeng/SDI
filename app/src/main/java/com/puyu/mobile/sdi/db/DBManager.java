@@ -1,5 +1,8 @@
 package com.puyu.mobile.sdi.db;
 
+import com.puyu.mobile.sdi.bean.LabelGasVal;
+import com.puyu.mobile.sdi.bean.LabelSave;
+import com.puyu.mobile.sdi.bean.LabelSave_;
 import com.puyu.mobile.sdi.bean.MethodGasConfig;
 import com.puyu.mobile.sdi.bean.MethodSave;
 import com.puyu.mobile.sdi.bean.MethodSave_;
@@ -48,7 +51,7 @@ public class DBManager {
     }
 
     public long getAllMethodCount() {
-       return getBox(MethodSave.class).count();
+        return getBox(MethodSave.class).count();
     }
 
     public boolean removeMethod(MethodSave methodSave) {
@@ -56,8 +59,27 @@ public class DBManager {
         getBox(MethodGasConfig.class).remove(methodGasConfigs);
         return getBox(MethodSave.class).remove(methodSave);
     }
-    public boolean hasMethodName(String name){
-        return getBox(MethodSave.class).query().equal(MethodSave_.gasName,name).build().findFirst()!=null;
+
+    public boolean hasMethodName(String name) {
+        return getBox(MethodSave.class).query().equal(MethodSave_.gasName, name).build().findFirst() != null;
     }
 
+    /*********************获取打印标签***************************/
+    public List<LabelSave> getAllLabel() {
+        return getBox(LabelSave.class).query().orderDesc(LabelSave_.dbId).build().find();
+    }
+
+    public LabelSave getLastLabel() {
+        return getBox(LabelSave.class).query().orderDesc(LabelSave_.dbId).build().findFirst();
+    }
+
+    public boolean removeLabelSave(LabelSave labelSave) {
+        ToMany<LabelGasVal> labelGasVals = labelSave.labelGasVals;
+        getBox(LabelGasVal.class).remove(labelGasVals);
+        return getBox(LabelSave.class).remove(labelSave);
+    }
+
+    public long putLabelSave(LabelSave bean) {
+        return put(LabelSave.class, bean);
+    }
 }

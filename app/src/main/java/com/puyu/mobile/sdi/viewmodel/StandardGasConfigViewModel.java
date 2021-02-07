@@ -157,8 +157,7 @@ public class StandardGasConfigViewModel extends BaseViewModel<StandardGasConfigR
 
         @Override
         public void call(String s) {
-            List<MethodSave> allMethod = DBManager.getInstance().getAllMethod();
-            methods.setValue(allMethod);
+            methods.setValue(DBManager.getInstance().getAllMethod());
         }
     });
 

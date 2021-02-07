@@ -21,6 +21,8 @@ public class LabelSave {
     public String personnel;//配气人员
     public float startPress;//开始压力值
     public float targetPress;//最新压力值
+    public int state = 0;//0开始 1完成 2停止
+    public String deviceId;//0开始 1完成 2停止
     @Backlink(to = "labelSaveToOne")
     public ToMany<LabelGasVal> labelGasVals;//标气浓度
 
@@ -28,11 +30,12 @@ public class LabelSave {
     public LabelSave() {
     }
 
-    public LabelSave(String label, long time, String personnel, float startPress, float targetPress) {
+    public LabelSave(String label, long time, String personnel, float startPress, float targetPress,String deviceId) {
         this.label = label;
         this.time = time;
         this.personnel = personnel;
         this.startPress = startPress;
         this.targetPress = targetPress;
+        this.deviceId = deviceId;
     }
 }
