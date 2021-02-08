@@ -108,7 +108,14 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
          viewModel.labels.observe(this, new Observer<List<LabelSave>>() {
              @Override
              public void onChanged(List<LabelSave> labelSaves) {
-                 new DialogPrintLabel(MainActivity.this,null, labelSaves).showNow(getSupportFragmentManager(), "labelDialog");
+                 new DialogPrintLabel(MainActivity.this,null/* new DialogChoseMethod.ImportMethodCall() {
+                     @Override
+                     public void callMethod(MethodSave methodSave) {
+                         if (methodSave == null) return;
+                         viewModel.setChoseMethod(methodSave);
+                         passageAdapter.notifyDataSetChanged();
+                     }
+                 }*/, labelSaves).showNow(getSupportFragmentManager(), "labelDialog");
              }
          });
     }

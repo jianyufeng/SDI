@@ -15,6 +15,7 @@ import com.puyu.mobile.sdi.bean.RecPressureLimit;
 import com.puyu.mobile.sdi.bean.RecSystemMonitor;
 import com.puyu.mobile.sdi.bean.StandardGas;
 import com.puyu.mobile.sdi.bean.WifiLinkStateEnum;
+import com.puyu.mobile.sdi.db.DBManager;
 import com.puyu.mobile.sdi.mvvm.livedata.SingleLiveEvent;
 import com.puyu.mobile.sdi.netty.NettyConnected;
 import com.puyu.mobile.sdi.netty.ProtocolParams;
@@ -211,6 +212,13 @@ public class LiveDataStateBean {
 
     public LinkedBlockingQueue<LabelSave> labelSavesQueue = new LinkedBlockingQueue<>();
 
+    //数据库存储 打印标签操作
+    public void saveDBLabel(){
+        if (!LiveDataStateBean.getInstant().labelSavesQueue.isEmpty()) {
+            LabelSave labelSave = LiveDataStateBean.getInstant().labelSavesQueue.peek();
+            DBManager.getInstance().putLabelSave(labelSave);//保存
+        }
+    }
     //连接成功 初始化发送的消息
     public void initSendData() {
         sendData.clear();

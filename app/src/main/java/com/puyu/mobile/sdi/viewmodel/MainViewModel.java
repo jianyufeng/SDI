@@ -210,7 +210,6 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                             }
                         }
                         LiveDataStateBean.getInstant().labelSavesQueue.offer(labelSave);//暂存
-                        DBManager.getInstance().putLabelSave(labelSave);//保存
                     }
                     break;
                 case R.id.rinse: //冲洗启动
@@ -247,6 +246,24 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                             standard2Gas.passageBean.selected, standard3Gas.passageBean.selected,
                             standard4Gas.passageBean.selected, diluentRinseTime,
                             standRinseTime, 10));
+                    if (start) {
+                        LiveDataStateBean.getInstant().labelSavesQueue.clear();
+                        //要保存每一步的操作
+                        LabelSave labelSave = new LabelSave(getApplication().getString(R.string.rinse),
+                                System.currentTimeMillis(), "root",
+                                liveDataStateBean.systemMonitor.getValue().currentPress,
+                                liveDataStateBean.systemMonitor.getValue().currentPress, liveDataStateBean.deviceIdLiveData.getValue().deviceId);
+                        for (int i = 1; i < liveDataStateBean.standardGasesRinse.size(); i++) {
+                            boolean selected = liveDataStateBean.standardGasesRinse.get(i).passageBean.selected;
+                            if (selected) { //开启的通道
+                                String name = liveDataStateBean.standardGasesRinse.get(i).gasName.getValue();
+                              /*  float initVal = NumberUtil.parseFloat(gasList.get(i).initVal);
+                                float targetVal = NumberUtil.parseFloat(gasList.get(i).targetVal);*/
+                                labelSave.labelGasVals.add(new LabelGasVal(name, 0, 0));
+                            }
+                        }
+                        LiveDataStateBean.getInstant().labelSavesQueue.offer(labelSave);//暂存
+                    }
                     break;
                 case R.id.pressurize: //加压启动
                     //加压方法设置
@@ -261,9 +278,18 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                     //显示加载框
                     showWaitingDialog(new DialogOption("正在设置", QMUITipDialog.Builder.ICON_TYPE_LOADING));
                     SenDataUtil.sendPressureConfig(start, value);
+                    if (start) {
+                        LiveDataStateBean.getInstant().labelSavesQueue.clear();
+                        //要保存每一步的操作
+                        LabelSave labelSave = new LabelSave(getApplication().getString(R.string.pressurize),
+                                System.currentTimeMillis(), "root",
+                                liveDataStateBean.systemMonitor.getValue().currentPress,
+                                value, liveDataStateBean.deviceIdLiveData.getValue().deviceId);
+                        LiveDataStateBean.getInstant().labelSavesQueue.offer(labelSave);//暂存
+                    }
                     break;
                 case R.id.add_sample://加样启动
-                    //加压方法设置
+                    //加样方法设置
                     Integer pw = liveDataStateBean.addSampPressOpen.getValue();
                     Float addSampvalue = NumberUtil.parseFloat(liveDataStateBean.addSampTargetPress.getValue());
                     if (start) {
@@ -280,14 +306,34 @@ public class MainViewModel extends BaseViewModel<MainRepository> {
                     //显示加载框
                     showWaitingDialog(new DialogOption("正在设置", QMUITipDialog.Builder.ICON_TYPE_LOADING));
                     SenDataUtil.sendAddSampConfig(start, pw, addSampvalue);
+                    if (start) {
+                        LiveDataStateBean.getInstant().labelSavesQueue.clear();
+                        //要保存每一步的操作
+                        LabelSave labelSave = new LabelSave(getApplication().getString(R.string.rinse),
+                                System.currentTimeMillis(), "root",
+                                liveDataStateBean.systemMonitor.getValue().currentPress,
+                                addSampvalue, liveDataStateBean.deviceIdLiveData.getValue().deviceId);
+                        for (int i = 1; i < liveDataStateBean.standardGasesRinse.size(); i++) {
+                            int prassage = liveDataStateBean.standardGasesRinse.get(i).passageBean.prassage;
+                            if (prassage ==pw) { //开启的通道
+                                String name = liveDataStateBean.standardGasesRinse.get(i).gasName.getValue();
+                              /*  float initVal = NumberUtil.parseFloat(gasList.get(i).initVal);
+                                float targetVal = NumberUtil.parseFloat(gasList.get(i).targetVal);*/
+                                labelSave.labelGasVals.add(new LabelGasVal(name, 0, 0));
+                                break;
+                            }
+                        }
+                        LiveDataStateBean.getInstant().labelSavesQueue.offer(labelSave);//暂存
+                    }
                     break;
             }
             //停止 需要移除启动的操作
             if (!start) {
-                LabelSave lastLabel = DBManager.getInstance().getLastLabel();
                 if (!LiveDataStateBean.getInstant().labelSavesQueue.isEmpty()) {
                     LabelSave labelSave = LiveDataStateBean.getInstant().labelSavesQueue.poll();
-                    if (labelSave.time == lastLabel.time) {
+                    LabelSave lastLabel = DBManager.getInstance().getLastLabel();
+                    if (lastLabel!=null && labelSave.time == lastLabel.time &&
+                            labelSave.deviceId.equals(lastLabel.deviceId)) {
                         DBManager.getInstance().removeLabelSave(lastLabel);
                     }
                 }

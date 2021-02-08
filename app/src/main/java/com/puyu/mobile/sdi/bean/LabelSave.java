@@ -17,7 +17,8 @@ public class LabelSave {
     @Id
     public long dbId;
     public String label;//类型
-    public long time; //完成时间
+    public long time; //启动时间
+    public long endTime; //完成时间
     public String personnel;//配气人员
     public float startPress;//开始压力值
     public float targetPress;//最新压力值

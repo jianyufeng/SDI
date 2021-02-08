@@ -165,7 +165,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                             LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("设置成功");
                             //写入成功
                             System.out.println("加压方法设置 成功:" + date.length);
-
+                            //数据库存储 打印标签操作
+                            LiveDataStateBean.getInstant().saveDBLabel();
                         } else if (date[0] == ProtocolParams.CMD_set_R_f) { //方法设置失败
                             LiveDataStateBean.getInstant().receiveFailData(ProtocolParams.CMD_add_samp, false, "加压方法设置失败");//写入加压方法设置失败 失败
                             //写入失败
@@ -185,7 +186,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                             LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("设置成功");
                             //写入成功
                             System.out.println("冲洗方法设置 成功:" + date.length);
-
+                            //数据库存储 打印标签操作
+                            LiveDataStateBean.getInstant().saveDBLabel();
                         } else if (date[0] == ProtocolParams.CMD_set_R_f) { //方法设置失败
                             LiveDataStateBean.getInstant().receiveFailData(ProtocolParams.CMD_add_samp, false, "冲洗方法设置失败");//写入冲洗方法设置失败 失败
 
@@ -204,7 +206,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                         if (date[0] == ProtocolParams.CMD_set_R_s) { //方法设置成功
                             LiveDataStateBean.getInstant().receiveData(ProtocolParams.CMD_add_samp);//加压方法设置 写入成功
                             LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("设置成功");
-
+                            //数据库存储 打印标签操作
+                            LiveDataStateBean.getInstant().saveDBLabel();
                             //写入成功
                             System.out.println("加样方法 成功:" + date.length);
 
@@ -227,6 +230,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                             System.out.println("配气方法设置 成功:" + date.length);
                             LiveDataStateBean.getInstant().receiveData(ProtocolParams.CMD_gas_config);//配气方法设置 写入成功
                             LiveDataStateBean.getInstant().mainActivityDisLoadDialog.postValue("设置成功");
+                            //数据库存储 打印标签操作
+                            LiveDataStateBean.getInstant().saveDBLabel();
                         } else if (date[0] == ProtocolParams.CMD_set_R_f) { //方法设置失败
                             LiveDataStateBean.getInstant().receiveFailData(ProtocolParams.CMD_gas_config, false, "配气方法设置失败");//写入配气方法设置失败 失败
                             //写入失败
