@@ -128,7 +128,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<Object> {
                 }
 
             } else if (cmd == ProtocolParams.CMD_DEVICE_Type) { //仪器类型
-
                 if (rw == ProtocolParams.CMD_Ex_R_R) { //仪器类型 返回 1个字节 0x00:静态稀释仪
                     LiveDataStateBean.getInstant().receiveData(ProtocolParams.CMD_DEVICE_Type);//仪器类型 获取
                     //获取数据

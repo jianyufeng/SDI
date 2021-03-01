@@ -33,97 +33,52 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:background="@color/c_ffffff"
-                android:layout_height="match_parent">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_type_tip"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:padding="@dimen/dp10"
-                    android:textSize="@dimen/sp16"
-                    android:text="传感器校准"
-                    android:textColor="@color/c_384051"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
-
-                <View
-                    android:id="@+id/line"
-                    android:layout_marginLeft="@dimen/dp10"
-                    android:layout_marginRight="@dimen/dp10"
-                    android:background="@color/c_DBE0E8"
-                    android:layout_width="0dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_type_tip"
-                    android:layout_height="1dp" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_0_calibration"
-                    app:layout_constraintTop_toBottomOf="@id/line"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:textSize="@dimen/sp16"
-                    app:onClickCommand="@{viewModel.checkPress}"
-                    app:isThrottleFirst="@{true}"
-                    app:params="@{`0`}"
-                    android:text="零点校准"
-                    android:layout_marginLeft="@dimen/dp20"
-                    android:layout_marginTop="@dimen/dp10"
-                    android:layout_marginBottom="@dimen/dp10"
-                    android:paddingLeft="@dimen/dp10"
-                    android:paddingRight="@dimen/dp10"
-                    android:gravity="center"
-                    android:background="@drawable/big_corner_bg"
-                    android:textColor="@color/c_384051"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp35" />
+                android:layout_height="match_parent"
+                android:background="@color/c_ffffff">
 
                 <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp10"
                     android:src="@drawable/ic_baseline_help_outline_24"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_0_calibration"
                     app:layout_constraintLeft_toRightOf="@id/tv_0_calibration"
-                    app:layout_constraintTop_toTopOf="@id/tv_0_calibration"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_0_calibration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    app:layout_constraintTop_toTopOf="@id/tv_0_calibration" />
 
+                <ImageView
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_margin="@dimen/dp5"
-                    android:id="@+id/tv_normal_calibration_tip"
-                    app:layout_constraintTop_toTopOf="@id/tv_0_calibration"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_0_calibration"
-                    app:layout_constraintLeft_toRightOf="@+id/et_pressure_up_val"
-                    android:padding="@dimen/dp10"
-                    android:textSize="@dimen/sp16"
-                    android:text="常压校准："
-                    android:textColor="@color/c_384051"
+                    android:id="@+id/ig_normal_help"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp10"
+                    android:src="@drawable/ic_baseline_help_outline_24"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_normal_calibration_tip"
+                    app:layout_constraintLeft_toRightOf="@id/tv_normal_calibration"
+                    app:layout_constraintTop_toTopOf="@id/tv_normal_calibration_tip" />
 
                 <LinearLayout
+                    android:id="@+id/tv_normal_calibration"
+                    android:layout_width="@dimen/dp150"
+                    android:layout_height="@dimen/dp35"
+                    android:background="@drawable/big_corner_bg"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:id="@+id/tv_normal_calibration"
-                    app:layout_constraintTop_toTopOf="@id/tv_normal_calibration_tip"
                     app:layout_constraintBottom_toBottomOf="@id/tv_normal_calibration_tip"
                     app:layout_constraintLeft_toRightOf="@id/tv_normal_calibration_tip"
-                    android:background="@drawable/big_corner_bg"
-                    android:layout_width="@dimen/dp150"
-                    android:layout_height="@dimen/dp35">
+                    app:layout_constraintTop_toTopOf="@id/tv_normal_calibration_tip">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:layout_width="0dp"
-                        android:padding="0dp"
-                        android:maxLength="6"
-                        android:textSize="@dimen/sp16"
-                        android:textColor="@color/c_384051"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:background="@null"
                         android:imeOptions="actionDone"
                         android:inputType="numberDecimal"
+                        android:maxLength="6"
+                        android:padding="0dp"
                         android:text="@={viewModel.norPressVal}"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content" />
+                        android:textColor="@color/c_384051"
+                        android:textSize="@dimen/sp16" />
 
                     <!--<View
                         android:layout_width="1px"
@@ -135,324 +90,370 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
-                        android:textSize="@dimen/sp16"
-                        android:textColor="@color/c_16a5ff"
-                        android:text="校准"
-                        android:paddingLeft="@dimen/dp10"
-                        android:paddingRight="@dimen/dp10"
+                        android:layout_height="match_parent"
                         android:background="@drawable/big_corner_bg"
                         android:gravity="center"
-                        app:onClickCommand="@{viewModel.checkPress}"
+                        android:paddingLeft="@dimen/dp10"
+                        android:paddingRight="@dimen/dp10"
+                        android:text="校准"
+                        android:textColor="@color/c_16a5ff"
+                        android:textSize="@dimen/sp16"
                         app:isThrottleFirst="@{true}"
-                        app:params="@{viewModel.norPressVal}"
-                        android:layout_height="match_parent" />
+                        app:onClickCommand="@{viewModel.checkPress}"
+                        app:params="@{viewModel.norPressVal}" />
                 </LinearLayout>
 
-                <ImageView
-
-                    android:id="@+id/ig_normal_help"
-                    app:layout_constraintLeft_toRightOf="@id/tv_normal_calibration"
-                    android:src="@drawable/ic_baseline_help_outline_24"
-                    android:layout_marginStart="@dimen/dp10"
-                    app:layout_constraintTop_toTopOf="@id/tv_normal_calibration_tip"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_normal_calibration_tip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_pressure_tip"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_normal_calibration_tip"
-                    android:padding="@dimen/dp10"
-                    android:textSize="@dimen/sp16"
-                    android:text="压力限值"
-                    android:layout_marginTop="@dimen/dp5"
-                    android:textColor="@color/c_384051"
+                <View
+                    android:id="@+id/line"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:background="@color/c_DBE0E8"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_type_tip" />
+
 
                 <View
                     android:id="@+id/line1"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/dp10"
                     android:layout_marginRight="@dimen/dp10"
                     android:background="@color/c_DBE0E8"
-                    android:layout_width="0dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_pressure_tip"
-                    android:layout_height="1dp" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_margin="@dimen/dp5"
-                    android:id="@+id/tv_pressure_up_val_tip"
-                    app:layout_constraintTop_toBottomOf="@id/line1"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:padding="@dimen/dp10"
-                    android:textSize="@dimen/sp16"
-                    android:text="压力上限："
-                    android:textColor="@color/c_384051"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_pressure_up_val"
-                    android:singleLine="true"
-                    android:imeOptions="actionDone"
-                    android:inputType="numberDecimal"
-                    app:layout_constraintLeft_toRightOf="@id/tv_pressure_up_val_tip"
-                    app:layout_constraintTop_toTopOf="@id/tv_pressure_up_val_tip"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_pressure_up_val_tip"
-                    android:textSize="@dimen/sp16"
-                    android:text="@={viewModel.liveDataStateBean.pressUp}"
-                    app:bgPresLimitUp="@{viewModel.liveDataStateBean.pressUp}"
-                    app:bgPresLimitLow="@{viewModel.liveDataStateBean.pressLow}"
-                    app:checkUp="@{true}"
-                    android:maxLength="5"
-                    android:gravity="center_vertical"
-                    android:layout_width="@dimen/dp150"
-                    android:textColor="@color/c_384051"
-                    android:background="@drawable/big_corner_bg"
-                    android:layout_height="@dimen/dp35" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_margin="@dimen/dp5"
-                    android:id="@+id/tv_pressure_down_val_tip"
-                    app:layout_constraintTop_toTopOf="@id/tv_pressure_up_val_tip"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_pressure_up_val_tip"
-                    app:layout_constraintLeft_toRightOf="@id/et_pressure_up_val"
-                    android:padding="@dimen/dp10"
-                    android:layout_marginTop="@dimen/dp10"
-                    android:textSize="@dimen/sp16"
-                    android:text="压力下限："
-                    android:textColor="@color/c_384051"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_pressure_down_val"
-                    app:layout_constraintTop_toTopOf="@id/tv_pressure_down_val_tip"
-                    app:layout_constraintLeft_toRightOf="@id/tv_pressure_down_val_tip"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_pressure_down_val_tip"
-                    android:textSize="@dimen/sp16"
-                    android:singleLine="true"
-                    android:maxLength="5"
-                    android:imeOptions="actionDone"
-                    android:inputType="numberDecimal"
-                    android:text="@={viewModel.liveDataStateBean.pressLow}"
-                    android:layout_width="@dimen/dp150"
-                    android:background="@drawable/big_corner_bg"
-                    android:textColor="@color/c_384051"
-                    android:layout_height="@dimen/dp35"
-                    app:bgPresLimitUp="@{viewModel.liveDataStateBean.pressUp}"
-                    app:bgPresLimitLow="@{viewModel.liveDataStateBean.pressLow}"
-                    app:checkUp="@{false}" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:layout_marginTop="@dimen/dp5"
-                    app:layout_constraintLeft_toLeftOf="@id/et_pressure_up_val"
-                    app:layout_constraintTop_toBottomOf="@id/tv_pressure_up_val_tip"
-                    android:paddingLeft="@dimen/dp10"
-                    android:paddingRight="@dimen/dp10"
-                    android:id="@+id/btn_get_limit"
-                    android:textColor="@color/c_384051"
-                    android:layout_width="wrap_content"
-                    android:text="获取上下限"
-                    app:isThrottleFirst="@{true}"
-                    app:onClickCommand="@{viewModel.getPressLimit}"
-                    android:textSize="@dimen/sp16"
-                    android:background="@drawable/big_corner_bg"
-                    android:layout_height="@dimen/dp35" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:layout_marginLeft="@dimen/dp80"
-                    app:layout_constraintLeft_toRightOf="@id/btn_get_limit"
-                    app:layout_constraintTop_toTopOf="@id/btn_get_limit"
-                    android:paddingLeft="@dimen/dp10"
-                    android:paddingRight="@dimen/dp10"
-                    android:id="@+id/btn_change_limit"
-                    android:textColor="@color/c_384051"
-                    android:background="@drawable/big_corner_bg"
-                    android:layout_width="wrap_content"
-                    android:text="确定修改上下限"
-                    app:isThrottleFirst="@{true}"
-                    app:onClickCommand="@{viewModel.changePressLimit}"
-                    android:textSize="@dimen/sp16"
-                    android:layout_height="@dimen/dp35"
-                    app:bgPresLimitUp="@{viewModel.liveDataStateBean.pressUp}"
-                    app:bgPresLimitLow="@{viewModel.liveDataStateBean.pressLow}"
-                    app:checkChange="@{true}" />
-
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_version_tip"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/btn_change_limit"
-                    android:padding="@dimen/dp10"
-                    android:textSize="@dimen/sp16"
-                    android:text="版本信息"
-                    android:layout_marginTop="@dimen/dp5"
-                    android:textColor="@color/c_384051"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_pressure_tip" />
 
                 <View
                     android:id="@+id/line2"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/dp10"
                     android:layout_marginRight="@dimen/dp10"
                     android:background="@color/c_DBE0E8"
-                    android:layout_width="0dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_version_tip"
-                    android:layout_height="1dp" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_margin="@dimen/dp5"
-                    android:id="@+id/tv_version_tip_app_tip"
-                    app:layout_constraintTop_toBottomOf="@id/line2"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:padding="@dimen/dp10"
-                    android:textSize="@dimen/sp16"
-                    android:text="APP版本："
-                    android:textColor="@color/c_384051"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_version_tip_app"
-                    android:singleLine="true"
-                    android:text="@{APPVersionUtil.getVersionName(APP.getInstance())}"
-                    app:layout_constraintLeft_toRightOf="@id/tv_version_tip_app_tip"
-                    app:layout_constraintTop_toTopOf="@id/tv_version_tip_app_tip"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_version_tip_app_tip"
-                    android:textSize="@dimen/sp16"
-                    android:gravity="center_vertical"
-                    android:layout_width="@dimen/dp150"
-                    android:textColor="@color/c_384051"
-                    android:layout_height="@dimen/dp35" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_margin="@dimen/dp5"
-                    android:id="@+id/tv_version_tip_mcu_tip"
-                    app:layout_constraintTop_toTopOf="@id/tv_version_tip_app_tip"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_version_tip_app_tip"
-                    app:layout_constraintLeft_toRightOf="@id/tv_version_tip_app"
-                    android:padding="@dimen/dp10"
-                    android:layout_marginTop="@dimen/dp10"
-                    android:textSize="@dimen/sp16"
-                    android:text="MCU版本："
-                    android:textColor="@color/c_384051"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_version_tip_mcu"
-                    app:layout_constraintTop_toTopOf="@id/tv_version_tip_mcu_tip"
-                    app:layout_constraintLeft_toRightOf="@id/tv_version_tip_mcu_tip"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_version_tip_mcu_tip"
-                    android:textSize="@dimen/sp16"
-                    android:singleLine="true"
-                    android:text="@{viewModel.liveDataStateBean.deviceVersion.deviceVersion}"
-                    android:gravity="center_vertical"
-                    android:layout_width="@dimen/dp150"
-                    android:textColor="@color/c_384051"
-                    android:layout_height="@dimen/dp35" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_version_tip" />
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_get_limit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp35"
                     android:layout_marginTop="@dimen/dp5"
-                    app:layout_constraintLeft_toRightOf="@id/tv_version_tip_mcu"
-                    app:layout_constraintTop_toTopOf="@id/tv_version_tip_mcu"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_version_tip_mcu"
+                    android:background="@drawable/big_corner_bg"
                     android:paddingLeft="@dimen/dp10"
                     android:paddingRight="@dimen/dp10"
-                    android:id="@+id/btn_get_version"
+                    android:text="获取上下限"
                     android:textColor="@color/c_384051"
-                    android:layout_width="wrap_content"
-                    android:text="获取版本"
+                    android:textSize="@dimen/sp16"
                     app:isThrottleFirst="@{true}"
-                    app:onClickCommand="@{viewModel.getVersion}"
-                    android:textSize="@dimen/sp16"
-                    android:background="@drawable/big_corner_bg"
-                    android:layout_height="0dp" />
+                    app:layout_constraintLeft_toLeftOf="@id/et_pressure_up_val"
+                    app:layout_constraintTop_toBottomOf="@id/tv_pressure_up_val_tip"
+                    app:onClickCommand="@{viewModel.getPressLimit}" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_tep_tip"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_version_tip_app_tip"
-                    android:padding="@dimen/dp10"
-                    android:textSize="@dimen/sp16"
-                    android:layout_marginTop="@dimen/dp10"
-                    android:text="@{String.format(`环境温度（%.1f℃）`,viewModel.liveDataStateBean.systemMonitor.surroundTem)}"
-                    android:textColor="@color/c_384051"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
-
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_device_id_tip"
-                    android:layout_marginTop="@dimen/dp10"
-                    app:layout_constraintTop_toBottomOf="@id/tv_tep_tip"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:padding="@dimen/dp10"
-                    android:textSize="@dimen/sp16"
-                    android:text="仪器ID："
-                    android:textColor="@color/c_384051"
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_change_limit"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="@dimen/dp35"
+                    android:layout_marginLeft="@dimen/dp80"
+                    android:background="@drawable/big_corner_bg"
+                    android:paddingLeft="@dimen/dp10"
+                    android:paddingRight="@dimen/dp10"
+                    android:text="确定修改上下限"
+                    android:textColor="@color/c_384051"
+                    android:textSize="@dimen/sp16"
+                    app:bgPresLimitLow="@{viewModel.liveDataStateBean.pressLow}"
+                    app:bgPresLimitUp="@{viewModel.liveDataStateBean.pressUp}"
+                    app:checkChange="@{true}"
+                    app:isThrottleFirst="@{true}"
+                    app:layout_constraintLeft_toRightOf="@id/btn_get_limit"
+                    app:layout_constraintTop_toTopOf="@id/btn_get_limit"
+                    app:onClickCommand="@{viewModel.changePressLimit}" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_get_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/dp5"
+                    android:background="@drawable/big_corner_bg"
+                    android:paddingLeft="@dimen/dp10"
+                    android:paddingRight="@dimen/dp10"
+                    android:text="获取版本"
+                    android:textColor="@color/c_384051"
+                    android:textSize="@dimen/sp16"
+                    app:isThrottleFirst="@{true}"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_version_tip_mcu"
+                    app:layout_constraintLeft_toRightOf="@id/tv_version_tip_mcu"
+                    app:layout_constraintTop_toTopOf="@id/tv_version_tip_mcu"
+                    app:onClickCommand="@{viewModel.getVersion}" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_get_deviceId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_margin="@dimen/dp5"
+                    android:background="@drawable/big_corner_bg"
+                    android:paddingLeft="@dimen/dp10"
+                    android:paddingRight="@dimen/dp10"
+                    android:text="获取仪器ID"
+                    android:textColor="@color/c_384051"
+                    android:textSize="@dimen/sp16"
+                    app:isThrottleFirst="@{true}"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_device_id_tip"
+                    app:layout_constraintLeft_toRightOf="@id/tv_device_id"
+                    app:layout_constraintTop_toTopOf="@id/tv_device_id_tip"
+                    app:onClickCommand="@{viewModel.getDeviceId}" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_set_deviceId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_margin="@dimen/dp5"
+                    android:background="@drawable/big_corner_bg"
+                    android:paddingLeft="@dimen/dp10"
+                    android:paddingRight="@dimen/dp10"
+                    android:text="设置仪器ID"
+                    android:textColor="@color/c_384051"
+                    android:textSize="@dimen/sp16"
+                    app:bgDeviceIdChange="@{viewModel.liveDataStateBean.changeDeviceID}"
+                    app:checkChange="@{true}"
+                    app:isThrottleFirst="@{true}"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_device_id_tip"
+                    app:layout_constraintLeft_toRightOf="@id/btn_get_deviceId"
+                    app:layout_constraintTop_toTopOf="@id/tv_device_id_tip"
+                    app:onClickCommand="@{viewModel.setDeviceId}"
+                    app:params="@{viewModel.liveDataStateBean.changeDeviceID}" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_pressure_up_val"
+                    android:layout_width="@dimen/dp150"
+                    android:layout_height="@dimen/dp35"
+                    android:background="@drawable/big_corner_bg"
+                    android:gravity="center_vertical"
+                    android:imeOptions="actionDone"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    android:singleLine="true"
+                    android:text="@={viewModel.liveDataStateBean.pressUp}"
+                    android:textColor="@color/c_384051"
+                    android:textSize="@dimen/sp16"
+                    app:bgPresLimitLow="@{viewModel.liveDataStateBean.pressLow}"
+                    app:bgPresLimitUp="@{viewModel.liveDataStateBean.pressUp}"
+                    app:checkUp="@{true}"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_pressure_up_val_tip"
+                    app:layout_constraintLeft_toRightOf="@id/tv_pressure_up_val_tip"
+                    app:layout_constraintTop_toTopOf="@id/tv_pressure_up_val_tip" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_pressure_down_val"
+                    android:layout_width="@dimen/dp150"
+                    android:layout_height="@dimen/dp35"
+                    android:background="@drawable/big_corner_bg"
+                    android:imeOptions="actionDone"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    android:singleLine="true"
+                    android:text="@={viewModel.liveDataStateBean.pressLow}"
+                    android:textColor="@color/c_384051"
+                    android:textSize="@dimen/sp16"
+                    app:bgPresLimitLow="@{viewModel.liveDataStateBean.pressLow}"
+                    app:bgPresLimitUp="@{viewModel.liveDataStateBean.pressUp}"
+                    app:checkUp="@{false}"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_pressure_down_val_tip"
+                    app:layout_constraintLeft_toRightOf="@id/tv_pressure_down_val_tip"
+                    app:layout_constraintTop_toTopOf="@id/tv_pressure_down_val_tip" />
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tv_device_id"
-                    app:layout_constraintTop_toTopOf="@id/tv_device_id_tip"
-                    app:layout_constraintLeft_toRightOf="@id/tv_device_id_tip"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_device_id_tip"
-                    android:textSize="@dimen/sp16"
-                    android:singleLine="true"
-                    android:padding="0dp"
-                    android:maxLength="12"
-                    android:imeOptions="actionDone"
-                    app:bgDeviceId="@{viewModel.liveDataStateBean.changeDeviceID}"
-                    android:text="@={viewModel.liveDataStateBean.changeDeviceID}"
-                    android:gravity="center_vertical"
                     android:layout_width="@dimen/dp150"
+                    android:layout_height="@dimen/dp35"
+                    android:digits="@string/digits"
+                    android:gravity="center_vertical"
+                    android:imeOptions="actionDone"
+                    android:maxLength="12"
+                    android:padding="0dp"
+                    android:singleLine="true"
+                    android:text="@={viewModel.liveDataStateBean.changeDeviceID}"
                     android:textColor="@color/c_384051"
-                    android:layout_height="@dimen/dp35" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:layout_margin="@dimen/dp5"
-                    app:layout_constraintLeft_toRightOf="@id/tv_device_id"
-                    app:layout_constraintTop_toTopOf="@id/tv_device_id_tip"
+                    android:textSize="@dimen/sp16"
+                    app:bgDeviceId="@{viewModel.liveDataStateBean.changeDeviceID}"
                     app:layout_constraintBottom_toBottomOf="@id/tv_device_id_tip"
+                    app:layout_constraintLeft_toRightOf="@id/tv_device_id_tip"
+                    app:layout_constraintTop_toTopOf="@id/tv_device_id_tip" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_type_tip"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp10"
+                    android:text="传感器校准"
+                    android:textColor="@color/c_384051"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_0_calibration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp35"
+                    android:layout_marginLeft="@dimen/dp20"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:layout_marginBottom="@dimen/dp10"
+                    android:background="@drawable/big_corner_bg"
+                    android:gravity="center"
                     android:paddingLeft="@dimen/dp10"
                     android:paddingRight="@dimen/dp10"
-                    android:id="@+id/btn_get_deviceId"
+                    android:text="零点校准"
                     android:textColor="@color/c_384051"
-                    android:layout_width="wrap_content"
-                    android:text="获取仪器ID"
-                    app:isThrottleFirst="@{true}"
-                    app:onClickCommand="@{viewModel.getDeviceId}"
                     android:textSize="@dimen/sp16"
-                    android:background="@drawable/big_corner_bg"
-                    android:layout_height="0dp" />
+                    app:isThrottleFirst="@{true}"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line"
+                    app:onClickCommand="@{viewModel.checkPress}"
+                    app:params="@{`0`}" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:layout_margin="@dimen/dp5"
-                    app:layout_constraintLeft_toRightOf="@id/btn_get_deviceId"
-                    app:layout_constraintTop_toTopOf="@id/tv_device_id_tip"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_device_id_tip"
-                    android:paddingLeft="@dimen/dp10"
-                    android:paddingRight="@dimen/dp10"
-                    android:id="@+id/btn_set_deviceId"
-                    android:textColor="@color/c_384051"
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_normal_calibration_tip"
                     android:layout_width="wrap_content"
-                    android:text="设置仪器ID"
-                    app:isThrottleFirst="@{true}"
-                    app:bgDeviceIdChange = "@{viewModel.liveDataStateBean.changeDeviceID}"
-                    app:checkChange="@{true}"
-                    app:onClickCommand="@{viewModel.setDeviceId}"
-                    app:params="@{viewModel.liveDataStateBean.changeDeviceID}"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp5"
+                    android:padding="@dimen/dp10"
+                    android:text="常压校准(KPa)："
+                    android:textColor="@color/c_384051"
                     android:textSize="@dimen/sp16"
-                    android:background="@drawable/big_corner_bg"
-                    android:layout_height="0dp" />
+                    app:layout_constraintBottom_toBottomOf="@id/tv_0_calibration"
+                    app:layout_constraintLeft_toRightOf="@+id/et_pressure_up_val"
+                    app:layout_constraintTop_toTopOf="@id/tv_0_calibration" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_pressure_tip"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp5"
+                    android:padding="@dimen/dp10"
+                    android:text="压力限值"
+                    android:textColor="@color/c_384051"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_normal_calibration_tip" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_pressure_up_val_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp5"
+                    android:padding="@dimen/dp10"
+                    android:text="压力上限(psia)："
+                    android:textColor="@color/c_384051"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line1" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_pressure_down_val_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp5"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:padding="@dimen/dp10"
+                    android:text="压力下限(psia)："
+                    android:textColor="@color/c_384051"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_pressure_up_val_tip"
+                    app:layout_constraintLeft_toRightOf="@id/et_pressure_up_val"
+                    app:layout_constraintTop_toTopOf="@id/tv_pressure_up_val_tip" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_version_tip"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp5"
+                    android:padding="@dimen/dp10"
+                    android:text="版本信息"
+                    android:textColor="@color/c_384051"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_change_limit" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_version_tip_app_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp5"
+                    android:padding="@dimen/dp10"
+                    android:text="APP版本："
+                    android:textColor="@color/c_384051"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line2" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_version_tip_app"
+                    android:layout_width="@dimen/dp150"
+                    android:layout_height="@dimen/dp35"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="@{APPVersionUtil.getVersionName(APP.getInstance())}"
+                    android:textColor="@color/c_384051"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_version_tip_app_tip"
+                    app:layout_constraintLeft_toRightOf="@id/tv_version_tip_app_tip"
+                    app:layout_constraintTop_toTopOf="@id/tv_version_tip_app_tip" />
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_version_tip_mcu_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp5"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:padding="@dimen/dp10"
+                    android:text="MCU版本："
+                    android:textColor="@color/c_384051"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_version_tip_app_tip"
+                    app:layout_constraintLeft_toRightOf="@id/tv_version_tip_app"
+                    app:layout_constraintTop_toTopOf="@id/tv_version_tip_app_tip" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_version_tip_mcu"
+                    android:layout_width="@dimen/dp150"
+                    android:layout_height="@dimen/dp35"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="@{viewModel.liveDataStateBean.deviceVersion.deviceVersion}"
+                    android:textColor="@color/c_384051"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_version_tip_mcu_tip"
+                    app:layout_constraintLeft_toRightOf="@id/tv_version_tip_mcu_tip"
+                    app:layout_constraintTop_toTopOf="@id/tv_version_tip_mcu_tip" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_tep_tip"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:padding="@dimen/dp10"
+                    android:text="@{String.format(`环境温度（%.1f℃）`,viewModel.liveDataStateBean.systemMonitor.surroundTem)}"
+                    android:textColor="@color/c_384051"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_version_tip_app_tip" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_device_id_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:padding="@dimen/dp10"
+                    android:text="仪器ID："
+                    android:textColor="@color/c_384051"
+                    android:textSize="@dimen/sp16"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_tep_tip" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

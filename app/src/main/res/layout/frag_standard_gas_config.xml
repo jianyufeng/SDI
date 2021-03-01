@@ -85,7 +85,7 @@
                     app:layout_constraintRight_toLeftOf="@+id/et_final_pressure"
                     app:layout_constraintLeft_toRightOf="@id/btn_save_method"
                     android:textSize="@dimen/sp16"
-                    android:text="总压力设置："
+                    android:text="总压力设置(psi)："
                     android:textColor="@color/c_384051"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />

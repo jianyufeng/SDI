@@ -207,7 +207,7 @@
                     android:id="@+id/tv_absolute_pressure_val_tip"
                     android:padding="@dimen/dp10"
                     android:textSize="@dimen/sp16"
-                    android:text="绝对压力值："
+                    android:text="绝对压力值(psi)："
                     android:textColor="@color/c_384051"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -274,7 +274,7 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     android:padding="@dimen/dp10"
                     android:textSize="@dimen/sp16"
-                    android:text="开始压力值："
+                    android:text="开始压力值(psi)："
                     android:textColor="@color/c_384051"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -301,7 +301,7 @@
                     android:padding="@dimen/dp10"
                     android:layout_marginTop="@dimen/dp10"
                     android:textSize="@dimen/sp16"
-                    android:text="目标压力值："
+                    android:text="目标压力值(psi)："
                     android:textColor="@color/c_384051"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

@@ -6,7 +6,7 @@ import com.puyu.mobile.sdi.bean.SendRinseConfig;
 import com.puyu.mobile.sdi.bean.SendStandConfig;
 import com.puyu.mobile.sdi.util.AppCRC;
 
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
@@ -22,7 +22,7 @@ public class SenDataUtil {
 
     //字符串 要添加空格
     public static void add20(ByteBuf byteBuf, String val, int fixedLen, boolean addLen) {
-        byte[] name = val.getBytes(StandardCharsets.UTF_8);
+        byte[] name = val.getBytes(Charset.forName("GBK"));
         if (addLen) {
             byteBuf.writeByte(fixedLen);//长度使用1个字节
         }

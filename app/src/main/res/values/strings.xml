@@ -5,4 +5,5 @@
     <string name="pressurize">加压</string>
     <string name="set">设置</string>
     <string name="add_sample">加样</string>
+    <string name="digits">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</string>
 </resources>

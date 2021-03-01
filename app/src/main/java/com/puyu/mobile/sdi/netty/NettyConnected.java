@@ -27,8 +27,10 @@ import io.netty.handler.timeout.IdleStateHandler;
  */
 
 public class NettyConnected extends Thread {
-    public static String host = "192.168.43.1";
-    public static int port = 54321;
+    public static String host = "192.168.1.1";
+    public static int port = 8899;
+//    public static String host = "192.168.43.1";
+//    public static int port = 54321;
     private Bootstrap bootstrap;
     private Channel channel;
 
@@ -47,7 +49,7 @@ public class NettyConnected extends Thread {
                     protected void initChannel(Channel ch) {
                         ChannelPipeline pipeline = ch.pipeline();
                         //添加心跳处理Handler
-                        pipeline.addLast("timeOut", new IdleStateHandler(0, 0, 10));
+                        pipeline.addLast("timeOut", new IdleStateHandler(0, 0, 1));
                         pipeline.addLast("frame", new HeaderEnderDecoder());
                         pipeline.addLast("encoder", new ByteArrayEncoder());
                         //  pipeline.addLast("frame1", new GT06MsgDecoder());

@@ -88,7 +88,7 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     android:padding="@dimen/dp10"
                     android:textSize="@dimen/sp16"
-                    android:text="稀释气冲洗时间："
+                    android:text="稀释气冲洗时间(sec)："
                     android:textColor="@color/c_384051"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -119,7 +119,7 @@
                     android:padding="@dimen/dp10"
                     android:layout_marginTop="@dimen/dp10"
                     android:textSize="@dimen/sp16"
-                    android:text="标气冲洗时间："
+                    android:text="标气冲洗时间(sec)："
                     android:textColor="@color/c_384051"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
